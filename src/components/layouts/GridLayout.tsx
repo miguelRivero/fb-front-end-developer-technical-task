@@ -1,6 +1,6 @@
 import { PhotoCard } from '../PhotoCard'
 import type { Photo } from '../../domain/entities/Photo'
-import styles from './GridLayout.module.css'
+import styles from './GridLayout.module.scss'
 
 /**
  * Props for the GridLayout component

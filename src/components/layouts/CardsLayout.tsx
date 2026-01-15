@@ -1,5 +1,5 @@
 import type { Photo } from '../../domain/entities/Photo'
-import styles from './CardsLayout.module.css'
+import styles from './CardsLayout.module.scss'
 
 /**
  * Props for the CardsLayout component

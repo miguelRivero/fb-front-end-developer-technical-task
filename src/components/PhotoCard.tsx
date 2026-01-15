@@ -1,5 +1,5 @@
 import type { Photo } from '../domain/entities/Photo'
-import styles from './PhotoCard.module.css'
+import styles from './PhotoCard.module.scss'
 
 /**
  * Props for the PhotoCard component

@@ -1,5 +1,5 @@
 import type { Photo } from '../../domain/entities/Photo'
-import styles from './ListLayout.module.css'
+import styles from './ListLayout.module.scss'
 
 /**
  * Props for the ListLayout component
