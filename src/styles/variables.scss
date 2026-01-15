@@ -3,51 +3,85 @@
 
 :root {
   /* Colors */
-  --color-primary: #3b82f6; /* blue-600 */
-  --color-primary-dark: #2563eb; /* blue-700 */
-  --color-primary-light: #60a5fa; /* blue-400 */
+  /* Backgrounds */
+  --color-background: #F5F5F7; /* Page background */
+  --color-surface: #FFFFFF; /* Card/panel background */
 
-  --color-secondary: #8b5cf6; /* purple-500 */
-  --color-secondary-dark: #7c3aed; /* purple-600 */
-  --color-secondary-light: #a78bfa; /* purple-400 */
+  /* Text Colors */
+  --color-text: #111827; /* Primary text */
+  --color-text-secondary: #6B7280; /* Secondary text */
+  --color-text-muted: #9CA3AF; /* Muted/meta text */
 
-  --color-background: #f9fafb; /* gray-50 */
-  --color-surface: #ffffff; /* white */
-  --color-text: #111827; /* gray-900 */
-  --color-text-secondary: #6b7280; /* gray-500 */
-
-  --color-error: #ef4444; /* red-500 */
-  --color-success: #10b981; /* green-500 */
-  --color-warning: #f59e0b; /* amber-500 */
-
-  /* Spacing */
-  --spacing-unit: 0.25rem; /* 4px base unit */
-  --spacing-xs: calc(var(--spacing-unit) * 2); /* 8px */
-  --spacing-sm: calc(var(--spacing-unit) * 3); /* 12px */
-  --spacing-md: calc(var(--spacing-unit) * 4); /* 16px */
-  --spacing-lg: calc(var(--spacing-unit) * 6); /* 24px */
-  --spacing-xl: calc(var(--spacing-unit) * 8); /* 32px */
-  --spacing-2xl: calc(var(--spacing-unit) * 12); /* 48px */
-
-  /* Typography */
-  --font-family-sans:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, sans-serif;
-  --font-size-xs: 0.75rem; /* 12px */
-  --font-size-sm: 0.875rem; /* 14px */
-  --font-size-base: 1rem; /* 16px */
-  --font-size-lg: 1.125rem; /* 18px */
-  --font-size-xl: 1.25rem; /* 20px */
-  --font-size-2xl: 1.5rem; /* 24px */
-  --font-size-3xl: 1.875rem; /* 30px */
+  /* Accent and States */
+  --color-primary: #2563EB; /* Primary accent (buttons, active layout) */
+  --color-primary-alt: #6366F1; /* Alternative primary accent */
+  --color-error: #EF4444; /* Error state */
 
   /* Borders */
+  --color-border: rgba(15, 23, 42, 0.06); /* Subtle borders */
+
+  /* Legacy color support (for backward compatibility) */
+  --color-primary-dark: #2563EB; /* Same as primary */
+  --color-primary-light: #60a5fa; /* Lighter variant for hover states */
+  --color-secondary: #8b5cf6; /* Kept for backward compatibility */
+  --color-secondary-dark: #7c3aed;
+  --color-secondary-light: #a78bfa;
+  --color-success: #10b981; /* Kept for potential future use */
+  --color-warning: #f59e0b; /* Kept for potential future use */
+
+  /* Spacing (8px system) */
+  --spacing-xs: 4px; /* XS: 4px */
+  --spacing-sm: 8px; /* S: 8px */
+  --spacing-md: 16px; /* M: 16px */
+  --spacing-lg: 24px; /* L: 24px */
+  --spacing-xl: 32px; /* XL: 32px */
+
+  /* Legacy spacing support (for backward compatibility) */
+  --spacing-unit: 0.25rem; /* 4px base unit */
+  --spacing-2xl: 48px; /* Extra large spacing */
+
+  /* Typography */
+  /* Font Family: Inter, SF Pro, or system UI font stack */
+  --font-family-sans:
+    'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Font Sizes - Limited to 4 sizes as per guidelines */
+  --font-size-meta: 12px; /* Meta/labels: 12-13px */
+  --font-size-body: 14px; /* Body/description: 14-16px */
+  --font-size-base: 16px; /* Base font size, Card/list item title: 16px */
+  --font-size-title: 20px; /* Title/section heading: 20px */
+
+  /* Font Weights */
+  --font-weight-normal: 400; /* Body/description, Meta/labels */
+  --font-weight-medium: 500; /* Meta/labels, Card/list item title */
+  --font-weight-semibold: 600; /* Title/section heading, Card/list item title */
+
+  /* Legacy font size support (for backward compatibility) */
+  --font-size-xs: 0.75rem; /* 12px - maps to meta */
+  --font-size-sm: 0.875rem; /* 14px - maps to body */
+  --font-size-lg: 1.125rem; /* 18px - kept for compatibility */
+  --font-size-xl: 1.25rem; /* 20px - maps to title */
+  --font-size-2xl: 1.5rem; /* 24px - kept for compatibility */
+  --font-size-3xl: 1.875rem; /* 30px - kept for compatibility */
+
+  /* Borders and Radii */
+  /* Border Radius */
+  --border-radius-card: 8px; /* Cards, images, panels: 8-12px */
+  --border-radius-card-large: 12px; /* Larger card radius option */
+  --border-radius-pill: 999px; /* Pills/chips: large/rounded (999px) */
+
+  /* Legacy border radius support (for backward compatibility) */
   --border-radius-sm: 0.25rem; /* 4px */
-  --border-radius-md: 0.5rem; /* 8px */
-  --border-radius-lg: 0.75rem; /* 12px */
-  --border-radius-full: 9999px;
+  --border-radius-md: 0.5rem; /* 8px - maps to card */
+  --border-radius-lg: 0.75rem; /* 12px - maps to card-large */
+  --border-radius-full: 9999px; /* Maps to pill */
 
   /* Shadows */
+  --shadow-card-resting: 0 10px 30px rgba(15, 23, 42, 0.06); /* Card resting shadow */
+  --shadow-card-hover: 0 16px 40px rgba(15, 23, 42, 0.10); /* Card hover shadow */
+
+  /* Legacy shadow support (for backward compatibility) */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md:
     0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
