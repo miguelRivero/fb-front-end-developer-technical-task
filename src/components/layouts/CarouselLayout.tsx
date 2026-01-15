@@ -4,9 +4,11 @@ import 'swiper/css/pagination'
 
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { useEffect, useRef } from 'react'
 
 import type { Photo } from '../../domain/entities/Photo'
 import { PhotoCard } from '../PhotoCard'
+import type { Swiper as SwiperType } from 'swiper'
 import styles from './CarouselLayout.module.scss'
 
 /**
@@ -56,6 +58,15 @@ export function CarouselLayout({
   loading,
   error,
 }: CarouselLayoutProps) {
+  const swiperRef = useRef<SwiperType | null>(null)
+
+  // Update Swiper when photos change
+  useEffect(() => {
+    if (swiperRef.current && photos.length > 0) {
+      swiperRef.current.update()
+    }
+  }, [photos])
+
   // Handle error state
   if (error) {
     return (
@@ -90,6 +101,9 @@ export function CarouselLayout({
   return (
     <div className={styles.carouselContainer}>
       <Swiper
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper
+        }}
         modules={[Navigation, Pagination]}
         navigation={true}
         pagination={{ clickable: true }}
@@ -97,6 +111,7 @@ export function CarouselLayout({
         slidesPerView={1}
         slidesPerGroup={1}
         loop={false}
+        autoHeight={true}
         breakpoints={{
           640: {
             slidesPerView: 1,

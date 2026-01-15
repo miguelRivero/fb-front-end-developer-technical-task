@@ -14,8 +14,28 @@
 .slide {
   height: auto;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
+  width: 100%;
+}
+
+/* Ensure PhotoCard fills the slide */
+.slide > * {
+  width: 100%;
+  flex: 1;
+}
+
+/* Ensure Swiper wrapper has proper height */
+.swiper :global(.swiper-wrapper) {
+  height: auto;
+  align-items: stretch;
+}
+
+.swiper :global(.swiper-slide) {
+  height: auto;
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
 }
 
 /* Custom Swiper Navigation Arrows */
