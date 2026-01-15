@@ -1,0 +1,60 @@
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  color: white;
+  will-change: opacity;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.overlayVisible {
+  opacity: 1;
+}
+
+.overlayContent {
+  width: 100%;
+}
+
+.photoTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: white;
+}
+
+.photoAuthor {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.5rem;
+}
+
+/* Large variant for carousel */
+.overlay-large .photoTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.overlay-large .photoAuthor {
+  font-size: var(--font-size-sm);
+  margin-bottom: 0.5rem;
+}
+
+.overlay-large {
+  padding: 1.5rem;
+}

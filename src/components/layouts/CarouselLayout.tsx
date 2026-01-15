@@ -1,7 +1,10 @@
-import { useState, useCallback, useEffect } from 'react'
-import type React from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+import { EmptyState } from '../common/EmptyState/EmptyState'
 import type { Photo } from '../../domain/entities/Photo'
-import { capitalizeFirst } from '../../utils/stringUtils'
+import { PhotoImage } from '../common/PhotoImage/PhotoImage'
+import { PhotoOverlay } from '../common/PhotoOverlay/PhotoOverlay'
+import type React from 'react'
 import styles from './CarouselLayout.module.scss'
 
 /**
@@ -109,11 +112,7 @@ export function CarouselLayout({
 
   // Handle error state
   if (error) {
-    return (
-      <div className={styles.emptyState}>
-        <p className={styles.errorText}>Error: {error.message}</p>
-      </div>
-    )
+    return <EmptyState error={error} />
   }
 
   // Handle loading state
@@ -131,11 +130,7 @@ export function CarouselLayout({
 
   // Handle empty state
   if (photos.length === 0) {
-    return (
-      <div className={styles.emptyState}>
-        <p className={styles.emptyStateText}>No photos to display</p>
-      </div>
-    )
+    return <EmptyState />
   }
 
   // Calculate visible photos based on current index
@@ -143,8 +138,11 @@ export function CarouselLayout({
   // Tablet: show 2 (current, next)
   // Mobile: show 1 (current)
   const getVisiblePhotos = () => {
-    const visible: Array<{ photo: Photo; position: 'prev' | 'current' | 'next' }> = []
-    
+    const visible: Array<{
+      photo: Photo
+      position: 'prev' | 'current' | 'next'
+    }> = []
+
     // Always include current
     visible.push({
       photo: photos[currentIndex],
@@ -193,67 +191,20 @@ export function CarouselLayout({
                   onMouseEnter={() => setHoveredPhotoId(photo.id)}
                   onMouseLeave={() => setHoveredPhotoId(null)}
                 >
-                  <img
-                    src={photo.urls.regular}
-                    alt={photo.altDescription || `Photo by ${photo.creator.name}`}
-                    className={`${styles.image} ${
-                      isHovered ? styles.imageHovered : ''
-                    }`}
-                    loading={isActive ? 'eager' : 'lazy'}
-                  />
-                  <div
-                    className={`${styles.overlay} ${
-                      isHovered ? styles.overlayVisible : ''
-                    }`}
-                  >
-                    <div className={styles.overlayContent}>
-                      <h3 className={styles.photoTitle}>
-                        {capitalizeFirst(photo.altDescription) || 'Photo'}
-                      </h3>
-                      <p className={styles.photoAuthor}>by {photo.creator.name}</p>
-                      <div className={styles.stats}>
-                        <span className={styles.statItem}>
-                          <svg
-                            className={styles.statIcon}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                            />
-                          </svg>
-                          {photo.likes.toLocaleString()}
-                        </span>
-                        <span className={styles.statItem}>
-                          <svg
-                            className={styles.statIcon}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                            />
-                          </svg>
-                          View
-                        </span>
-                      </div>
-                    </div>
+                  <div className={styles.slideImageWrapper}>
+                    <PhotoImage
+                      photo={photo}
+                      urlType="regular"
+                      isHovered={isHovered}
+                      aspectRatio="4/3"
+                      priority={isActive}
+                    />
+                    <PhotoOverlay
+                      photo={photo}
+                      isVisible={isHovered}
+                      showViews
+                      className={isActive ? styles.overlayLarge : ''}
+                    />
                   </div>
                 </div>
               )

@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import type { Photo } from '../../domain/entities/Photo'
-import { capitalizeFirst } from '../../utils/stringUtils'
+import { CreatorInfo } from '../common/CreatorInfo/CreatorInfo'
+import { EmptyState } from '../common/EmptyState/EmptyState'
+import { PhotoDescription } from '../common/PhotoDescription/PhotoDescription'
+import { PhotoImage } from '../common/PhotoImage/PhotoImage'
+import { PhotoStats } from '../common/PhotoStats/PhotoStats'
 import styles from './ListLayout.module.scss'
 
 /**
@@ -53,11 +57,7 @@ export function ListLayout({
 }: ListLayoutProps) {
   // Handle error state
   if (error) {
-    return (
-      <div className={styles.emptyState}>
-        <p className={styles.errorText}>Error: {error.message}</p>
-      </div>
-    )
+    return <EmptyState error={error} />
   }
 
   // Handle loading state
@@ -79,11 +79,7 @@ export function ListLayout({
 
   // Handle empty state
   if (photos.length === 0) {
-    return (
-      <div className={styles.emptyState}>
-        <p className={styles.emptyStateText}>No photos to display</p>
-      </div>
-    )
+    return <EmptyState />
   }
 
   return (
@@ -125,91 +121,20 @@ export function ListLayout({
           >
             {/* Photo Thumbnail */}
             <div className={styles.thumbnailContainer}>
-              <img
-                src={photo.urls.small}
-                alt={altText}
-                loading="lazy"
-                className={`${styles.thumbnail} ${isHovered ? styles.thumbnailHovered : ''}`}
-                width={photo.dimensions.width}
-                height={photo.dimensions.height}
+              <PhotoImage
+                photo={photo}
+                urlType="small"
+                isHovered={isHovered}
+                aspectRatio="4/3"
               />
             </div>
 
             {/* Metadata */}
             <div className={styles.metadata}>
-              {/* Creator Info */}
-              <div className={styles.creatorInfo}>
-                <img
-                  src={photo.creator.profileImageUrl}
-                  alt={`${photo.creator.name}'s profile`}
-                  className={styles.profileImage}
-                  width={40}
-                  height={40}
-                  loading="lazy"
-                />
-                <div className={styles.creatorDetails}>
-                  <span className={styles.creatorName}>
-                    {photo.creator.name}
-                  </span>
-                  <span className={styles.creatorUsername}>
-                    @{photo.creator.username}
-                  </span>
-                </div>
-              </div>
-
-              {/* Description */}
-              {photo.altDescription && (
-                <div className={styles.description}>
-                  <p className={styles.descriptionText}>
-                    {capitalizeFirst(photo.altDescription)}
-                  </p>
-                </div>
-              )}
-
-              {/* Stats */}
-              <div className={styles.stats}>
-                <div className={styles.likes}>
-                  <svg
-                    className={styles.likeIcon}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                  <span className={styles.likesCount}>
-                    {photo.likes.toLocaleString()} likes
-                  </span>
-                </div>
-                <div className={styles.views}>
-                  <svg
-                    className={styles.viewIcon}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    />
-                  </svg>
-                  <span className={styles.viewsCount}>View</span>
-                </div>
+              <CreatorInfo photo={photo} size="md" showUsername lightTheme />
+              <PhotoDescription description={photo.altDescription} maxLines={2} />
+              <div className={styles.statsContainer}>
+                <PhotoStats photo={photo} showViews showLikesLabel lightTheme size="sm" />
               </div>
             </div>
           </article>

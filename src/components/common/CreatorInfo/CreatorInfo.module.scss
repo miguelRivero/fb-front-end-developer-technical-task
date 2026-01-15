@@ -1,0 +1,83 @@
+.creatorInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.creatorInfo-sm {
+  gap: 0.375rem;
+}
+
+.creatorInfo-md {
+  gap: 0.5rem;
+}
+
+.creatorInfo-lg {
+  gap: 0.75rem;
+}
+
+.profileImage {
+  border-radius: 9999px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.creatorInfo-sm .profileImage {
+  border-width: 1px;
+}
+
+.creatorInfo-lg .profileImage {
+  border-width: 2px;
+}
+
+.creatorDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0; /* Allow text truncation */
+}
+
+.creatorName {
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.creatorInfo-sm .creatorName {
+  font-size: var(--font-size-xs);
+}
+
+.creatorInfo-lg .creatorName {
+  font-size: var(--font-size-base);
+}
+
+.creatorUsername {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.creatorInfo-sm .creatorUsername {
+  font-size: 10px;
+}
+
+/* Light theme variants (for cards/list layouts) - applied via className prop */
+.creatorInfo-light .creatorName {
+  color: var(--foreground);
+}
+
+.creatorInfo-light .creatorUsername {
+  color: var(--muted-foreground);
+}
+
+.creatorInfo-light .profileImage {
+  border-color: var(--border);
+}

@@ -1,0 +1,26 @@
+.description {
+  color: var(--muted-foreground);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.description-sm {
+  font-size: var(--font-size-xs);
+}
+
+.description-md {
+  font-size: var(--font-size-sm);
+}
+
+.descriptionText {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+/* Light theme variant for overlays */
+.description-overlay {
+  color: rgba(255, 255, 255, 0.9);
+}

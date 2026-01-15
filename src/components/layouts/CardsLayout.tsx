@@ -1,5 +1,9 @@
 import type { Photo } from '../../domain/entities/Photo'
-import { capitalizeFirst } from '../../utils/stringUtils'
+import { CreatorInfo } from '../common/CreatorInfo/CreatorInfo'
+import { EmptyState } from '../common/EmptyState/EmptyState'
+import { PhotoDescription } from '../common/PhotoDescription/PhotoDescription'
+import { PhotoImage } from '../common/PhotoImage/PhotoImage'
+import { PhotoStats } from '../common/PhotoStats/PhotoStats'
 import styles from './CardsLayout.module.scss'
 
 /**
@@ -50,11 +54,7 @@ export function CardsLayout({
 }: CardsLayoutProps) {
   // Handle error state
   if (error) {
-    return (
-      <div className={styles.emptyState}>
-        <p className={styles.errorText}>Error: {error.message}</p>
-      </div>
-    )
+    return <EmptyState error={error} />
   }
 
   // Handle loading state
@@ -77,20 +77,12 @@ export function CardsLayout({
 
   // Handle empty state
   if (photos.length === 0) {
-    return (
-      <div className={styles.emptyState}>
-        <p className={styles.emptyStateText}>No photos to display</p>
-      </div>
-    )
+    return <EmptyState />
   }
 
   return (
     <div className={styles.grid}>
       {photos.map((photo) => {
-        // Generate alt text with fallback chain
-        const altText =
-          photo.altDescription || `Photo by ${photo.creator.name}` || 'Photo'
-
         // Format creation date
         const formattedDate = new Date(photo.createdAt).toLocaleDateString(
           'en-US',
@@ -127,66 +119,19 @@ export function CardsLayout({
           >
             {/* Photo Image */}
             <div className={styles.imageContainer}>
-              <img
-                src={photo.urls.regular}
-                alt={altText}
-                loading="lazy"
-                className={styles.image}
-                width={photo.dimensions.width}
-                height={photo.dimensions.height}
+              <PhotoImage
+                photo={photo}
+                urlType="regular"
+                aspectRatio="4/3"
               />
             </div>
 
             {/* Card Content */}
             <div className={styles.content}>
-              {/* Creator Information */}
-              <div className={styles.creatorInfo}>
-                <img
-                  src={photo.creator.profileImageUrl}
-                  alt={`${photo.creator.name}'s profile`}
-                  className={styles.profileImage}
-                  width={40}
-                  height={40}
-                  loading="lazy"
-                />
-                <div className={styles.creatorDetails}>
-                  <span className={styles.creatorName}>
-                    {photo.creator.name}
-                  </span>
-                  <span className={styles.creatorUsername}>
-                    @{photo.creator.username}
-                  </span>
-                </div>
-              </div>
-
-              {/* Alt Description (if available) - Above metadata */}
-              {photo.altDescription && (
-                <div className={styles.description}>
-                  <p className={styles.descriptionText}>
-                    {capitalizeFirst(photo.altDescription)}
-                  </p>
-                </div>
-              )}
-
-              {/* Metadata Section */}
+              <CreatorInfo photo={photo} size="md" showUsername lightTheme />
+              <PhotoDescription description={photo.altDescription} maxLines={2} />
               <div className={styles.metadata}>
-                {/* Likes Count */}
-                <div className={styles.metadataItem}>
-                  <svg
-                    className={styles.metadataIcon}
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className={styles.metadataValue}>{photo.likes}</span>
-                </div>
-
+                <PhotoStats photo={photo} lightTheme size="sm" />
                 {/* Dimensions */}
                 <div className={styles.metadataItem}>
                   <svg
@@ -224,7 +169,7 @@ export function CardsLayout({
                       d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
-                  <span className={styles.metadataValue}>{formattedDate}                  </span>
+                  <span className={styles.metadataValue}>{formattedDate}</span>
                 </div>
               </div>
             </div>
