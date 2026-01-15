@@ -1,11 +1,13 @@
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination } from 'swiper/modules'
-import { PhotoCard } from '../PhotoCard'
-import type { Photo } from '../../domain/entities/Photo'
-import styles from './CarouselLayout.module.scss'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+
+import { Navigation, Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+import type { Photo } from '../../domain/entities/Photo'
+import { PhotoCard } from '../PhotoCard'
+import styles from './CarouselLayout.module.scss'
 
 /**
  * Props for the CarouselLayout component
@@ -23,10 +25,10 @@ interface CarouselLayoutProps {
 
 /**
  * CarouselLayout Component
- * 
+ *
  * Displays photos in a swipeable carousel/slider layout using Swiper.
  * Provides a focused, one-photo-at-a-time viewing experience with smooth navigation.
- * 
+ *
  * Features:
  * - Touch/swipe support for mobile devices
  * - Navigation arrows (prev/next) for desktop
@@ -35,14 +37,14 @@ interface CarouselLayoutProps {
  * - Smooth transitions between slides
  * - Loading and empty states
  * - Clean integration with PhotoCard component
- * 
+ *
  * @param props - CarouselLayout component props
  * @returns CarouselLayout component
- * 
+ *
  * @example
  * ```tsx
- * <CarouselLayout 
- *   photos={photos} 
+ * <CarouselLayout
+ *   photos={photos}
  *   onPhotoClick={(photo) => console.log('Clicked', photo.id)}
  *   loading={loading}
  * />

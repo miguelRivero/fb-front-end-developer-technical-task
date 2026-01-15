@@ -17,31 +17,36 @@ interface CardsLayoutProps {
 
 /**
  * CardsLayout Component
- * 
+ *
  * Displays photos in a card-based format with comprehensive metadata.
  * Each card showcases a photo with rich information including creator details,
  * engagement metrics, dimensions, and creation date.
- * 
+ *
  * Features:
  * - Responsive card grid (1/2/3-4 columns based on screen size)
  * - Comprehensive metadata display
  * - Professional card design with shadows and rounded corners
  * - Smooth hover effects and interactions
  * - Loading and empty states
- * 
+ *
  * @param props - CardsLayout component props
  * @returns CardsLayout component
- * 
+ *
  * @example
  * ```tsx
- * <CardsLayout 
- *   photos={photos} 
+ * <CardsLayout
+ *   photos={photos}
  *   onPhotoClick={(photo) => console.log('Clicked', photo.id)}
  *   loading={loading}
  * />
  * ```
  */
-export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayoutProps) {
+export function CardsLayout({
+  photos,
+  onPhotoClick,
+  loading,
+  error,
+}: CardsLayoutProps) {
   // Handle error state
   if (error) {
     return (
@@ -83,16 +88,17 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
       {photos.map((photo) => {
         // Generate alt text with fallback chain
         const altText =
-          photo.altDescription ||
-          `Photo by ${photo.creator.name}` ||
-          'Photo'
+          photo.altDescription || `Photo by ${photo.creator.name}` || 'Photo'
 
         // Format creation date
-        const formattedDate = new Date(photo.createdAt).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })
+        const formattedDate = new Date(photo.createdAt).toLocaleDateString(
+          'en-US',
+          {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          }
+        )
 
         // Handle click event
         const handleClick = () => {
@@ -114,7 +120,9 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
                 handleClick()
               }
             }}
-            aria-label={onPhotoClick ? `View photo by ${photo.creator.name}` : undefined}
+            aria-label={
+              onPhotoClick ? `View photo by ${photo.creator.name}` : undefined
+            }
           >
             {/* Photo Image */}
             <div className={styles.imageContainer}>
@@ -141,8 +149,12 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
                   loading="lazy"
                 />
                 <div className={styles.creatorDetails}>
-                  <span className={styles.creatorName}>{photo.creator.name}</span>
-                  <span className={styles.creatorUsername}>@{photo.creator.username}</span>
+                  <span className={styles.creatorName}>
+                    {photo.creator.name}
+                  </span>
+                  <span className={styles.creatorUsername}>
+                    @{photo.creator.username}
+                  </span>
                 </div>
               </div>
 
@@ -209,7 +221,9 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
               {/* Alt Description (if available) */}
               {photo.altDescription && (
                 <div className={styles.description}>
-                  <p className={styles.descriptionText}>{photo.altDescription}</p>
+                  <p className={styles.descriptionText}>
+                    {photo.altDescription}
+                  </p>
                 </div>
               )}
             </div>

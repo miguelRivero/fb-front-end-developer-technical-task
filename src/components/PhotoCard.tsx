@@ -15,24 +15,24 @@ interface PhotoCardProps {
 
 /**
  * PhotoCard Component
- * 
+ *
  * A reusable component that displays a single photo with essential information.
  * This component handles photo display, alt text, creator attribution, and basic interactions.
- * 
+ *
  * Features:
  * - Responsive image display with proper aspect ratio
  * - Creator attribution with profile image
  * - Photo metadata (likes count)
  * - Hover effects and click interactions
  * - Full accessibility support
- * 
+ *
  * @param props - PhotoCard component props
  * @returns PhotoCard component
- * 
+ *
  * @example
  * ```tsx
- * <PhotoCard 
- *   photo={photo} 
+ * <PhotoCard
+ *   photo={photo}
  *   onClick={(photo) => console.log('Clicked', photo.id)}
  * />
  * ```
@@ -40,9 +40,7 @@ interface PhotoCardProps {
 export function PhotoCard({ photo, onClick, className }: PhotoCardProps) {
   // Generate alt text with fallback chain
   const altText =
-    photo.altDescription ||
-    `Photo by ${photo.creator.name}` ||
-    'Photo'
+    photo.altDescription || `Photo by ${photo.creator.name}` || 'Photo'
 
   // Handle click event
   const handleClick = () => {
@@ -99,7 +97,9 @@ export function PhotoCard({ photo, onClick, className }: PhotoCardProps) {
           />
           <div className={styles.creatorDetails}>
             <span className={styles.creatorName}>{photo.creator.name}</span>
-            <span className={styles.creatorUsername}>@{photo.creator.username}</span>
+            <span className={styles.creatorUsername}>
+              @{photo.creator.username}
+            </span>
           </div>
         </div>
 

@@ -17,11 +17,11 @@ interface ListLayoutProps {
 
 /**
  * ListLayout Component
- * 
+ *
  * Displays photos in a vertical scrolling list format.
  * Each list item shows a photo thumbnail on the left and metadata on the right.
  * This layout is ideal for browsing photos with their metadata in a clean, minimal format.
- * 
+ *
  * Features:
  * - Vertical scrolling list
  * - Photo thumbnails with metadata
@@ -30,20 +30,25 @@ interface ListLayoutProps {
  * - Hover effects and interactions
  * - Loading and empty states
  * - Responsive design
- * 
+ *
  * @param props - ListLayout component props
  * @returns ListLayout component
- * 
+ *
  * @example
  * ```tsx
- * <ListLayout 
- *   photos={photos} 
+ * <ListLayout
+ *   photos={photos}
  *   onPhotoClick={(photo) => console.log('Clicked', photo.id)}
  *   loading={loading}
  * />
  * ```
  */
-export function ListLayout({ photos, onPhotoClick, loading, error }: ListLayoutProps) {
+export function ListLayout({
+  photos,
+  onPhotoClick,
+  loading,
+  error,
+}: ListLayoutProps) {
   // Handle error state
   if (error) {
     return (
@@ -84,9 +89,7 @@ export function ListLayout({ photos, onPhotoClick, loading, error }: ListLayoutP
       {photos.map((photo) => {
         // Generate alt text with fallback chain
         const altText =
-          photo.altDescription ||
-          `Photo by ${photo.creator.name}` ||
-          'Photo'
+          photo.altDescription || `Photo by ${photo.creator.name}` || 'Photo'
 
         // Handle click event
         const handleClick = () => {
@@ -108,7 +111,9 @@ export function ListLayout({ photos, onPhotoClick, loading, error }: ListLayoutP
                 handleClick()
               }
             }}
-            aria-label={onPhotoClick ? `View photo by ${photo.creator.name}` : undefined}
+            aria-label={
+              onPhotoClick ? `View photo by ${photo.creator.name}` : undefined
+            }
           >
             {/* Photo Thumbnail */}
             <div className={styles.thumbnailContainer}>
@@ -135,8 +140,12 @@ export function ListLayout({ photos, onPhotoClick, loading, error }: ListLayoutP
                   loading="lazy"
                 />
                 <div className={styles.creatorDetails}>
-                  <span className={styles.creatorName}>{photo.creator.name}</span>
-                  <span className={styles.creatorUsername}>@{photo.creator.username}</span>
+                  <span className={styles.creatorName}>
+                    {photo.creator.name}
+                  </span>
+                  <span className={styles.creatorUsername}>
+                    @{photo.creator.username}
+                  </span>
                 </div>
               </div>
 

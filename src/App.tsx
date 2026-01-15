@@ -3,8 +3,8 @@ import './App.scss'
 import { CardsLayout } from './components/layouts/CardsLayout'
 import { CarouselLayout } from './components/layouts/CarouselLayout'
 import { GridLayout } from './components/layouts/GridLayout'
+import { LayoutSwitcher } from './components/LayoutSwitcher'
 import { ListLayout } from './components/layouts/ListLayout'
-import styles from './App.module.scss'
 import { useEffect } from 'react'
 import { useLayout } from './presentation/hooks/useLayout'
 import { usePhotos } from './presentation/hooks/usePhotos'
@@ -22,15 +22,14 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-blue-600 mb-4">
-          Photo Gallery App
-        </h1>
-        <p className={styles.test}>CSS Modules test</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <h1 className="text-4xl font-bold text-blue-600">
+            Photo Gallery App
+          </h1>
+          <LayoutSwitcher />
+        </div>
 
         <div className="mt-4 p-4 bg-white rounded-lg shadow">
-          <p className="text-lg">
-            <strong>Layout:</strong> {currentLayout}
-          </p>
           <p className="text-lg">
             <strong>Status:</strong>{' '}
             {loading ? 'Loading...' : `${photos.length} photos loaded`}

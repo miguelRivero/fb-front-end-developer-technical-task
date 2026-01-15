@@ -1,5 +1,5 @@
-import { PhotoCard } from '../PhotoCard'
 import type { Photo } from '../../domain/entities/Photo'
+import { PhotoCard } from '../PhotoCard'
 import styles from './GridLayout.module.scss'
 
 /**
@@ -18,32 +18,37 @@ interface GridLayoutProps {
 
 /**
  * GridLayout Component
- * 
+ *
  * Displays photos in a responsive masonry-style grid layout.
  * The grid adapts to different screen sizes with varying column counts:
  * - Mobile (< 640px): 1 column
  * - Tablet (640px - 1024px): 2-3 columns
  * - Desktop (> 1024px): 3-4 columns
- * 
+ *
  * Features:
  * - Responsive grid using CSS Grid
  * - Graceful handling of varying photo aspect ratios
  * - Loading and empty states
  * - Clean integration with PhotoCard component
- * 
+ *
  * @param props - GridLayout component props
  * @returns GridLayout component
- * 
+ *
  * @example
  * ```tsx
- * <GridLayout 
- *   photos={photos} 
+ * <GridLayout
+ *   photos={photos}
  *   onPhotoClick={(photo) => console.log('Clicked', photo.id)}
  *   loading={loading}
  * />
  * ```
  */
-export function GridLayout({ photos, onPhotoClick, loading, error }: GridLayoutProps) {
+export function GridLayout({
+  photos,
+  onPhotoClick,
+  loading,
+  error,
+}: GridLayoutProps) {
   // Handle error state
   if (error) {
     return (
@@ -78,11 +83,7 @@ export function GridLayout({ photos, onPhotoClick, loading, error }: GridLayoutP
   return (
     <div className={styles.grid}>
       {photos.map((photo) => (
-        <PhotoCard
-          key={photo.id}
-          photo={photo}
-          onClick={onPhotoClick}
-        />
+        <PhotoCard key={photo.id} photo={photo} onClick={onPhotoClick} />
       ))}
     </div>
   )
