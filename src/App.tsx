@@ -2,6 +2,8 @@ import './App.css'
 
 import { GridLayout } from './components/layouts/GridLayout'
 import { CarouselLayout } from './components/layouts/CarouselLayout'
+import { ListLayout } from './components/layouts/ListLayout'
+import { CardsLayout } from './components/layouts/CardsLayout'
 import styles from './App.module.css'
 import { useEffect } from 'react'
 import { useLayout } from './presentation/hooks/useLayout'
@@ -52,6 +54,22 @@ function App() {
           )}
           {currentLayout === 'carousel' && (
             <CarouselLayout
+              photos={photos}
+              loading={loading}
+              error={error}
+              onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
+            />
+          )}
+          {currentLayout === 'list' && (
+            <ListLayout
+              photos={photos}
+              loading={loading}
+              error={error}
+              onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
+            />
+          )}
+          {currentLayout === 'cards' && (
+            <CardsLayout
               photos={photos}
               loading={loading}
               error={error}
