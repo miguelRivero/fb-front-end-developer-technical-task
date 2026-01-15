@@ -24,11 +24,10 @@ interface CardsLayoutProps {
  * 
  * Features:
  * - Responsive card grid (1/2/3-4 columns based on screen size)
- * - Professional card design with rounded corners and shadows
  * - Comprehensive metadata display
- * - Hover effects and smooth interactions
+ * - Professional card design with shadows and rounded corners
+ * - Smooth hover effects and interactions
  * - Loading and empty states
- * - Full accessibility support
  * 
  * @param props - CardsLayout component props
  * @returns CardsLayout component
@@ -62,6 +61,7 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
             <div className={styles.skeletonContent}>
               <div className={styles.skeletonLine} />
               <div className={styles.skeletonLineShort} />
+              <div className={styles.skeletonLineShort} />
             </div>
           </div>
         ))}
@@ -90,7 +90,7 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
         // Format creation date
         const formattedDate = new Date(photo.createdAt).toLocaleDateString('en-US', {
           year: 'numeric',
-          month: 'long',
+          month: 'short',
           day: 'numeric',
         })
 
@@ -129,7 +129,7 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
             </div>
 
             {/* Card Content */}
-            <div className={styles.cardContent}>
+            <div className={styles.content}>
               {/* Creator Information */}
               <div className={styles.creatorInfo}>
                 <img
@@ -145,11 +145,6 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
                   <span className={styles.creatorUsername}>@{photo.creator.username}</span>
                 </div>
               </div>
-
-              {/* Alt Description */}
-              {photo.altDescription && (
-                <p className={styles.description}>{photo.altDescription}</p>
-              )}
 
               {/* Metadata Section */}
               <div className={styles.metadata}>
@@ -167,7 +162,7 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className={styles.metadataText}>{photo.likes}</span>
+                  <span className={styles.metadataValue}>{photo.likes}</span>
                 </div>
 
                 {/* Dimensions */}
@@ -183,10 +178,10 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
                     />
                   </svg>
-                  <span className={styles.metadataText}>
+                  <span className={styles.metadataValue}>
                     {photo.dimensions.width} × {photo.dimensions.height}
                   </span>
                 </div>
@@ -207,9 +202,16 @@ export function CardsLayout({ photos, onPhotoClick, loading, error }: CardsLayou
                       d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
-                  <span className={styles.metadataText}>{formattedDate}</span>
+                  <span className={styles.metadataValue}>{formattedDate}</span>
                 </div>
               </div>
+
+              {/* Alt Description (if available) */}
+              {photo.altDescription && (
+                <div className={styles.description}>
+                  <p className={styles.descriptionText}>{photo.altDescription}</p>
+                </div>
+              )}
             </div>
           </article>
         )
