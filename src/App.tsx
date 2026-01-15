@@ -1,9 +1,11 @@
-import { useEffect } from 'react'
 import './App.css'
-import styles from './App.module.css'
-import { usePhotos } from './presentation/hooks/usePhotos'
-import { useLayout } from './presentation/hooks/useLayout'
+
 import { GridLayout } from './components/layouts/GridLayout'
+import { CarouselLayout } from './components/layouts/CarouselLayout'
+import styles from './App.module.css'
+import { useEffect } from 'react'
+import { useLayout } from './presentation/hooks/useLayout'
+import { usePhotos } from './presentation/hooks/usePhotos'
 
 function App() {
   const { photos, loading, error, fetchPhotos } = usePhotos()
@@ -18,9 +20,11 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-blue-600 mb-4">Photo Gallery App</h1>
+        <h1 className="text-4xl font-bold text-blue-600 mb-4">
+          Photo Gallery App
+        </h1>
         <p className={styles.test}>CSS Modules test</p>
-        
+
         <div className="mt-4 p-4 bg-white rounded-lg shadow">
           <p className="text-lg">
             <strong>Layout:</strong> {currentLayout}
@@ -40,6 +44,14 @@ function App() {
         <div className="mt-8">
           {currentLayout === 'grid' && (
             <GridLayout
+              photos={photos}
+              loading={loading}
+              error={error}
+              onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
+            />
+          )}
+          {currentLayout === 'carousel' && (
+            <CarouselLayout
               photos={photos}
               loading={loading}
               error={error}
