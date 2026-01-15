@@ -2,6 +2,7 @@ import './App.scss'
 
 import { CardsLayout } from './components/layouts/CardsLayout'
 import { CarouselLayout } from './components/layouts/CarouselLayout'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { GridLayout } from './components/layouts/GridLayout'
 import { LayoutSwitcher } from './components/LayoutSwitcher'
 import { ListLayout } from './components/layouts/ListLayout'
@@ -20,64 +21,66 @@ function App() {
   }, []) // Only run on mount
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-          <h1 className="text-4xl font-bold text-blue-600">
-            Photo Gallery App
-          </h1>
-          <LayoutSwitcher />
-        </div>
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gray-100 p-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <h1 className="text-4xl font-bold text-blue-600">
+              Photo Gallery App
+            </h1>
+            <LayoutSwitcher />
+          </div>
 
-        <div className="mt-4 p-4 bg-white rounded-lg shadow">
-          <p className="text-lg">
-            <strong>Status:</strong>{' '}
-            {loading ? 'Loading...' : `${photos.length} photos loaded`}
-          </p>
-          {error && (
-            <p className="text-red-600 mt-2">
-              <strong>Error:</strong> {error.message}
+          <div className="mt-4 p-4 bg-white rounded-lg shadow">
+            <p className="text-lg">
+              <strong>Status:</strong>{' '}
+              {loading ? 'Loading...' : `${photos.length} photos loaded`}
             </p>
-          )}
-        </div>
+            {error && (
+              <p className="text-red-600 mt-2">
+                <strong>Error:</strong> {error.message}
+              </p>
+            )}
+          </div>
 
-        {/* Layout Display */}
-        <div className="mt-8">
-          {currentLayout === 'grid' && (
-            <GridLayout
-              photos={photos}
-              loading={loading}
-              error={error}
-              onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
-            />
-          )}
-          {currentLayout === 'carousel' && (
-            <CarouselLayout
-              photos={photos}
-              loading={loading}
-              error={error}
-              onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
-            />
-          )}
-          {currentLayout === 'list' && (
-            <ListLayout
-              photos={photos}
-              loading={loading}
-              error={error}
-              onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
-            />
-          )}
-          {currentLayout === 'cards' && (
-            <CardsLayout
-              photos={photos}
-              loading={loading}
-              error={error}
-              onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
-            />
-          )}
+          {/* Layout Display */}
+          <div className="mt-8">
+            {currentLayout === 'grid' && (
+              <GridLayout
+                photos={photos}
+                loading={loading}
+                error={error}
+                onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
+              />
+            )}
+            {currentLayout === 'carousel' && (
+              <CarouselLayout
+                photos={photos}
+                loading={loading}
+                error={error}
+                onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
+              />
+            )}
+            {currentLayout === 'list' && (
+              <ListLayout
+                photos={photos}
+                loading={loading}
+                error={error}
+                onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
+              />
+            )}
+            {currentLayout === 'cards' && (
+              <CardsLayout
+                photos={photos}
+                loading={loading}
+                error={error}
+                onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
+              />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </ErrorBoundary>
   )
 }
 

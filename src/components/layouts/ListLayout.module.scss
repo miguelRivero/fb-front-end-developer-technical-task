@@ -165,7 +165,33 @@
   background: var(--color-surface);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-sm);
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse var(--animation-skeleton-pulse, 2s cubic-bezier(0.4, 0, 0.6, 1)) infinite;
+  will-change: opacity;
+}
+
+/* Stagger animation delays for visual variety */
+.skeletonItem:nth-child(1) {
+  animation-delay: calc(var(--animation-skeleton-delay-base, 0.1s) * 0);
+}
+
+.skeletonItem:nth-child(2) {
+  animation-delay: calc(var(--animation-skeleton-delay-base, 0.1s) * 1);
+}
+
+.skeletonItem:nth-child(3) {
+  animation-delay: calc(var(--animation-skeleton-delay-base, 0.1s) * 2);
+}
+
+.skeletonItem:nth-child(4) {
+  animation-delay: calc(var(--animation-skeleton-delay-base, 0.1s) * 3);
+}
+
+.skeletonItem:nth-child(5) {
+  animation-delay: calc(var(--animation-skeleton-delay-base, 0.1s) * 4);
+}
+
+.skeletonItem:nth-child(6) {
+  animation-delay: calc(var(--animation-skeleton-delay-base, 0.1s) * 5);
 }
 
 .skeletonThumbnail {
@@ -176,11 +202,14 @@
   background: linear-gradient(
     90deg,
     #f3f4f6 0%,
-    #e5e7eb 50%,
+    #e5e7eb 25%,
+    #f9fafb 50%,
+    #e5e7eb 75%,
     #f3f4f6 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
+  will-change: background-position;
 }
 
 .skeletonContent {
@@ -197,11 +226,15 @@
   background: linear-gradient(
     90deg,
     #f3f4f6 0%,
-    #e5e7eb 50%,
+    #e5e7eb 25%,
+    #f9fafb 50%,
+    #e5e7eb 75%,
     #f3f4f6 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
+  animation-delay: calc(var(--animation-skeleton-delay-base, 0.1s) * 0.5);
+  will-change: background-position;
 }
 
 .skeletonLineShort {
@@ -211,11 +244,15 @@
   background: linear-gradient(
     90deg,
     #f3f4f6 0%,
-    #e5e7eb 50%,
+    #e5e7eb 25%,
+    #f9fafb 50%,
+    #e5e7eb 75%,
     #f3f4f6 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
+  animation-delay: calc(var(--animation-skeleton-delay-base, 0.1s) * 1);
+  will-change: background-position;
 }
 
 @keyframes pulse {
@@ -224,7 +261,7 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.5;
+    opacity: 0.6;
   }
 }
 
@@ -234,6 +271,20 @@
   }
   100% {
     background-position: 200% 0;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .skeletonItem,
+  .skeletonThumbnail,
+  .skeletonLine,
+  .skeletonLineShort {
+    animation: none;
+  }
+  
+  .skeletonItem {
+    opacity: 0.7;
   }
 }
 

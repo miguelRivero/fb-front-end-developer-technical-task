@@ -208,7 +208,31 @@
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse var(--animation-skeleton-pulse);
+}
+
+.skeletonCard:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.skeletonCard:nth-child(2) {
+  animation-delay: calc(var(--animation-skeleton-delay-step) * 1);
+}
+
+.skeletonCard:nth-child(3) {
+  animation-delay: calc(var(--animation-skeleton-delay-step) * 2);
+}
+
+.skeletonCard:nth-child(4) {
+  animation-delay: calc(var(--animation-skeleton-delay-step) * 3);
+}
+
+.skeletonCard:nth-child(5) {
+  animation-delay: calc(var(--animation-skeleton-delay-step) * 4);
+}
+
+.skeletonCard:nth-child(6) {
+  animation-delay: calc(var(--animation-skeleton-delay-step) * 5);
 }
 
 .skeletonImage {
@@ -217,11 +241,14 @@
   background: linear-gradient(
     90deg,
     #f3f4f6 0%,
-    #e5e7eb 50%,
+    #e5e7eb 25%,
+    #f3f4f6 50%,
+    #e5e7eb 75%,
     #f3f4f6 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer var(--animation-skeleton-shimmer);
+  will-change: background-position;
 }
 
 .skeletonContent {
@@ -238,11 +265,14 @@
   background: linear-gradient(
     90deg,
     #f3f4f6 0%,
-    #e5e7eb 50%,
+    #e5e7eb 25%,
+    #f3f4f6 50%,
+    #e5e7eb 75%,
     #f3f4f6 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer var(--animation-skeleton-shimmer);
+  will-change: background-position;
 }
 
 .skeletonLineShort {
@@ -252,11 +282,14 @@
   background: linear-gradient(
     90deg,
     #f3f4f6 0%,
-    #e5e7eb 50%,
+    #e5e7eb 25%,
+    #f3f4f6 50%,
+    #e5e7eb 75%,
     #f3f4f6 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer var(--animation-skeleton-shimmer);
+  will-change: background-position;
 }
 
 @keyframes pulse {
@@ -265,7 +298,7 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.5;
+    opacity: 0.6;
   }
 }
 

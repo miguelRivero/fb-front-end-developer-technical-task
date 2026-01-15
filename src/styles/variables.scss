@@ -59,6 +59,11 @@
   --transition-base: 200ms ease-in-out;
   --transition-slow: 300ms ease-in-out;
 
+  /* Animation Timing */
+  --animation-skeleton-shimmer: 1.2s ease-in-out;
+  --animation-skeleton-pulse: 2s cubic-bezier(0.4, 0, 0.6, 1);
+  --animation-skeleton-delay-base: 0.1s;
+
   /* Z-index */
   --z-dropdown: 1000;
   --z-modal: 2000;
