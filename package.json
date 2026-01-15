@@ -1,30 +1,11 @@
 {
-  "name": "get-shit-done-cc",
-  "version": "1.3.34",
-  "description": "A meta-prompting, context engineering and spec-driven development system for Claude Code by TÂCHES.",
-  "bin": {
-    "get-shit-done-cc": "bin/install.js"
-  },
-  "files": [
-    "bin",
-    "commands",
-    "get-shit-done"
-  ],
-  "keywords": [
-    "claude",
-    "claude-code",
-    "ai",
-    "meta-prompting",
-    "context-engineering",
-    "spec-driven-development"
-  ],
-  "author": "TÂCHES",
+  "name": "fb-front-end-developer-technical-task",
+  "version": "1.0",
+  "description": "FB Front-End Developer Technical Task",
+  "author": "Miguel Rivero <miguel@cmrad.com> (https://github.com/miguelRivero)",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/glittercowboy/get-shit-done.git"
-  },
-  "engines": {
-    "node": ">=16.7.0"
+    "url": "git+https://github.com/miguelRivero/fb-front-end-developer-technical-task.git"
   }
 }

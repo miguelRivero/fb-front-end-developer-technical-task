@@ -3,5 +3,11 @@ package-lock.json
 .DS_Store
 TO-DOS.md
 CLAUDE.md
-.planning
 /research
+
+# Project management and documentation files (not part of codebase)
+.planning/
+get-shit-done/
+commands/
+guides/
+.git-rewrite-options.md
