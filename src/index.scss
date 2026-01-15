@@ -9,6 +9,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  border-color: var(--border);
 }
 
 body {
@@ -17,10 +18,25 @@ body {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-base);
   line-height: 1.5;
-  color: var(--color-text);
-  background-color: var(--color-background);
+  color: var(--foreground);
+  background-color: var(--background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom animations */
+@keyframes pulse-loading {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-loading {
+  animation: pulse-loading 1.5s ease-in-out infinite;
 }
 
 #root {

@@ -132,12 +132,15 @@ export function LayoutSwitcher() {
       {(Object.keys(LAYOUTS) as Layout[]).map((layout) => {
         const isActive = currentLayout === layout
         const layoutMetadata = LAYOUTS[layout]
+        const isListLayout = layout === 'list'
 
         return (
           <button
             key={layout}
             type="button"
-            className={`${styles.button} ${isActive ? styles.active : ''}`}
+            className={`${styles.button} ${isActive ? styles.active : ''} ${
+              isListLayout ? styles.hideOnMobile : ''
+            }`}
             onClick={() => handleLayoutChange(layout)}
             onKeyDown={(e) => handleKeyDown(e, layout)}
             aria-label={`Switch to ${layoutMetadata.displayName} layout`}

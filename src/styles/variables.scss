@@ -1,33 +1,52 @@
 /* CSS Custom Properties - Theme Variables */
 /* These can be used in CSS Modules for component-specific styling */
+/* Based on photo-gallery-design design system */
 
 :root {
-  /* Colors */
+  /* Colors - Using oklch color space for better color consistency */
   /* Backgrounds */
-  --color-background: #F5F5F7; /* Page background */
-  --color-surface: #FFFFFF; /* Card/panel background */
+  --background: oklch(0.98 0 0);
+  --color-background: oklch(0.98 0 0); /* Page background */
+  --card: oklch(1 0 0);
+  --color-surface: oklch(1 0 0); /* Card/panel background */
+  --popover: oklch(1 0 0);
 
   /* Text Colors */
-  --color-text: #111827; /* Primary text */
-  --color-text-secondary: #6B7280; /* Secondary text */
-  --color-text-muted: #9CA3AF; /* Muted/meta text */
+  --foreground: oklch(0.145 0 0);
+  --color-text: oklch(0.145 0 0); /* Primary text */
+  --card-foreground: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --color-text-secondary: oklch(0.5 0 0); /* Secondary text */
+  --muted-foreground: oklch(0.5 0 0);
+  --color-text-muted: oklch(0.5 0 0); /* Muted/meta text */
 
   /* Accent and States */
-  --color-primary: #2563EB; /* Primary accent (buttons, active layout) */
-  --color-primary-alt: #6366F1; /* Alternative primary accent */
-  --color-error: #EF4444; /* Error state */
+  --primary: oklch(0.205 0 0);
+  --color-primary: oklch(0.205 0 0); /* Primary accent (buttons, active layout) */
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.96 0 0);
+  --color-secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.96 0 0);
+  --accent: oklch(0.96 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --color-error: oklch(0.577 0.245 27.325); /* Error state */
+  --destructive-foreground: oklch(0.577 0.245 27.325);
 
   /* Borders */
-  --color-border: rgba(15, 23, 42, 0.06); /* Subtle borders */
+  --border: oklch(0.9 0 0);
+  --color-border: oklch(0.9 0 0); /* Subtle borders */
+  --input: oklch(0.9 0 0);
+  --ring: oklch(0.708 0 0);
 
   /* Legacy color support (for backward compatibility) */
-  --color-primary-dark: #2563EB; /* Same as primary */
-  --color-primary-light: #60a5fa; /* Lighter variant for hover states */
-  --color-secondary: #8b5cf6; /* Kept for backward compatibility */
-  --color-secondary-dark: #7c3aed;
-  --color-secondary-light: #a78bfa;
-  --color-success: #10b981; /* Kept for potential future use */
-  --color-warning: #f59e0b; /* Kept for potential future use */
+  --color-primary-dark: oklch(0.205 0 0); /* Same as primary */
+  --color-primary-light: oklch(0.3 0 0); /* Lighter variant for hover states */
+  --color-secondary-dark: oklch(0.9 0 0);
+  --color-secondary-light: oklch(0.97 0 0);
+  --color-success: oklch(0.646 0.222 41.116); /* Kept for potential future use */
+  --color-warning: oklch(0.828 0.189 84.429); /* Kept for potential future use */
 
   /* Spacing (8px system) */
   --spacing-xs: 4px; /* XS: 4px */
@@ -67,19 +86,21 @@
 
   /* Borders and Radii */
   /* Border Radius */
-  --border-radius-card: 8px; /* Cards, images, panels: 8-12px */
-  --border-radius-card-large: 12px; /* Larger card radius option */
+  --radius: 0.5rem;
+  --border-radius-card: 0.5rem; /* Cards, images, panels: 8-12px */
+  --border-radius-card-large: 0.625rem; /* Larger card radius option */
   --border-radius-pill: 999px; /* Pills/chips: large/rounded (999px) */
 
   /* Legacy border radius support (for backward compatibility) */
-  --border-radius-sm: 0.25rem; /* 4px */
-  --border-radius-md: 0.5rem; /* 8px - maps to card */
-  --border-radius-lg: 0.75rem; /* 12px - maps to card-large */
+  --border-radius-sm: calc(var(--radius) - 4px); /* 4px */
+  --border-radius-md: calc(var(--radius) - 2px); /* 6px */
+  --border-radius-lg: var(--radius); /* 8px - maps to card */
+  --border-radius-xl: calc(var(--radius) + 4px); /* 12px */
   --border-radius-full: 9999px; /* Maps to pill */
 
   /* Shadows */
-  --shadow-card-resting: 0 10px 30px rgba(15, 23, 42, 0.06); /* Card resting shadow */
-  --shadow-card-hover: 0 16px 40px rgba(15, 23, 42, 0.10); /* Card hover shadow */
+  --shadow-card-resting: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Card resting shadow */
+  --shadow-card-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Card hover shadow */
 
   /* Legacy shadow support (for backward compatibility) */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -87,6 +108,8 @@
     0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg:
     0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
   /* Transitions */
   --transition-fast: 150ms ease-in-out;
