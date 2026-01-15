@@ -1,4 +1,4 @@
-import type { Photo, PhotoSearchParams, PhotoSearchResult } from '../entities/Photo'
+import type { PhotoSearchParams, PhotoSearchResult } from '../entities/Photo'
 
 /**
  * Domain Repository Interface: PhotoRepository
@@ -27,12 +27,17 @@ export interface PhotoRepository {
  * Represents errors that can occur in photo repository operations.
  */
 export class PhotoRepositoryError extends Error {
+  public readonly type: 'rate_limit' | 'network' | 'api_error' | 'unknown'
+  public readonly originalError?: unknown
+
   constructor(
     message: string,
-    public readonly type: 'rate_limit' | 'network' | 'api_error' | 'unknown',
-    public readonly originalError?: unknown
+    type: 'rate_limit' | 'network' | 'api_error' | 'unknown',
+    originalError?: unknown
   ) {
     super(message)
     this.name = 'PhotoRepositoryError'
+    this.type = type
+    this.originalError = originalError
   }
 }

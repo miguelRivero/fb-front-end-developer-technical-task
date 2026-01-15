@@ -1,5 +1,4 @@
-import axios from 'axios'
-import type { UnsplashPhoto, UnsplashResponse, FetchPhotosError } from '../../types/unsplash'
+import type { UnsplashPhoto, FetchPhotosError } from '../../types/unsplash'
 import type { Photo } from '../../domain/entities/Photo'
 
 /**

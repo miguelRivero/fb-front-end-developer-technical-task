@@ -1,159 +1,112 @@
-# Roadmap: GSD Brownfield Support
+# Roadmap: Photo Gallery App
 
 ## Overview
 
-Add comprehensive brownfield support to GSD. Users adopting GSD for existing codebases will have a systematic way to capture architectural knowledge before planning begins. A new `/gsd:map-codebase` workflow will produce structured `.planning/codebase/` documents that stay current as plans execute.
+This roadmap takes the Photo Gallery App from initial setup through to a fully functional, tested, and documented React TypeScript application. We start with foundation and tooling, integrate the Unsplash API with proper state management, build all four layout views (Grid, Carousel, List, Cards), add seamless view switching with polished UI, implement comprehensive testing, and finish with documentation and delivery.
+
+**Architectural Approach**: The project follows Clean Architecture and Domain-Driven Design (DDD) principles, organized in layers:
+- **Domain Layer**: Core business entities and value objects (Photo, Layout types)
+- **Application Layer**: Use cases and application services (photo fetching, layout management)
+- **Infrastructure Layer**: External adapters (Unsplash API client, localStorage)
+- **Presentation Layer**: React components and UI state management
+
+This layered approach ensures separation of concerns, testability, and maintainability while demonstrating architectural knowledge appropriate for the application's complexity.
 
 ## Domain Expertise
 
-None - this is internal GSD development following existing command/workflow/template patterns.
+None
 
 ## Phases
 
-**Phase Numbering:**
-- Integer phases (1, 2, 3): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
-
-- [ ] **Phase 1: Templates & Structure** - Create codebase map templates and folder structure
-- [ ] **Phase 2: Map Codebase Command** - Build /gsd:map-codebase with parallel Explore agents
-- [ ] **Phase 3: Integration** - Wire brownfield support into existing GSD workflows
+- [ ] **Phase 1: Foundation and Setup** - Initialize project with Vite, React, TypeScript, and tooling
+- [ ] **Phase 2: API Integration and State Management** - Unsplash API service and Context-based state
+- [ ] **Phase 3: Core Layout Components** - Build all four layout views (Grid, Carousel, List, Cards)
+- [ ] **Phase 4: Layout Switching and UI Polish** - View switcher and polished transitions
+- [ ] **Phase 5: Testing Implementation** - Comprehensive test coverage
+- [ ] **Phase 6: Documentation and Delivery** - README, comments, and GitHub setup
 
 ## Phase Details
 
-### Phase 1: Templates & Structure
-**Goal**: Create templates for all codebase map document types and define the folder structure
+### Phase 1: Foundation and Setup
+**Goal**: Initialize Vite + React + TypeScript project with complete tooling setup
 **Depends on**: Nothing (first phase)
-**Research**: Unlikely (established GSD template patterns)
-**Plans**: TBD
+**Research**: Unlikely (standard Vite + React setup, established tooling)
+**Plans**: 3 plans
 
-Documents to template:
-- stack.md (languages, frameworks, dependencies)
-- architecture.md (patterns, layers, data flow)
-- structure.md (directory layout, key files)
-- conventions.md (coding standards, naming)
-- testing.md (test setup, patterns)
-- integrations.md (external services, APIs)
-- concerns.md (tech debt, known issues)
+Plans:
+- [x] 01-01: Project initialization and base configuration (completed 2026-01-15)
+- [x] 01-02: Styling setup (Tailwind CSS + CSS Modules) (completed 2026-01-15)
+- [x] 01-03: Testing and linting configuration (completed 2026-01-15)
 
-### Phase 2: Map Codebase Command
-**Goal**: Build the /gsd:map-codebase slash command with parallel Explore agent workflow
+### Phase 2: API Integration and State Management
+**Goal**: Create Unsplash API service with Context API state management following Clean Architecture principles
 **Depends on**: Phase 1
-**Research**: Unlikely (using existing Explore agent patterns, GSD workflow conventions)
-**Plans**: TBD
+**Research**: Likely (external API integration)
+**Research topics**: Unsplash API documentation, authentication flow, rate limiting best practices, API response structure
+**Architectural focus**: Implement repository pattern to abstract API calls, create domain entities, establish clear layer boundaries
+**Plans**: 4 plans
 
-Components:
-- Slash command: `commands/gsd/map-codebase.md`
-- Workflow: `get-shit-done/workflows/map-codebase.md`
-- Parallel Explore agent orchestration
-- Output to `.planning/codebase/`
+Plans:
+- [x] 02-01: Unsplash API service and types (completed 2026-01-15)
+- [x] 02-02: Photo fetching with error handling (completed 2026-01-15)
+- [ ] 02-03: Context API setup for global state
+- [ ] 02-04: Custom hooks (usePhotos, useLayout)
 
-### Phase 3: Integration
-**Goal**: Wire brownfield support into existing GSD workflows
+### Phase 3: Core Layout Components
+**Goal**: Build all four layout views with responsive design
 **Depends on**: Phase 2
-**Research**: Unlikely (modifying existing GSD commands, established patterns)
-**Plans**: TBD
+**Research**: Likely (Swiper library integration)
+**Research topics**: Swiper React integration, responsive configuration, customization options
+**Plans**: 5 plans
 
-Integration points:
-- `/gsd:new-project` - detect existing code, offer to map first
-- `/gsd:plan-phase` - load relevant codebase context automatically
-- Post-execution - update codebase map after plan execution
+Plans:
+- [ ] 03-01: Base PhotoCard component
+- [ ] 03-02: Grid Layout with responsive design
+- [ ] 03-03: Carousel Layout with Swiper
+- [ ] 03-04: List Layout with vertical scrolling
+- [ ] 03-05: Cards Layout with metadata
 
-### Phase 4: Plan-Phase Optimizations
-**Goal**: Reduce context usage in /gsd:plan-phase by ~37% through file consolidation and verbosity reduction
+### Phase 4: Layout Switching and UI Polish
+**Goal**: Implement layout switcher with smooth transitions and polished UI
 **Depends on**: Phase 3
-**Research**: Unlikely (internal optimization of existing files)
-**Plans**: TBD
+**Research**: Unlikely (internal state management patterns, standard React practices)
+**Plans**: 4 plans
 
-Optimization targets:
-- Merge `cli-automation.md` into `checkpoints.md` (-15KB)
-- Compress `plan-format.md` to reference card (-7KB)
-- Trim `scope-estimation.md` verbosity (-6KB)
-- Streamline `plan-phase.md` workflow (-9KB)
+Plans:
+- [ ] 04-01: LayoutSwitcher component
+- [ ] 04-02: Layout state management and localStorage
+- [ ] 04-03: Loading skeletons and error boundary
+- [ ] 04-04: Transitions and animations polish
 
-### Phase 5: TDD Instructions
-**Goal**: Add TDD guidance to GSD so Claude uses test-driven development when appropriate and beneficial
+### Phase 5: Testing Implementation
+**Goal**: Comprehensive test coverage (80%+) for components and state
 **Depends on**: Phase 4
-**Research**: Unlikely (established TDD patterns, GSD integration points clear)
-**Plans**: 2 plans
+**Research**: Unlikely (Vitest + React Testing Library are established patterns)
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: TDD Foundation - Create tdd.md reference, add TDD annotation to plan-format.md
-- [ ] 05-02: TDD Integration - Update plan-phase.md detection, execute-phase.md execution flow
+- [ ] 05-01: Component unit tests
+- [ ] 05-02: Integration tests and responsive behavior
+- [ ] 05-03: State management and localStorage tests
 
-### Phase 6: Frontmatter System Upgrade
-
-**Goal:** Add YAML frontmatter to SUMMARY.md enabling automatic context assembly via dependency graph
-**Depends on:** Phase 5
-**Plans:** 2 plans
-
-Plans:
-- [ ] 06-01: Frontmatter Schema - Add comprehensive YAML frontmatter to summary.md template with dependency metadata
-- [ ] 06-02: Intelligent Selection - Implement frontmatter-based context assembly in plan-phase.md
-
-**Details:**
-Transform planning from "Claude guesses which summaries to read" to "System automatically assembles optimal context" by:
-- Adding frontmatter with subsystem, requires/provides/affects, tech-stack, key-files, key-decisions
-- Scanning all summary frontmatter (fast - first ~25 lines each)
-- Building dependency graph to auto-select relevant prior phases
-- Extracting context from frontmatter before reading full summaries
-- Making context assembly deterministic and optimal
-
-### Phase 7: Backfill Existing Summaries With Frontmatter
-
-**Goal:** Backfill YAML frontmatter with dependency graph metadata to Phase 1-6 historical summaries
-**Depends on:** Phase 6
-**Plans:** 1 plan
+### Phase 6: Documentation and Delivery
+**Goal**: Complete documentation, setup GitHub, and deliver final product
+**Depends on**: Phase 5
+**Research**: Unlikely (standard documentation and Git practices)
+**Plans**: 3 plans
 
 Plans:
-- [x] 07-01: Backfill frontmatter to all Phase 1-5 summaries (10 files)
-
-**Details:**
-Enable intelligent context assembly for all historical phases by adding consistent frontmatter with subsystem categorization, dependency graph (requires/provides/affects), tech tracking, key decisions, and patterns established.
-
-### Phase 8: Improve Roadmap System
-
-**Goal:** [To be planned]
-**Depends on:** Phase 7
-**Research:** Unlikely (internal GSD workflow improvements)
-**Plans:** TBD
-
-Plans:
-- [ ] TBD (run /gsd:plan-phase 8 to break down)
-
-**Details:**
-[To be added during planning]
-
-### Phase 9: Integrate Verify-Work
-
-**Goal:** Properly integrate /gsd:verify-work into GSD with workflow delegation, templates, and /gsd:plan-fix command
-**Depends on:** Phase 8
-**Research:** Unlikely (refactoring contributed command to match GSD patterns)
-**Plans:** TBD
-
-Components:
-- Refactor `commands/gsd/verify-work.md` to GSD style (workflow delegation)
-- Create `workflows/verify-work.md` for UAT logic
-- Create `templates/uat-issues.md` for phase-scoped issues format
-- Create `commands/gsd/plan-fix.md` for planning fixes from UAT issues
-- Update `commands/gsd/progress.md` to offer plan-fix when issues exist
-- Update README.md with new commands
-
-**Details:**
-Community contribution from OracleGreyBeard. Original command works but doesn't follow GSD patterns (no workflow delegation, inline templates, verbose steps). Refactor to match conventions, then add /gsd:plan-fix to complete the verify → fix loop.
+- [ ] 06-01: README and code comments
+- [ ] 06-02: Environment setup and GitHub repository
+- [ ] 06-03: Final testing and verification
 
 ## Progress
 
-**Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
-
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Templates & Structure | 3/3 | Complete | 2025-12-17 |
-| 2. Map Codebase Command | 2/2 | Complete | 2025-12-17 |
-| 3. Integration | 1/1 | Complete | 2025-12-17 |
-| 4. Plan-Phase Optimizations | 2/2 | Complete | 2025-12-29 |
-| 5. TDD Instructions | 2/2 | Complete | 2025-12-31 |
-| 6. Frontmatter System Upgrade | 2/2 | Complete | 2026-01-05 |
-| 7. Backfill Existing Summaries | 1/1 | Complete | 2026-01-05 |
-| 8. Improve Roadmap System | 1/1 | Complete | 2026-01-05 |
-| 9. Integrate Verify-Work | 1/? | In Progress | - |
+| 1. Foundation and Setup | 3/3 | Complete | 2026-01-15 |
+| 2. API Integration and State Management | 2/4 | In progress | - |
+| 3. Core Layout Components | 0/5 | Not started | - |
+| 4. Layout Switching and UI Polish | 0/4 | Not started | - |
+| 5. Testing Implementation | 0/3 | Not started | - |
+| 6. Documentation and Delivery | 0/3 | Not started | - |

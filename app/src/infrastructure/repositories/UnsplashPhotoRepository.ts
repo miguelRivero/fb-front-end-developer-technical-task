@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type { PhotoRepository } from '../../domain/repositories/PhotoRepository'
-import type { Photo, PhotoSearchParams, PhotoSearchResult } from '../../domain/entities/Photo'
+import type { PhotoSearchParams, PhotoSearchResult } from '../../domain/entities/Photo'
 import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
 import type { UnsplashPhoto, UnsplashResponse, FetchPhotosError } from '../../types/unsplash'
 import { UnsplashApiAdapter } from '../adapters/UnsplashApiAdapter'

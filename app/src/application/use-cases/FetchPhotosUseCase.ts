@@ -1,5 +1,5 @@
 import type { PhotoRepository } from '../../domain/repositories/PhotoRepository'
-import type { Photo, PhotoSearchParams, PhotoSearchResult } from '../../domain/entities/Photo'
+import type { PhotoSearchParams, PhotoSearchResult } from '../../domain/entities/Photo'
 import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
 
 /**
@@ -13,7 +13,11 @@ import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
  * and orchestrate domain operations without knowing implementation details.
  */
 export class FetchPhotosUseCase {
-  constructor(private readonly photoRepository: PhotoRepository) {}
+  private readonly photoRepository: PhotoRepository
+
+  constructor(photoRepository: PhotoRepository) {
+    this.photoRepository = photoRepository
+  }
 
   /**
    * Executes the photo fetching use case
