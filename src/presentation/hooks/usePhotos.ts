@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useCallback, useMemo } from 'react'
 import { PhotoContext } from '../context/PhotoContext'
 import { FetchPhotosUseCase } from '../../application/use-cases/FetchPhotosUseCase'
 import { photoRepository } from '../../infrastructure/repositories'
@@ -36,50 +36,56 @@ export function usePhotos() {
 
   const { state, dispatch } = context
 
-  // Create use case instance with repository
-  const fetchPhotosUseCase = new FetchPhotosUseCase(photoRepository)
+  // Create use case instance with repository (memoized to prevent recreation)
+  const fetchPhotosUseCase = useMemo(
+    () => new FetchPhotosUseCase(photoRepository),
+    []
+  )
 
   /**
    * Fetches photos using the provided query
    * 
    * @param query - Search query (defaults to 'nature' if not provided)
    */
-  const fetchPhotos = async (query: string = 'nature') => {
-    dispatch({ type: 'FETCH_START', query })
+  const fetchPhotos = useCallback(
+    async (query: string = 'nature') => {
+      dispatch({ type: 'FETCH_START', query })
 
-    try {
-      const result = await fetchPhotosUseCase.execute({
-        query,
-        page: 1,
-        perPage: 20,
-      })
+      try {
+        const result = await fetchPhotosUseCase.execute({
+          query,
+          page: 1,
+          perPage: 20,
+        })
 
-      dispatch({
-        type: 'FETCH_SUCCESS',
-        photos: result.photos,
-        page: result.currentPage,
-        hasMore: result.hasMore,
-      })
-    } catch (error) {
-      // Ensure error is PhotoRepositoryError
-      const photoError =
-        error instanceof PhotoRepositoryError
-          ? error
-          : new PhotoRepositoryError(
-              error instanceof Error ? error.message : 'Failed to fetch photos',
-              'unknown',
-              error
-            )
+        dispatch({
+          type: 'FETCH_SUCCESS',
+          photos: result.photos,
+          page: result.currentPage,
+          hasMore: result.hasMore,
+        })
+      } catch (error) {
+        // Ensure error is PhotoRepositoryError
+        const photoError =
+          error instanceof PhotoRepositoryError
+            ? error
+            : new PhotoRepositoryError(
+                error instanceof Error ? error.message : 'Failed to fetch photos',
+                'unknown',
+                error
+              )
 
-      dispatch({ type: 'FETCH_ERROR', error: photoError })
-    }
-  }
+        dispatch({ type: 'FETCH_ERROR', error: photoError })
+      }
+    },
+    [dispatch, fetchPhotosUseCase]
+  )
 
   /**
    * Loads more photos (pagination)
    * Prevents loading if already loading or no more photos available
    */
-  const loadMore = async () => {
+  const loadMore = useCallback(async () => {
     if (!state.hasMore || state.loading) {
       return
     }
@@ -111,14 +117,14 @@ export function usePhotos() {
 
       dispatch({ type: 'FETCH_ERROR', error: photoError })
     }
-  }
+  }, [dispatch, fetchPhotosUseCase, state.hasMore, state.loading, state.searchQuery, state.currentPage])
 
   /**
    * Resets the photo state to initial values
    */
-  const reset = () => {
+  const reset = useCallback(() => {
     dispatch({ type: 'RESET' })
-  }
+  }, [dispatch])
 
   return {
     // State

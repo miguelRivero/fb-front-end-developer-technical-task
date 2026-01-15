@@ -3,6 +3,7 @@ import './App.css'
 import styles from './App.module.css'
 import { usePhotos } from './presentation/hooks/usePhotos'
 import { useLayout } from './presentation/hooks/useLayout'
+import { GridLayout } from './components/layouts/GridLayout'
 
 function App() {
   const { photos, loading, error, fetchPhotos } = usePhotos()
@@ -11,7 +12,8 @@ function App() {
   useEffect(() => {
     // Initial fetch on mount
     fetchPhotos('nature')
-  }, [fetchPhotos])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Only run on mount
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -31,6 +33,18 @@ function App() {
             <p className="text-red-600 mt-2">
               <strong>Error:</strong> {error.message}
             </p>
+          )}
+        </div>
+
+        {/* Layout Display */}
+        <div className="mt-8">
+          {currentLayout === 'grid' && (
+            <GridLayout
+              photos={photos}
+              loading={loading}
+              error={error}
+              onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
+            />
           )}
         </div>
       </div>

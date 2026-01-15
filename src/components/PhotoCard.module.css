@@ -1,0 +1,178 @@
+/* PhotoCard Component Styles */
+
+.card {
+  position: relative;
+  background: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.card.clickable {
+  cursor: pointer;
+}
+
+.card.clickable:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Image Container */
+.imageContainer {
+  position: relative;
+  width: 100%;
+  padding-bottom: 75%; /* 4:3 aspect ratio fallback */
+  overflow: hidden;
+  background: var(--color-background);
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+/* Metadata Overlay */
+.metadata {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--spacing-md);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    transparent 100%
+  );
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+/* Show metadata on hover or when card is focused */
+.card:hover .metadata,
+.card:focus .metadata,
+.card:focus-within .metadata {
+  opacity: 1;
+}
+
+/* Creator Info */
+.creatorInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 0; /* Allow text truncation */
+}
+
+.profileImage {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--border-radius-full);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.creatorDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0; /* Allow text truncation */
+}
+
+.creatorName {
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.creatorUsername {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Likes */
+.likes {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.likeIcon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.likesCount {
+  line-height: 1;
+}
+
+/* Hover Effects */
+.card:hover,
+.card:focus {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card:hover .image,
+.card:focus .image {
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .metadata {
+    opacity: 1; /* Always show on mobile for better UX */
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.6) 50%,
+      transparent 100%
+    );
+  }
+
+  .creatorDetails {
+    gap: 0;
+  }
+
+  .creatorName {
+    font-size: var(--font-size-xs);
+  }
+
+  .creatorUsername {
+    display: none; /* Hide username on mobile to save space */
+  }
+
+  .likes {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Touch Device Support */
+@media (hover: none) and (pointer: coarse) {
+  .metadata {
+    opacity: 1; /* Always show on touch devices */
+  }
+}
