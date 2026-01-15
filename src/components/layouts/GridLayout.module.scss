@@ -34,18 +34,21 @@
   justify-content: center;
   min-height: 400px;
   padding: 2rem;
+  animation: fadeIn var(--transition-base, 200ms) ease-out;
 }
 
 .emptyStateText {
   font-size: 1.125rem;
   color: #6b7280;
   text-align: center;
+  transition: color var(--transition-base, 200ms);
 }
 
 .errorText {
   font-size: 1.125rem;
   color: #ef4444;
   text-align: center;
+  transition: color var(--transition-base, 200ms);
 }
 
 /* Loading skeleton */

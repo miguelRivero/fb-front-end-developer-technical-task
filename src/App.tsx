@@ -6,6 +6,7 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 import { GridLayout } from './components/layouts/GridLayout'
 import { LayoutSwitcher } from './components/LayoutSwitcher'
 import { ListLayout } from './components/layouts/ListLayout'
+import styles from './App.module.scss'
 import { useEffect } from 'react'
 import { useLayout } from './presentation/hooks/useLayout'
 import { usePhotos } from './presentation/hooks/usePhotos'
@@ -44,39 +45,52 @@ function App() {
           </div>
 
           {/* Layout Display */}
-          <div className="mt-8">
-            {currentLayout === 'grid' && (
-              <GridLayout
-                photos={photos}
-                loading={loading}
-                error={error}
-                onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
-              />
-            )}
-            {currentLayout === 'carousel' && (
-              <CarouselLayout
-                photos={photos}
-                loading={loading}
-                error={error}
-                onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
-              />
-            )}
-            {currentLayout === 'list' && (
-              <ListLayout
-                photos={photos}
-                loading={loading}
-                error={error}
-                onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
-              />
-            )}
-            {currentLayout === 'cards' && (
-              <CardsLayout
-                photos={photos}
-                loading={loading}
-                error={error}
-                onPhotoClick={(photo) => console.log('Clicked photo:', photo.id)}
-              />
-            )}
+          <div className={`${styles.layoutContainer} mt-8`}>
+            <div
+              key={currentLayout}
+              className={`${styles.layoutWrapper} ${styles[`layout-${currentLayout}`]}`}
+            >
+              {currentLayout === 'grid' && (
+                <GridLayout
+                  photos={photos}
+                  loading={loading}
+                  error={error}
+                  onPhotoClick={(photo) =>
+                    console.log('Clicked photo:', photo.id)
+                  }
+                />
+              )}
+              {currentLayout === 'carousel' && (
+                <CarouselLayout
+                  photos={photos}
+                  loading={loading}
+                  error={error}
+                  onPhotoClick={(photo) =>
+                    console.log('Clicked photo:', photo.id)
+                  }
+                />
+              )}
+              {currentLayout === 'list' && (
+                <ListLayout
+                  photos={photos}
+                  loading={loading}
+                  error={error}
+                  onPhotoClick={(photo) =>
+                    console.log('Clicked photo:', photo.id)
+                  }
+                />
+              )}
+              {currentLayout === 'cards' && (
+                <CardsLayout
+                  photos={photos}
+                  loading={loading}
+                  error={error}
+                  onPhotoClick={(photo) =>
+                    console.log('Clicked photo:', photo.id)
+                  }
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

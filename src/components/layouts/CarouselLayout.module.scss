@@ -28,25 +28,32 @@
   height: 44px;
   margin-top: -22px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  transition: all var(--transition-base, 0.2s);
+  transition: all var(--transition-base, 200ms) var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
+  will-change: transform, box-shadow, background-color;
 }
 
 :global(.swiper-button-next::after),
 :global(.swiper-button-prev::after) {
   font-size: 18px;
   font-weight: 700;
+  transition: transform var(--transition-fast, 150ms) var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
 }
 
 :global(.swiper-button-next:hover),
 :global(.swiper-button-prev:hover) {
   background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transform: scale(1.15);
+}
+
+:global(.swiper-button-next:hover::after),
+:global(.swiper-button-prev:hover::after) {
   transform: scale(1.1);
 }
 
 :global(.swiper-button-next:active),
 :global(.swiper-button-prev:active) {
-  transform: scale(0.95);
+  transform: scale(0.9);
 }
 
 :global(.swiper-button-disabled) {

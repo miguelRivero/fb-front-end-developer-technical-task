@@ -1,4 +1,74 @@
-.test {
-  color: red;
-  font-weight: bold;
+/* App Component Styles */
+
+/* Layout Container - provides positioning context */
+.layoutContainer {
+  position: relative;
+  width: 100%;
+  min-height: 400px; /* Prevent layout shift during transitions */
+}
+
+/* Layout Wrapper - handles transitions */
+.layoutWrapper {
+  width: 100%;
+  animation: fadeIn var(--transition-layout, 300ms) ease-out;
+  will-change: opacity, transform;
+}
+
+/* Layout-specific transition classes */
+.layout-grid,
+.layout-carousel,
+.layout-list,
+.layout-cards {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade-in animation for layout transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cross-fade effect for smoother transitions */
+.layoutWrapper.entering {
+  animation: fadeIn var(--transition-layout, 300ms) ease-out;
+}
+
+.layoutWrapper.exiting {
+  animation: fadeOut var(--transition-layout, 200ms) ease-in;
+  pointer-events: none;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .layoutWrapper {
+    animation: none;
+  }
+  
+  .layoutWrapper.entering,
+  .layoutWrapper.exiting {
+    animation: none;
+  }
+}
+
+/* Performance optimization */
+.layoutContainer {
+  contain: layout style paint;
 }

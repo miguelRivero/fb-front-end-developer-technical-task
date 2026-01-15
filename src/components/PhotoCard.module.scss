@@ -6,9 +6,11 @@
   border-radius: var(--border-radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  transition: transform var(--transition-base, 200ms) var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1)),
+    box-shadow var(--transition-base, 200ms) var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
   display: flex;
   flex-direction: column;
+  will-change: transform, box-shadow;
 }
 
 .card.clickable {
@@ -36,7 +38,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-slow);
+  transition: transform var(--transition-slow, 300ms) var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
+  will-change: transform;
 }
 
 /* Metadata Overlay */
@@ -56,7 +59,10 @@
   justify-content: space-between;
   align-items: center;
   opacity: 0;
-  transition: opacity var(--transition-base);
+  transform: translateY(8px);
+  transition: opacity var(--transition-base, 200ms) var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1)),
+    transform var(--transition-base, 200ms) var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
+  will-change: opacity, transform;
 }
 
 /* Show metadata on hover or when card is focused */
@@ -64,6 +70,7 @@
 .card:focus .metadata,
 .card:focus-within .metadata {
   opacity: 1;
+  transform: translateY(0);
 }
 
 /* Creator Info */
@@ -132,13 +139,21 @@
 /* Hover Effects */
 .card:hover,
 .card:focus {
-  transform: translateY(-4px);
+  transform: translateY(-6px) scale(1.01);
   box-shadow: var(--shadow-lg);
+}
+
+.card:active {
+  transform: translateY(-2px) scale(0.99);
 }
 
 .card:hover .image,
 .card:focus .image {
-  transform: scale(1.05);
+  transform: scale(1.08);
+}
+
+.card:active .image {
+  transform: scale(1.02);
 }
 
 /* Responsive Design */
@@ -174,5 +189,45 @@
 @media (hover: none) and (pointer: coarse) {
   .metadata {
     opacity: 1; /* Always show on touch devices */
+    transform: translateY(0);
+  }
+  
+  .card:hover,
+  .card:focus {
+    transform: none; /* Disable hover transform on touch devices */
+  }
+  
+  .card:hover .image,
+  .card:focus .image {
+    transform: none;
+  }
+  
+  .card:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .image,
+  .metadata {
+    transition: none;
+  }
+  
+  .card:hover,
+  .card:focus,
+  .card:active {
+    transform: none;
+  }
+  
+  .card:hover .image,
+  .card:focus .image,
+  .card:active .image {
+    transform: none;
+  }
+  
+  .metadata {
+    transform: translateY(0);
   }
 }
