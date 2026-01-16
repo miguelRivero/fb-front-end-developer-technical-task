@@ -325,7 +325,24 @@ export function CarouselLayout({
         </button>
       </div>
 
-      {/* Dot Indicators */}
+      {/* Mobile Progress Bar */}
+      {photos.length > 0 && (
+        <div className={styles.mobileProgress}>
+          <div className={styles.progressBar}>
+            <div 
+              className={styles.progressFill}
+              style={{
+                width: `${((currentIndex + 1) / photos.length) * 100}%`,
+              }}
+            />
+          </div>
+          <div className={styles.progressText}>
+            {currentIndex + 1} / {photos.length}
+          </div>
+        </div>
+      )}
+
+      {/* Desktop/Tablet Dot Indicators */}
       {photos.length > 0 && (
         <div className={styles.dots}>
           {photos.map((photo, index) => {
