@@ -22,7 +22,9 @@
 
   /* Accent and States */
   --primary: oklch(0.205 0 0);
-  --color-primary: oklch(0.205 0 0); /* Primary accent (buttons, active layout) */
+  --color-primary: oklch(
+    0.205 0 0
+  ); /* Primary accent (buttons, active layout) */
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.96 0 0);
   --color-secondary: oklch(0.96 0 0);
@@ -45,8 +47,12 @@
   --color-primary-light: oklch(0.3 0 0); /* Lighter variant for hover states */
   --color-secondary-dark: oklch(0.9 0 0);
   --color-secondary-light: oklch(0.97 0 0);
-  --color-success: oklch(0.646 0.222 41.116); /* Kept for potential future use */
-  --color-warning: oklch(0.828 0.189 84.429); /* Kept for potential future use */
+  --color-success: oklch(
+    0.646 0.222 41.116
+  ); /* Kept for potential future use */
+  --color-warning: oklch(
+    0.828 0.189 84.429
+  ); /* Kept for potential future use */
 
   /* Spacing (8px system) */
   --spacing-xs: 4px; /* XS: 4px */
@@ -100,7 +106,8 @@
 
   /* Shadows */
   --shadow-card-resting: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Card resting shadow */
-  --shadow-card-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Card hover shadow */
+  --shadow-card-hover:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Card hover shadow */
 
   /* Legacy shadow support (for backward compatibility) */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -121,7 +128,7 @@
   --animation-skeleton-shimmer: 1.2s ease-in-out;
   --animation-skeleton-pulse: 2s cubic-bezier(0.4, 0, 0.6, 1);
   --animation-skeleton-delay-base: 0.1s;
-  
+
   /* Easing Functions */
   --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
@@ -132,4 +139,8 @@
   --z-dropdown: 1000;
   --z-modal: 2000;
   --z-tooltip: 3000;
+  --z-header: 50;
+
+  /* Layout */
+  --header-height: 120px; /* Fixed header height: 24px (top padding) + 72px (content) + 24px (bottom padding) */
 }

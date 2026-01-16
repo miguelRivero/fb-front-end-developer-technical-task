@@ -24,8 +24,8 @@ function App() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-background">
-        {/* Classic Header */}
-        <div className="bg-background border-b border-border">
+        {/* Fixed Header */}
+        <div className={`${styles.header} bg-background border-b border-border`}>
           <div className={styles.headerContainer}>
             <header className="flex items-center justify-between">
               {/* Logo and Title */}

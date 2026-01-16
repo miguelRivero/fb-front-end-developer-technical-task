@@ -1,5 +1,18 @@
 /* App Component Styles */
 
+/* Fixed Header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-header, 50);
+  width: 100%;
+  background-color: var(--background);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
 /* Container styles with responsive breakpoints */
 .headerContainer,
 .contentContainer {
@@ -15,7 +28,12 @@
   padding-bottom: 1.5rem;
 }
 
+/* Content container with top margin to account for fixed header */
 .contentContainer {
+  margin-top: var(
+    --header-height,
+    120px
+  ); /* Fallback to 120px if variable not available */
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
@@ -139,7 +157,7 @@
   .layoutWrapper {
     animation: none;
   }
-  
+
   .layoutWrapper.entering,
   .layoutWrapper.exiting {
     animation: none;
