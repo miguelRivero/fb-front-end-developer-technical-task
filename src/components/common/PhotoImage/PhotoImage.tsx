@@ -20,6 +20,8 @@ interface PhotoImageProps {
   className?: string
   /** Click handler */
   onClick?: () => void
+  /** Callback when image loads */
+  onImageLoad?: () => void
 }
 
 /**
@@ -35,12 +37,18 @@ export function PhotoImage({
   priority = false,
   className,
   onClick,
+  onImageLoad,
 }: PhotoImageProps) {
   const [isLoaded, setIsLoaded] = useState(false)
 
   const imageUrl = photo.urls[urlType]
   const altText =
     photo.altDescription || `Photo by ${photo.creator.name}` || 'Photo'
+
+  const handleLoad = () => {
+    setIsLoaded(true)
+    onImageLoad?.()
+  }
 
   return (
     <div
@@ -58,7 +66,7 @@ export function PhotoImage({
         width={photo.dimensions.width}
         height={photo.dimensions.height}
         className={`${styles.image} ${isHovered ? styles.imageHovered : ''}`}
-        onLoad={() => setIsLoaded(true)}
+        onLoad={handleLoad}
         loading={priority ? 'eager' : 'lazy'}
       />
     </div>

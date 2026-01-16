@@ -59,8 +59,72 @@ export function CarouselLayout({
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [hoveredPhotoId, setHoveredPhotoId] = useState<string | null>(null)
   const [slidesPerView, setSlidesPerView] = useState(1)
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
 
   const minSwipeDistance = 50
+
+  // Ensure currentIndex is always valid when photos change
+  useEffect(() => {
+    if (photos.length === 0) {
+      setCurrentIndex(0)
+      return
+    }
+    
+    // Adjust currentIndex if it's too close to the end when showing multiple slides
+    if (slidesPerView > 1 && currentIndex + slidesPerView > photos.length) {
+      const maxIndex = Math.max(0, photos.length - slidesPerView)
+      if (currentIndex > maxIndex) {
+        setCurrentIndex(maxIndex)
+      }
+    } else if (currentIndex >= photos.length) {
+      setCurrentIndex(Math.max(0, photos.length - 1))
+    }
+  }, [photos.length, currentIndex, slidesPerView])
+
+  // Track when images are loaded
+  const handleImageLoad = useCallback((photoId: string) => {
+    setLoadedImages((prev) => new Set(prev).add(photoId))
+  }, [])
+
+  // Preload images for visible slides
+  useEffect(() => {
+    if (photos.length === 0) return
+    
+    const indicesToPreload = new Set<number>()
+    
+    // Always preload current
+    indicesToPreload.add(currentIndex)
+    
+    // Preload adjacent slides based on viewport
+    if (slidesPerView >= 2) {
+      // Preload next
+      const nextIndex = currentIndex === photos.length - 1 ? 0 : currentIndex + 1
+      indicesToPreload.add(nextIndex)
+      
+      // Preload previous
+      const prevIndex = currentIndex === 0 ? photos.length - 1 : currentIndex - 1
+      indicesToPreload.add(prevIndex)
+      
+      if (slidesPerView >= 3) {
+        // Preload one more in each direction
+        const nextNextIndex = nextIndex === photos.length - 1 ? 0 : nextIndex + 1
+        indicesToPreload.add(nextNextIndex)
+        
+        const prevPrevIndex = prevIndex === 0 ? photos.length - 1 : prevIndex - 1
+        indicesToPreload.add(prevPrevIndex)
+      }
+    }
+    
+    // Preload images
+    indicesToPreload.forEach((index) => {
+      const photo = photos[index]
+      if (photo && !loadedImages.has(photo.id)) {
+        const img = new Image()
+        img.src = photo.urls.regular
+        img.onload = () => handleImageLoad(photo.id)
+      }
+    })
+  }, [currentIndex, slidesPerView, photos, loadedImages, handleImageLoad])
 
   // Calculate slides per view based on window width
   useEffect(() => {
@@ -81,12 +145,21 @@ export function CarouselLayout({
 
   const goToSlide = useCallback(
     (index: number) => {
-      if (isTransitioning) return
+      if (isTransitioning || photos.length === 0) return
+      // Clamp index to valid range, accounting for slides per view
+      // When showing multiple slides, adjust so we don't go past the end
+      let validIndex = Math.max(0, Math.min(index, photos.length - 1))
+      
+      // If we're showing multiple slides and near the end, adjust to show the last slide properly
+      if (slidesPerView > 1 && validIndex + slidesPerView > photos.length) {
+        validIndex = Math.max(0, photos.length - slidesPerView)
+      }
+      
       setIsTransitioning(true)
-      setCurrentIndex(index)
+      setCurrentIndex(validIndex)
       setTimeout(() => setIsTransitioning(false), 300)
     },
-    [isTransitioning]
+    [isTransitioning, photos.length, slidesPerView]
   )
 
   const goToPrevious = useCallback(() => {
@@ -170,6 +243,9 @@ export function CarouselLayout({
             {photos.map((photo, index) => {
               const isActive = index === currentIndex
               const isHovered = hoveredPhotoId === photo.id
+              const isImageLoaded = loadedImages.has(photo.id)
+              const shouldShowLoading = !isImageLoaded
+              
               return (
                 <div
                   key={photo.id}
@@ -178,19 +254,27 @@ export function CarouselLayout({
                   onMouseLeave={() => setHoveredPhotoId(null)}
                 >
                   <div className={styles.slideImageWrapper}>
+                    {shouldShowLoading && (
+                      <div className={styles.slideSkeleton} aria-hidden="true">
+                        <div className={styles.skeletonImage} />
+                      </div>
+                    )}
                     <PhotoImage
                       photo={photo}
                       urlType="regular"
                       isHovered={isHovered}
                       aspectRatio="4/3"
                       priority={isActive}
+                      onImageLoad={() => handleImageLoad(photo.id)}
                     />
-                    <PhotoOverlay
-                      photo={photo}
-                      isVisible={isHovered}
-                      showViews
-                      className={isActive ? styles.overlayLarge : ''}
-                    />
+                    {isImageLoaded && (
+                      <PhotoOverlay
+                        photo={photo}
+                        isVisible={isHovered}
+                        showViews
+                        className={isActive ? styles.overlayLarge : ''}
+                      />
+                    )}
                   </div>
                 </div>
               )
@@ -242,18 +326,24 @@ export function CarouselLayout({
       </div>
 
       {/* Dot Indicators */}
-      <div className={styles.dots}>
-        {photos.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`${styles.dot} ${
-              index === currentIndex ? styles.dotActive : ''
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
+      {photos.length > 0 && (
+        <div className={styles.dots}>
+          {photos.map((photo, index) => {
+            // Only render dot if photo is valid
+            if (!photo) return null
+            return (
+              <button
+                key={photo.id || index}
+                onClick={() => goToSlide(index)}
+                className={`${styles.dot} ${
+                  index === currentIndex ? styles.dotActive : ''
+                }`}
+                aria-label={`Go to slide ${index + 1} of ${photos.length}`}
+              />
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
