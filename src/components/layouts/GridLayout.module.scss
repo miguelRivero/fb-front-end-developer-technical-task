@@ -150,3 +150,16 @@
     transform: scale(0.98);
   }
 }
+
+/* Sentinel element for infinite scroll */
+.sentinel {
+  height: 1px;
+  width: 100%;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Loading more indicator */
+.loadingMore {
+  margin-top: 1rem;
+}

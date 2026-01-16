@@ -4,6 +4,7 @@ import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoOverlay } from '../common/PhotoOverlay/PhotoOverlay'
 import styles from './GridLayout.module.scss'
 import { useState } from 'react'
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 
 /**
  * Props for the GridLayout component
@@ -17,6 +18,10 @@ interface GridLayoutProps {
   loading?: boolean
   /** Error state - displays error message */
   error?: Error | null
+  /** Optional callback to load more photos (for infinite scroll) */
+  loadMore?: () => void | Promise<void>
+  /** Whether more photos are available to load */
+  hasMore?: boolean
 }
 
 /**
@@ -51,14 +56,27 @@ export function GridLayout({
   onPhotoClick,
   loading,
   error,
+  loadMore,
+  hasMore = false,
 }: GridLayoutProps) {
+  // Set up infinite scroll if loadMore is provided
+  const sentinelRef = useInfiniteScroll({
+    loadMore: loadMore || (() => {}),
+    hasMore: hasMore && !!loadMore,
+    loading: loading && photos.length > 0, // Only consider "load more" loading, not initial
+  })
+
+  // Determine if this is initial loading (no photos yet) vs loading more
+  const isInitialLoading = loading && photos.length === 0
+  const isLoadingMore = loading && photos.length > 0
+
   // Handle error state
   if (error) {
     return <EmptyState error={error} />
   }
 
-  // Handle loading state
-  if (loading) {
+  // Handle initial loading state
+  if (isInitialLoading) {
     return (
       <div className={styles.grid}>
         {Array.from({ length: 6 }).map((_, index) => (
@@ -76,11 +94,29 @@ export function GridLayout({
   }
 
   return (
-    <div className={styles.grid}>
-      {photos.map((photo) => (
-        <GridItem key={photo.id} photo={photo} onClick={onPhotoClick} />
-      ))}
-    </div>
+    <>
+      <div className={styles.grid}>
+        {photos.map((photo) => (
+          <GridItem key={photo.id} photo={photo} onClick={onPhotoClick} />
+        ))}
+      </div>
+      {/* Loading indicator for "load more" */}
+      {isLoadingMore && (
+        <div className={styles.loadingMore}>
+          <div className={styles.grid}>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div key={`loading-${index}`} className={styles.skeleton}>
+                <div className={styles.skeletonImage} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {/* Sentinel element for infinite scroll */}
+      {hasMore && loadMore && (
+        <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
+      )}
+    </>
   )
 }
 

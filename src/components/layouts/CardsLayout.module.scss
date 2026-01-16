@@ -269,3 +269,16 @@
     transform: none;
   }
 }
+
+/* Sentinel element for infinite scroll */
+.sentinel {
+  height: 1px;
+  width: 100%;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Loading more indicator */
+.loadingMore {
+  margin-top: 1.5rem;
+}

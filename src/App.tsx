@@ -12,7 +12,7 @@ import { useLayout } from './presentation/hooks/useLayout'
 import { usePhotos } from './presentation/hooks/usePhotos'
 
 function App() {
-  const { photos, loading, error, fetchPhotos } = usePhotos()
+  const { photos, loading, error, fetchPhotos, loadMore, hasMore } = usePhotos()
   const { currentLayout } = useLayout()
 
   useEffect(() => {
@@ -84,6 +84,8 @@ function App() {
                   photos={photos}
                   loading={loading}
                   error={error}
+                  loadMore={loadMore}
+                  hasMore={hasMore}
                   onPhotoClick={(photo) =>
                     console.log('Clicked photo:', photo.id)
                   }
@@ -101,6 +103,8 @@ function App() {
                   photos={photos}
                   loading={loading}
                   error={error}
+                  loadMore={loadMore}
+                  hasMore={hasMore}
                   onPhotoClick={(photo) =>
                     console.log('Clicked photo:', photo.id)
                   }
@@ -111,6 +115,8 @@ function App() {
                   photos={photos}
                   loading={loading}
                   error={error}
+                  loadMore={loadMore}
+                  hasMore={hasMore}
                   onPhotoClick={(photo) =>
                     console.log('Clicked photo:', photo.id)
                   }

@@ -6,6 +6,7 @@ import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoStats } from '../common/PhotoStats/PhotoStats'
 import styles from './ListLayout.module.scss'
 import { useState } from 'react'
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 
 /**
  * Props for the ListLayout component
@@ -19,6 +20,10 @@ interface ListLayoutProps {
   loading?: boolean
   /** Error state - displays error message */
   error?: Error | null
+  /** Optional callback to load more photos (for infinite scroll) */
+  loadMore?: () => void | Promise<void>
+  /** Whether more photos are available to load */
+  hasMore?: boolean
 }
 
 /**
@@ -54,14 +59,27 @@ export function ListLayout({
   onPhotoClick,
   loading,
   error,
+  loadMore,
+  hasMore = false,
 }: ListLayoutProps) {
+  // Set up infinite scroll if loadMore is provided
+  const sentinelRef = useInfiniteScroll({
+    loadMore: loadMore || (() => {}),
+    hasMore: hasMore && !!loadMore,
+    loading: loading && photos.length > 0, // Only consider "load more" loading, not initial
+  })
+
+  // Determine if this is initial loading (no photos yet) vs loading more
+  const isInitialLoading = loading && photos.length === 0
+  const isLoadingMore = loading && photos.length > 0
+
   // Handle error state
   if (error) {
     return <EmptyState error={error} />
   }
 
-  // Handle loading state
-  if (loading) {
+  // Handle initial loading state
+  if (isInitialLoading) {
     return (
       <div className={styles.list}>
         {Array.from({ length: 6 }).map((_, index) => (
@@ -83,15 +101,37 @@ export function ListLayout({
   }
 
   return (
-    <div className={styles.list}>
-      {photos.map((photo) => (
-        <ListItem
-          key={photo.id}
-          photo={photo}
-          onPhotoClick={onPhotoClick}
-        />
-      ))}
-    </div>
+    <>
+      <div className={styles.list}>
+        {photos.map((photo) => (
+          <ListItem
+            key={photo.id}
+            photo={photo}
+            onPhotoClick={onPhotoClick}
+          />
+        ))}
+      </div>
+      {/* Loading indicator for "load more" */}
+      {isLoadingMore && (
+        <div className={styles.loadingMore}>
+          <div className={styles.list}>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div key={`loading-${index}`} className={styles.skeletonItem}>
+                <div className={styles.skeletonThumbnail} />
+                <div className={styles.skeletonContent}>
+                  <div className={styles.skeletonLine} />
+                  <div className={styles.skeletonLineShort} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {/* Sentinel element for infinite scroll */}
+      {hasMore && loadMore && (
+        <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
+      )}
+    </>
   )
 }
 

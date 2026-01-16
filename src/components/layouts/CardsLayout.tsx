@@ -5,6 +5,7 @@ import { PhotoDescription } from '../common/PhotoDescription/PhotoDescription'
 import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoStats } from '../common/PhotoStats/PhotoStats'
 import styles from './CardsLayout.module.scss'
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 
 /**
  * Props for the CardsLayout component
@@ -18,6 +19,10 @@ interface CardsLayoutProps {
   loading?: boolean
   /** Error state - displays error message */
   error?: Error | null
+  /** Optional callback to load more photos (for infinite scroll) */
+  loadMore?: () => void | Promise<void>
+  /** Whether more photos are available to load */
+  hasMore?: boolean
 }
 
 /**
@@ -51,14 +56,27 @@ export function CardsLayout({
   onPhotoClick,
   loading,
   error,
+  loadMore,
+  hasMore = false,
 }: CardsLayoutProps) {
+  // Set up infinite scroll if loadMore is provided
+  const sentinelRef = useInfiniteScroll({
+    loadMore: loadMore || (() => {}),
+    hasMore: hasMore && !!loadMore,
+    loading: loading && photos.length > 0, // Only consider "load more" loading, not initial
+  })
+
+  // Determine if this is initial loading (no photos yet) vs loading more
+  const isInitialLoading = loading && photos.length === 0
+  const isLoadingMore = loading && photos.length > 0
+
   // Handle error state
   if (error) {
     return <EmptyState error={error} />
   }
 
-  // Handle loading state
-  if (loading) {
+  // Handle initial loading state
+  if (isInitialLoading) {
     return (
       <div className={styles.grid}>
         {Array.from({ length: 6 }).map((_, index) => (
@@ -81,8 +99,9 @@ export function CardsLayout({
   }
 
   return (
-    <div className={styles.grid}>
-      {photos.map((photo) => {
+    <>
+      <div className={styles.grid}>
+        {photos.map((photo) => {
         // Format creation date
         const formattedDate = new Date(photo.createdAt).toLocaleDateString(
           'en-US',
@@ -176,5 +195,27 @@ export function CardsLayout({
         )
       })}
     </div>
+    {/* Loading indicator for "load more" */}
+    {isLoadingMore && (
+      <div className={styles.loadingMore}>
+        <div className={styles.grid}>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={`loading-${index}`} className={styles.skeletonCard}>
+              <div className={styles.skeletonImage} />
+              <div className={styles.skeletonContent}>
+                <div className={styles.skeletonLine} />
+                <div className={styles.skeletonLineShort} />
+                <div className={styles.skeletonLineShort} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+    {/* Sentinel element for infinite scroll */}
+    {hasMore && loadMore && (
+      <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
+    )}
+  </>
   )
 }
