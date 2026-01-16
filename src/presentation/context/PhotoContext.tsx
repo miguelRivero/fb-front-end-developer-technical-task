@@ -19,8 +19,10 @@ import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
 export interface PhotoState {
   /** Array of photos (domain entities) */
   photos: Photo[]
-  /** Loading state indicator */
+  /** Loading state indicator for initial fetch */
   loading: boolean
+  /** Loading state indicator for loading more photos (pagination) */
+  loadingMore: boolean
   /** Error state (null when no error) */
   error: PhotoRepositoryError | null
   /** Current page number */
@@ -48,6 +50,7 @@ export type PhotoAction =
 const initialState: PhotoState = {
   photos: [],
   loading: false,
+  loadingMore: false,
   error: null,
   currentPage: 1,
   searchQuery: 'nature',
@@ -64,6 +67,7 @@ function photoReducer(state: PhotoState, action: PhotoAction): PhotoState {
       return {
         ...state,
         loading: true,
+        loadingMore: false,
         error: null,
         searchQuery: action.query,
         currentPage: 1,
@@ -74,6 +78,7 @@ function photoReducer(state: PhotoState, action: PhotoAction): PhotoState {
       return {
         ...state,
         loading: false,
+        loadingMore: false,
         photos: action.photos,
         currentPage: action.page,
         hasMore: action.hasMore,
@@ -83,20 +88,21 @@ function photoReducer(state: PhotoState, action: PhotoAction): PhotoState {
       return {
         ...state,
         loading: false,
+        loadingMore: false,
         error: action.error,
       }
 
     case 'LOAD_MORE_START':
       return {
         ...state,
-        loading: true,
+        loadingMore: true,
         error: null,
       }
 
     case 'LOAD_MORE_SUCCESS':
       return {
         ...state,
-        loading: false,
+        loadingMore: false,
         photos: [...state.photos, ...action.photos],
         currentPage: state.currentPage + 1,
         hasMore: action.hasMore,

@@ -6,24 +6,19 @@ import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoStats } from '../common/PhotoStats/PhotoStats'
 import styles from './ListLayout.module.scss'
 import { useState } from 'react'
+import React from 'react'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
+import { useLoadingState } from '../../hooks/useLoadingState'
+import { useClickable } from '../../hooks/useClickable'
+import type { BaseLayoutProps } from '../../types/layout'
+import { UI_CONSTANTS } from '../../constants'
 
 /**
  * Props for the ListLayout component
  */
-interface ListLayoutProps {
-  /** Array of Photo domain entities to display */
-  photos: Photo[]
-  /** Optional click handler for photo interactions */
-  onPhotoClick?: (photo: Photo) => void
-  /** Loading state - shows skeleton loading UI */
-  loading?: boolean
-  /** Error state - displays error message */
-  error?: Error | null
-  /** Optional callback to load more photos (for infinite scroll) */
-  loadMore?: () => void | Promise<void>
-  /** Whether more photos are available to load */
-  hasMore?: boolean
+interface ListLayoutProps extends BaseLayoutProps {
+  /** Loading more state - shows loading indicator for pagination */
+  loadingMore?: boolean
 }
 
 /**
@@ -58,6 +53,7 @@ export function ListLayout({
   photos,
   onPhotoClick,
   loading,
+  loadingMore = false,
   error,
   loadMore,
   hasMore = false,
@@ -66,12 +62,15 @@ export function ListLayout({
   const sentinelRef = useInfiniteScroll({
     loadMore: loadMore || (() => {}),
     hasMore: hasMore && !!loadMore,
-    loading: loading && photos.length > 0, // Only consider "load more" loading, not initial
+    loading: loadingMore, // Use dedicated loadingMore state
   })
 
-  // Determine if this is initial loading (no photos yet) vs loading more
-  const isInitialLoading = loading && photos.length === 0
-  const isLoadingMore = loading && photos.length > 0
+  // Use shared loading state hook
+  const { isInitialLoading, isLoadingMore: isLoadingMoreFromHook } = useLoadingState(
+    loading || false,
+    photos
+  )
+  const isLoadingMore = loadingMore || isLoadingMoreFromHook
 
   // Handle error state
   if (error) {
@@ -82,7 +81,7 @@ export function ListLayout({
   if (isInitialLoading) {
     return (
       <div className={styles.list}>
-        {Array.from({ length: 6 }).map((_, index) => (
+        {Array.from({ length: UI_CONSTANTS.SKELETON_COUNT }).map((_, index) => (
           <div key={index} className={styles.skeletonItem}>
             <div className={styles.skeletonThumbnail} />
             <div className={styles.skeletonContent}>
@@ -111,22 +110,22 @@ export function ListLayout({
           />
         ))}
       </div>
-      {/* Loading indicator for "load more" */}
-      {isLoadingMore && (
-        <div className={styles.loadingMore}>
-          <div className={styles.list}>
-            {Array.from({ length: 3 }).map((_, index) => (
-              <div key={`loading-${index}`} className={styles.skeletonItem}>
-                <div className={styles.skeletonThumbnail} />
-                <div className={styles.skeletonContent}>
-                  <div className={styles.skeletonLine} />
-                  <div className={styles.skeletonLineShort} />
-                </div>
+    {/* Loading indicator for "load more" */}
+    {isLoadingMore && (
+      <div className={styles.loadingMore}>
+        <div className={styles.list}>
+          {Array.from({ length: UI_CONSTANTS.LOADING_MORE_COUNT }).map((_, index) => (
+            <div key={`loading-${index}`} className={styles.skeletonItem}>
+              <div className={styles.skeletonThumbnail} />
+              <div className={styles.skeletonContent}>
+                <div className={styles.skeletonLine} />
+                <div className={styles.skeletonLineShort} />
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
+    )}
       {/* Sentinel element for infinite scroll */}
       {hasMore && loadMore && (
         <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
@@ -135,7 +134,7 @@ export function ListLayout({
   )
 }
 
-function ListItem({
+const ListItem = React.memo(function ListItem({
   photo,
   onPhotoClick,
 }: {
@@ -144,11 +143,8 @@ function ListItem({
 }) {
   const [isHovered, setIsHovered] = useState(false)
 
-  const handleClick = () => {
-    if (onPhotoClick) {
-      onPhotoClick(photo)
-    }
-  }
+  const { onClick: handleClick, onKeyDown, role, tabIndex, 'aria-label': ariaLabel } =
+    useClickable(onPhotoClick, photo, `View photo by ${photo.creator.name}`)
 
   return (
     <article
@@ -156,17 +152,10 @@ function ListItem({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
-      role={onPhotoClick ? 'button' : undefined}
-      tabIndex={onPhotoClick ? 0 : undefined}
-      onKeyDown={(e) => {
-        if (onPhotoClick && (e.key === 'Enter' || e.key === ' ')) {
-          e.preventDefault()
-          handleClick()
-        }
-      }}
-      aria-label={
-        onPhotoClick ? `View photo by ${photo.creator.name}` : undefined
-      }
+      role={role}
+      tabIndex={tabIndex}
+      onKeyDown={onKeyDown}
+      aria-label={ariaLabel}
     >
       {/* Photo Thumbnail */}
       <div className={styles.thumbnailContainer}>
@@ -194,4 +183,4 @@ function ListItem({
       </div>
     </article>
   )
-}
+})

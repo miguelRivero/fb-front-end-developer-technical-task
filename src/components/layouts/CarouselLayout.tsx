@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 
 import { EmptyState } from '../common/EmptyState/EmptyState'
 import type { Photo } from '../../domain/entities/Photo'
@@ -6,6 +6,7 @@ import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoOverlay } from '../common/PhotoOverlay/PhotoOverlay'
 import type React from 'react'
 import styles from './CarouselLayout.module.scss'
+import { UI_CONSTANTS } from '../../constants'
 
 /**
  * Props for the CarouselLayout component
@@ -60,8 +61,9 @@ export function CarouselLayout({
   const [hoveredPhotoId, setHoveredPhotoId] = useState<string | null>(null)
   const [slidesPerView, setSlidesPerView] = useState(1)
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
+  const preloadedImagesRef = useRef<Map<string, HTMLImageElement>>(new Map())
 
-  const minSwipeDistance = 50
+  const minSwipeDistance = UI_CONSTANTS.SWIPE_MIN_DISTANCE
 
   // Ensure currentIndex is always valid when photos change
   useEffect(() => {
@@ -119,12 +121,39 @@ export function CarouselLayout({
     indicesToPreload.forEach((index) => {
       const photo = photos[index]
       if (photo && !loadedImages.has(photo.id)) {
+        // Clean up old preload if it exists
+        const oldImg = preloadedImagesRef.current.get(photo.id)
+        if (oldImg) {
+          oldImg.src = ''
+          preloadedImagesRef.current.delete(photo.id)
+        }
+
         const img = new Image()
         img.src = photo.urls.regular
         img.onload = () => handleImageLoad(photo.id)
+        preloadedImagesRef.current.set(photo.id, img)
       }
     })
+
+    // Cleanup function
+    return () => {
+      // Clean up preloaded images when component unmounts or dependencies change
+      preloadedImagesRef.current.forEach((img) => {
+        img.src = ''
+      })
+      preloadedImagesRef.current.clear()
+    }
   }, [currentIndex, slidesPerView, photos, loadedImages, handleImageLoad])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      preloadedImagesRef.current.forEach((img) => {
+        img.src = ''
+      })
+      preloadedImagesRef.current.clear()
+    }
+  }, [])
 
   // Calculate slides per view based on window width
   useEffect(() => {
@@ -157,7 +186,7 @@ export function CarouselLayout({
       
       setIsTransitioning(true)
       setCurrentIndex(validIndex)
-      setTimeout(() => setIsTransitioning(false), 300)
+      setTimeout(() => setIsTransitioning(false), UI_CONSTANTS.TRANSITION_DURATION)
     },
     [isTransitioning, photos.length, slidesPerView]
   )

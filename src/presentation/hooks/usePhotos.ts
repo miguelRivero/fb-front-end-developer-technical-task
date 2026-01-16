@@ -1,8 +1,9 @@
-import { useContext, useCallback, useMemo } from 'react'
+import { useContext, useCallback, useMemo, useRef, useEffect } from 'react'
 import { PhotoContext } from '../context/PhotoContext'
 import { FetchPhotosUseCase } from '../../application/use-cases/FetchPhotosUseCase'
 import { photoRepository } from '../../infrastructure/repositories'
 import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
+import { PAGINATION_CONFIG } from '../../constants'
 
 /**
  * Custom hook: usePhotos
@@ -42,6 +43,16 @@ export function usePhotos() {
     []
   )
 
+  // AbortController ref for request cancellation
+  const abortControllerRef = useRef<AbortController | null>(null)
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort()
+    }
+  }, [])
+
   /**
    * Fetches photos using the provided query
    * 
@@ -49,14 +60,26 @@ export function usePhotos() {
    */
   const fetchPhotos = useCallback(
     async (query: string = 'nature') => {
+      // Cancel previous request if it exists
+      abortControllerRef.current?.abort()
+
+      // Create new AbortController for this request
+      const controller = new AbortController()
+      abortControllerRef.current = controller
+
       dispatch({ type: 'FETCH_START', query })
 
       try {
         const result = await fetchPhotosUseCase.execute({
           query,
           page: 1,
-          perPage: 20,
+          perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
         })
+
+        // Check if request was aborted
+        if (controller.signal.aborted) {
+          return
+        }
 
         dispatch({
           type: 'FETCH_SUCCESS',
@@ -65,6 +88,16 @@ export function usePhotos() {
           hasMore: result.hasMore,
         })
       } catch (error) {
+        // Don't show error if request was aborted
+        if (controller.signal.aborted) {
+          return
+        }
+
+        // Handle AbortError gracefully (don't show as user error)
+        if (error instanceof Error && error.name === 'AbortError') {
+          return
+        }
+
         // Ensure error is PhotoRepositoryError
         const photoError =
           error instanceof PhotoRepositoryError
@@ -86,9 +119,16 @@ export function usePhotos() {
    * Prevents loading if already loading or no more photos available
    */
   const loadMore = useCallback(async () => {
-    if (!state.hasMore || state.loading) {
+    if (!state.hasMore || state.loadingMore || state.loading) {
       return
     }
+
+    // Cancel previous request if it exists
+    abortControllerRef.current?.abort()
+
+    // Create new AbortController for this request
+    const controller = new AbortController()
+    abortControllerRef.current = controller
 
     dispatch({ type: 'LOAD_MORE_START' })
 
@@ -96,8 +136,13 @@ export function usePhotos() {
       const result = await fetchPhotosUseCase.execute({
         query: state.searchQuery,
         page: state.currentPage + 1,
-        perPage: 20,
+        perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
       })
+
+      // Check if request was aborted
+      if (controller.signal.aborted) {
+        return
+      }
 
       dispatch({
         type: 'LOAD_MORE_SUCCESS',
@@ -105,6 +150,16 @@ export function usePhotos() {
         hasMore: result.hasMore,
       })
     } catch (error) {
+      // Don't show error if request was aborted
+      if (controller.signal.aborted) {
+        return
+      }
+
+      // Handle AbortError gracefully (don't show as user error)
+      if (error instanceof Error && error.name === 'AbortError') {
+        return
+      }
+
       // Ensure error is PhotoRepositoryError
       const photoError =
         error instanceof PhotoRepositoryError
@@ -117,7 +172,7 @@ export function usePhotos() {
 
       dispatch({ type: 'FETCH_ERROR', error: photoError })
     }
-  }, [dispatch, fetchPhotosUseCase, state.hasMore, state.loading, state.searchQuery, state.currentPage])
+  }, [dispatch, fetchPhotosUseCase, state.hasMore, state.loadingMore, state.loading, state.searchQuery, state.currentPage])
 
   /**
    * Resets the photo state to initial values
@@ -130,6 +185,7 @@ export function usePhotos() {
     // State
     photos: state.photos,
     loading: state.loading,
+    loadingMore: state.loadingMore,
     error: state.error,
     searchQuery: state.searchQuery,
     hasMore: state.hasMore,

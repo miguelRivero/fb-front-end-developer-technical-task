@@ -6,13 +6,14 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 import { GridLayout } from './components/layouts/GridLayout'
 import { LayoutSwitcher } from './components/LayoutSwitcher'
 import { ListLayout } from './components/layouts/ListLayout'
+import { EmptyState } from './components/common/EmptyState/EmptyState'
 import styles from './App.module.scss'
 import { useEffect } from 'react'
 import { useLayout } from './presentation/hooks/useLayout'
 import { usePhotos } from './presentation/hooks/usePhotos'
 
 function App() {
-  const { photos, loading, error, fetchPhotos, loadMore, hasMore } = usePhotos()
+  const { photos, loading, loadingMore, error, fetchPhotos, loadMore, hasMore } = usePhotos()
   const { currentLayout } = useLayout()
 
   useEffect(() => {
@@ -80,47 +81,96 @@ function App() {
               className={`${styles.layoutWrapper} ${styles[`layout-${currentLayout}`]}`}
             >
               {currentLayout === 'grid' && (
-                <GridLayout
-                  photos={photos}
-                  loading={loading}
-                  error={error}
-                  loadMore={loadMore}
-                  hasMore={hasMore}
-                  onPhotoClick={(photo) =>
-                    console.log('Clicked photo:', photo.id)
+                <ErrorBoundary
+                  fallback={
+                    <EmptyState
+                      error={
+                        new Error('An error occurred while rendering the grid layout')
+                      }
+                    />
                   }
-                />
+                >
+                  <GridLayout
+                    photos={photos}
+                    loading={loading}
+                    loadingMore={loadingMore}
+                    error={error}
+                    loadMore={loadMore}
+                    hasMore={hasMore}
+                    onPhotoClick={(photo) => {
+                      if (import.meta.env.DEV) {
+                        console.log('Clicked photo:', photo.id)
+                      }
+                    }}
+                  />
+                </ErrorBoundary>
               )}
               {currentLayout === 'carousel' && (
-                <CarouselLayout
-                  photos={photos}
-                  loading={loading}
-                  error={error}
-                />
+                <ErrorBoundary
+                  fallback={
+                    <EmptyState
+                      error={
+                        new Error('An error occurred while rendering the carousel layout')
+                      }
+                    />
+                  }
+                >
+                  <CarouselLayout
+                    photos={photos}
+                    loading={loading}
+                    error={error}
+                  />
+                </ErrorBoundary>
               )}
               {currentLayout === 'list' && (
-                <ListLayout
-                  photos={photos}
-                  loading={loading}
-                  error={error}
-                  loadMore={loadMore}
-                  hasMore={hasMore}
-                  onPhotoClick={(photo) =>
-                    console.log('Clicked photo:', photo.id)
+                <ErrorBoundary
+                  fallback={
+                    <EmptyState
+                      error={
+                        new Error('An error occurred while rendering the list layout')
+                      }
+                    />
                   }
-                />
+                >
+                  <ListLayout
+                    photos={photos}
+                    loading={loading}
+                    loadingMore={loadingMore}
+                    error={error}
+                    loadMore={loadMore}
+                    hasMore={hasMore}
+                    onPhotoClick={(photo) => {
+                      if (import.meta.env.DEV) {
+                        console.log('Clicked photo:', photo.id)
+                      }
+                    }}
+                  />
+                </ErrorBoundary>
               )}
               {currentLayout === 'cards' && (
-                <CardsLayout
-                  photos={photos}
-                  loading={loading}
-                  error={error}
-                  loadMore={loadMore}
-                  hasMore={hasMore}
-                  onPhotoClick={(photo) =>
-                    console.log('Clicked photo:', photo.id)
+                <ErrorBoundary
+                  fallback={
+                    <EmptyState
+                      error={
+                        new Error('An error occurred while rendering the cards layout')
+                      }
+                    />
                   }
-                />
+                >
+                  <CardsLayout
+                    photos={photos}
+                    loading={loading}
+                    loadingMore={loadingMore}
+                    error={error}
+                    loadMore={loadMore}
+                    hasMore={hasMore}
+                    onPhotoClick={(photo) => {
+                      if (import.meta.env.DEV) {
+                        console.log('Clicked photo:', photo.id)
+                      }
+                    }}
+                  />
+                </ErrorBoundary>
               )}
             </div>
           </div>

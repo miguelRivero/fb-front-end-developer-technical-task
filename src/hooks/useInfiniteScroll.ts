@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 /**
  * Options for useInfiniteScroll hook
@@ -18,20 +18,20 @@ export interface UseInfiniteScrollOptions {
 
 /**
  * Custom hook: useInfiniteScroll
- * 
+ *
  * Implements infinite scroll functionality using the Intersection Observer API.
  * Automatically triggers loadMore callback when the sentinel element enters the viewport.
- * 
+ *
  * Features:
  * - Uses Intersection Observer for efficient scroll detection
  * - Prevents duplicate loads when already loading or no more items available
  * - Configurable root margin for early triggering
  * - Automatic cleanup on unmount
  * - TypeScript support with proper types
- * 
+ *
  * @param options - Configuration options for infinite scroll
  * @returns Ref to attach to the sentinel element
- * 
+ *
  * @example
  * ```tsx
  * function PhotoList() {
@@ -42,7 +42,7 @@ export interface UseInfiniteScrollOptions {
  *     loading,
  *     rootMargin: '200px',
  *   })
- *   
+ *
  *   return (
  *     <div>
  *       {photos.map(photo => <PhotoCard key={photo.id} photo={photo} />)}
@@ -61,23 +61,30 @@ export function useInfiniteScroll({
 }: UseInfiniteScrollOptions) {
   const sentinelRef = useRef<HTMLDivElement>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
-  const isLoadingRef = useRef(false)
+  const lastLoadTimeRef = useRef<number>(0)
+  const MIN_LOAD_INTERVAL = 500 // Minimum time between loads in milliseconds
 
   // Memoize loadMore callback to prevent unnecessary observer re-creation
   const loadMoreCallback = useCallback(async () => {
-    // Prevent duplicate loads
-    if (isLoadingRef.current || !hasMore || loading) {
+    // Prevent duplicate loads using timestamp-based debouncing
+    const now = Date.now()
+    const timeSinceLastLoad = now - lastLoadTimeRef.current
+    const shouldSkipLoad =
+      !hasMore || loading || timeSinceLastLoad < MIN_LOAD_INTERVAL
+
+    if (shouldSkipLoad) {
       return
     }
 
-    isLoadingRef.current = true
+    lastLoadTimeRef.current = now
     try {
       await loadMore()
-    } finally {
-      // Reset loading flag after a short delay to prevent rapid triggers
-      setTimeout(() => {
-        isLoadingRef.current = false
-      }, 100)
+    } catch (error) {
+      // Reset timestamp on error to allow retry
+      lastLoadTimeRef.current = 0
+      if (import.meta.env.DEV) {
+        console.error('Error loading more items:', error)
+      }
     }
   }, [loadMore, hasMore, loading])
 

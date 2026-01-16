@@ -4,24 +4,19 @@ import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoOverlay } from '../common/PhotoOverlay/PhotoOverlay'
 import styles from './GridLayout.module.scss'
 import { useState } from 'react'
+import React from 'react'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
+import { useLoadingState } from '../../hooks/useLoadingState'
+import { useClickable } from '../../hooks/useClickable'
+import type { BaseLayoutProps } from '../../types/layout'
+import { UI_CONSTANTS } from '../../constants'
 
 /**
  * Props for the GridLayout component
  */
-interface GridLayoutProps {
-  /** Array of Photo domain entities to display */
-  photos: Photo[]
-  /** Optional click handler for photo interactions */
-  onPhotoClick?: (photo: Photo) => void
-  /** Loading state - shows skeleton loading UI */
-  loading?: boolean
-  /** Error state - displays error message */
-  error?: Error | null
-  /** Optional callback to load more photos (for infinite scroll) */
-  loadMore?: () => void | Promise<void>
-  /** Whether more photos are available to load */
-  hasMore?: boolean
+interface GridLayoutProps extends BaseLayoutProps {
+  /** Loading more state - shows loading indicator for pagination */
+  loadingMore?: boolean
 }
 
 /**
@@ -55,6 +50,7 @@ export function GridLayout({
   photos,
   onPhotoClick,
   loading,
+  loadingMore = false,
   error,
   loadMore,
   hasMore = false,
@@ -63,12 +59,15 @@ export function GridLayout({
   const sentinelRef = useInfiniteScroll({
     loadMore: loadMore || (() => {}),
     hasMore: hasMore && !!loadMore,
-    loading: loading && photos.length > 0, // Only consider "load more" loading, not initial
+    loading: loadingMore, // Use dedicated loadingMore state
   })
 
-  // Determine if this is initial loading (no photos yet) vs loading more
-  const isInitialLoading = loading && photos.length === 0
-  const isLoadingMore = loading && photos.length > 0
+  // Use shared loading state hook
+  const { isInitialLoading, isLoadingMore: isLoadingMoreFromHook } = useLoadingState(
+    loading || false,
+    photos
+  )
+  const isLoadingMore = loadingMore || isLoadingMoreFromHook
 
   // Handle error state
   if (error) {
@@ -79,7 +78,7 @@ export function GridLayout({
   if (isInitialLoading) {
     return (
       <div className={styles.grid}>
-        {Array.from({ length: 6 }).map((_, index) => (
+        {Array.from({ length: UI_CONSTANTS.SKELETON_COUNT }).map((_, index) => (
           <div key={index} className={styles.skeleton}>
             <div className={styles.skeletonImage} />
           </div>
@@ -104,7 +103,7 @@ export function GridLayout({
       {isLoadingMore && (
         <div className={styles.loadingMore}>
           <div className={styles.grid}>
-            {Array.from({ length: 3 }).map((_, index) => (
+            {Array.from({ length: UI_CONSTANTS.LOADING_MORE_COUNT }).map((_, index) => (
               <div key={`loading-${index}`} className={styles.skeleton}>
                 <div className={styles.skeletonImage} />
               </div>
@@ -120,7 +119,7 @@ export function GridLayout({
   )
 }
 
-function GridItem({
+const GridItem = React.memo(function GridItem({
   photo,
   onClick,
 }: {
@@ -129,11 +128,8 @@ function GridItem({
 }) {
   const [isHovered, setIsHovered] = useState(false)
 
-  const handleClick = () => {
-    if (onClick) {
-      onClick(photo)
-    }
-  }
+  const { onClick: handleClick, onKeyDown, role, tabIndex, 'aria-label': ariaLabel } =
+    useClickable(onClick, photo, `View photo by ${photo.creator.name}`)
 
   return (
     <div
@@ -141,15 +137,10 @@ function GridItem({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onKeyDown={(e) => {
-        if (onClick && (e.key === 'Enter' || e.key === ' ')) {
-          e.preventDefault()
-          handleClick()
-        }
-      }}
-      aria-label={onClick ? `View photo by ${photo.creator.name}` : undefined}
+      role={role}
+      tabIndex={tabIndex}
+      onKeyDown={onKeyDown}
+      aria-label={ariaLabel}
     >
       <div className={styles.imageWrapper}>
         <PhotoImage
@@ -162,4 +153,4 @@ function GridItem({
       </div>
     </div>
   )
-}
+})

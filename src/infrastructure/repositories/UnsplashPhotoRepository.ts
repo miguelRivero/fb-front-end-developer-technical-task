@@ -53,10 +53,12 @@ export class UnsplashPhotoRepository implements PhotoRepository {
       // Convert infrastructure types to domain entities
       const photos = UnsplashApiAdapter.toDomainPhotos(unsplashPhotos)
 
+      // Improved hasMore calculation to handle edge cases
+      // Handles case where API returns empty array but indicates more pages
       return {
         photos,
         currentPage: page,
-        hasMore: unsplashPhotos.length === perPage,
+        hasMore: unsplashPhotos.length === perPage && unsplashPhotos.length > 0,
       }
     } catch (error) {
       // Handle errors and convert to domain error
