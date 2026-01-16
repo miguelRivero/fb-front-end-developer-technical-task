@@ -84,28 +84,22 @@ export function ListLayout({
 
   return (
     <div className={styles.list}>
-      {photos.map((photo, index) => {
-        const isLast = index === photos.length - 1
-        return (
-          <ListItem
-            key={photo.id}
-            photo={photo}
-            isLast={isLast}
-            onPhotoClick={onPhotoClick}
-          />
-        )
-      })}
+      {photos.map((photo) => (
+        <ListItem
+          key={photo.id}
+          photo={photo}
+          onPhotoClick={onPhotoClick}
+        />
+      ))}
     </div>
   )
 }
 
 function ListItem({
   photo,
-  isLast,
   onPhotoClick,
 }: {
   photo: Photo
-  isLast: boolean
   onPhotoClick?: (photo: Photo) => void
 }) {
   const [isHovered, setIsHovered] = useState(false)
@@ -118,7 +112,7 @@ function ListItem({
 
   return (
     <article
-      className={`${styles.listItem} ${onPhotoClick ? styles.clickable : ''} ${isLast ? styles.lastItem : ''}`}
+      className={`${styles.listItem} ${onPhotoClick ? styles.clickable : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
@@ -157,20 +151,6 @@ function ListItem({
             size="sm"
           />
         </div>
-      </div>
-
-      {/* Actions */}
-      <div className={styles.actions}>
-        <button
-          className={styles.actionButton}
-          onClick={(e) => {
-            e.stopPropagation()
-            handleClick()
-          }}
-          aria-label={`View details for photo by ${photo.creator.name}`}
-        >
-          View details
-        </button>
       </div>
     </article>
   )
