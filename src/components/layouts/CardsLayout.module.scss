@@ -28,12 +28,10 @@
   display: flex;
   flex-direction: column;
   background: var(--card);
-  border: 1px solid var(--border);
+  border: var(--border-base);
   border-radius: var(--border-radius-xl);
   overflow: hidden;
-  transition:
-    transform 250ms ease-out,
-    box-shadow 250ms ease-out;
+  transition: var(--transition-card);
   height: 100%;
   will-change: transform, box-shadow;
 }
@@ -43,8 +41,8 @@
 }
 
 .card.clickable:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 /* Hover Effects */
@@ -72,7 +70,7 @@
 /* Description spacing */
 .content > :global(.description) {
   padding-top: 0.75rem;
-  border-top: 1px solid var(--border);
+  border-top: var(--border-base);
   margin-bottom: 0.75rem;
 }
 
@@ -82,7 +80,7 @@
   flex-wrap: wrap;
   gap: 1rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--border);
+  border-top: var(--border-base);
   align-items: center;
 }
 
@@ -164,7 +162,7 @@
 }
 
 .skeletonLine {
-  height: 16px;
+  height: 1em;
   width: 70%;
   border-radius: var(--border-radius-sm);
   background: linear-gradient(
@@ -181,7 +179,7 @@
 }
 
 .skeletonLineShort {
-  height: 14px;
+  height: 0.875em;
   width: 50%;
   border-radius: var(--border-radius-sm);
   background: linear-gradient(
@@ -203,7 +201,7 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.6;
+    opacity: var(--opacity-skeleton);
   }
 }
 
@@ -248,7 +246,7 @@
   }
 
   .card.clickable:active {
-    transform: scale(0.98);
+    transform: var(--transform-scale-active);
   }
 }
 

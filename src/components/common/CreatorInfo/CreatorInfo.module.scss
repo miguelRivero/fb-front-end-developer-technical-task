@@ -20,21 +20,21 @@
   border-radius: 9999px;
   flex-shrink: 0;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.8);
+  border: var(--border-width-base) solid var(--white-overlay-80);
 }
 
 .creatorInfo-sm .profileImage {
-  border-width: 1px;
+  border-width: var(--border-width-thin);
 }
 
 .creatorInfo-lg .profileImage {
-  border-width: 2px;
+  border-width: var(--border-width-base);
 }
 
 .creatorDetails {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0.125em;
   min-width: 0; /* Allow text truncation */
 }
 
@@ -57,7 +57,7 @@
 }
 
 .creatorUsername {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--white-overlay-80);
   font-size: var(--font-size-xs);
   white-space: nowrap;
   overflow: hidden;
@@ -66,7 +66,7 @@
 }
 
 .creatorInfo-sm .creatorUsername {
-  font-size: 10px;
+  font-size: 0.625em;
 }
 
 /* Light theme variants (for cards/list layouts) - applied via className prop */

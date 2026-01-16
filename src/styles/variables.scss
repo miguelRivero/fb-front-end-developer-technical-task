@@ -143,4 +143,39 @@
 
   /* Layout */
   --header-height: 120px; /* Fixed header height: 24px (top padding) + 72px (content) + 24px (bottom padding) */
+
+  /* Border Widths (in em for scalability) */
+  --border-width-thin: 0.0625em; /* 1px at 16px base */
+  --border-width-base: 0.125em; /* 2px at 16px base */
+
+  /* Common Borders */
+  --border-base: var(--border-width-thin) solid var(--border);
+  --border-thick: var(--border-width-base) solid var(--border);
+
+  /* Focus Styles */
+  --focus-outline: var(--border-width-base) solid var(--primary);
+  --focus-outline-offset: 0.125em; /* 2px at 16px base */
+
+  /* Common Opacity Values */
+  --opacity-disabled: 0.6;
+  --opacity-muted: 0.7;
+  --opacity-overlay: 0.8;
+  --opacity-skeleton: 0.6;
+
+  /* Common White Overlay Colors */
+  --white-overlay-80: rgba(255, 255, 255, 0.8);
+  --white-overlay-70: rgba(255, 255, 255, 0.7);
+  --white-overlay-90: rgba(255, 255, 255, 0.9);
+
+  /* Common Transform Values */
+  --transform-scale-active: scale(0.98);
+  --transform-scale-hover: scale(1.02);
+  --transform-scale-hover-large: scale(1.05);
+  --transform-scale-hover-small: scale(1.01);
+  --transform-translate-center: translateY(-50%);
+
+  /* Common Card Transitions */
+  --transition-card: transform 250ms ease-out, box-shadow 250ms ease-out;
+  --transition-card-hover:
+    transform var(--transition-base), box-shadow var(--transition-base);
 }

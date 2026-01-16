@@ -18,8 +18,8 @@
 }
 
 .card.clickable:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 /* Image Container */
@@ -59,7 +59,7 @@
   justify-content: space-between;
   align-items: center;
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(var(--spacing-sm));
   transition: opacity var(--transition-base, 200ms) var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1)),
     transform var(--transition-base, 200ms) var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
   will-change: opacity, transform;
@@ -83,10 +83,10 @@
 }
 
 .profileImage {
-  width: 32px;
-  height: 32px;
+  width: 2em;
+  height: 2em;
   border-radius: var(--border-radius-full);
-  border: 2px solid rgba(255, 255, 255, 0.8);
+  border: var(--border-width-base) solid var(--white-overlay-80);
   flex-shrink: 0;
   object-fit: cover;
 }
@@ -94,7 +94,7 @@
 .creatorDetails {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0.125em;
   min-width: 0; /* Allow text truncation */
 }
 
@@ -108,7 +108,7 @@
 }
 
 .creatorUsername {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--white-overlay-80);
   font-size: var(--font-size-xs);
   white-space: nowrap;
   overflow: hidden;
@@ -127,8 +127,8 @@
 }
 
 .likeIcon {
-  width: 16px;
-  height: 16px;
+  width: 1rem;
+  height: 1rem;
   fill: currentColor;
 }
 
@@ -139,21 +139,21 @@
 /* Hover Effects */
 .card:hover,
 .card:focus {
-  transform: translateY(-6px) scale(1.01);
+  transform: translateY(-0.375em) var(--transform-scale-hover-small);
   box-shadow: var(--shadow-lg);
 }
 
 .card:active {
-  transform: translateY(-2px) scale(0.99);
+  transform: translateY(-0.125em) scale(0.99);
 }
 
 .card:hover .image,
 .card:focus .image {
-  transform: scale(1.08);
+  transform: var(--transform-scale-hover-large);
 }
 
 .card:active .image {
-  transform: scale(1.02);
+  transform: var(--transform-scale-hover);
 }
 
 /* Responsive Design */
@@ -203,7 +203,7 @@
   }
   
   .card:active {
-    transform: scale(0.98);
+    transform: var(--transform-scale-active);
   }
 }
 

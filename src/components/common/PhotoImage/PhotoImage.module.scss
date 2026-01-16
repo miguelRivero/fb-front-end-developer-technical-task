@@ -67,7 +67,7 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.6;
+    opacity: var(--opacity-skeleton);
   }
 }
 

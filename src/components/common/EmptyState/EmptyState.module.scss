@@ -8,13 +8,13 @@
 }
 
 .emptyStateText {
-  font-size: 1.125rem;
+  font-size: var(--font-size-lg);
   color: var(--muted-foreground);
   text-align: center;
 }
 
 .errorText {
-  font-size: 1.125rem;
+  font-size: var(--font-size-lg);
   color: var(--destructive);
   text-align: center;
 }

@@ -14,7 +14,7 @@
   gap: 1rem;
   padding: 1rem;
   background: var(--card);
-  border: 1px solid var(--border);
+  border: var(--border-base);
   border-radius: var(--border-radius-xl);
   transition:
     background-color 250ms ease-out,
@@ -28,8 +28,8 @@
 }
 
 .listItem.clickable:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 /* Hover Effects */
@@ -112,8 +112,8 @@
 
 .skeletonThumbnail {
   flex-shrink: 0;
-  width: 120px;
-  height: 90px;
+  width: 7.5em;
+  height: 5.625em;
   border-radius: var(--border-radius-md);
   background: linear-gradient(
     90deg,
@@ -137,7 +137,7 @@
 }
 
 .skeletonLine {
-  height: 16px;
+  height: 1em;
   width: 60%;
   border-radius: var(--border-radius-sm);
   background: linear-gradient(
@@ -156,7 +156,7 @@
 }
 
 .skeletonLineShort {
-  height: 14px;
+  height: 0.875em;
   width: 40%;
   border-radius: var(--border-radius-sm);
   background: linear-gradient(
@@ -180,7 +180,7 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.6;
+    opacity: var(--opacity-skeleton);
   }
 }
 
@@ -203,7 +203,7 @@
   }
 
   .skeletonItem {
-    opacity: 0.7;
+    opacity: var(--opacity-muted);
   }
 }
 
@@ -238,7 +238,7 @@
   }
 
   .listItem.clickable:active {
-    transform: scale(0.98);
+    transform: var(--transform-scale-active);
   }
 }
 
