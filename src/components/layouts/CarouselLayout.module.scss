@@ -32,7 +32,8 @@
   position: relative;
   flex: 0 0 100%;
   aspect-ratio: 4 / 3;
-  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition-slow, 300ms) var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
+  will-change: transform, opacity;
 }
 
 .slideImageWrapper {
@@ -125,15 +126,24 @@
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-lg);
-  transition: all 200ms ease-out;
+  transition: transform var(--transition-base, 200ms) ease-out,
+              opacity var(--transition-base, 200ms) ease-out,
+              background-color var(--transition-base, 200ms) ease-out;
   cursor: pointer;
   z-index: 10;
+  will-change: transform, opacity;
+  outline: none;
 }
 
 .navButton:hover {
   background: var(--card);
   opacity: 1;
   transform: translateY(-50%) scale(1.05);
+}
+
+.navButton:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .navButton:active {
@@ -169,13 +179,22 @@
   background: var(--muted-foreground);
   opacity: 0.3;
   border: none;
-  transition: all 200ms ease-out;
+  transition: width var(--transition-base, 200ms) ease-out,
+              opacity var(--transition-base, 200ms) ease-out,
+              background-color var(--transition-base, 200ms) ease-out;
   cursor: pointer;
+  outline: none;
+  will-change: width, opacity, background-color;
 }
 
 .dot:hover {
   opacity: 0.5;
   background: var(--muted-foreground);
+}
+
+.dot:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .dotActive {
@@ -246,6 +265,23 @@
 
 /* Responsive Design */
 @media (max-width: 640px) {
+  .imageContainer {
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .carousel {
+    border-radius: 0;
+  }
+
+  .slide {
+    border-radius: 0;
+  }
+
+  .slideImageWrapper {
+    border-radius: 0;
+  }
+
   .navButton {
     width: 2.25rem;
     height: 2.25rem;

@@ -31,16 +31,19 @@
   border: 1px solid var(--border);
   border-radius: var(--border-radius-xl);
   overflow: hidden;
-  transition: all 200ms ease-out;
+  transition:
+    transform 250ms ease-out,
+    box-shadow 250ms ease-out;
   height: 100%;
+  will-change: transform, box-shadow;
 }
 
 .card.clickable {
   cursor: pointer;
 }
 
-.card.clickable:focus {
-  outline: 2px solid var(--color-primary);
+.card.clickable:focus-visible {
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
@@ -48,6 +51,7 @@
 .card:hover {
   box-shadow: var(--shadow-xl);
   transform: translateY(-0.25rem);
+  border-radius: var(--border-radius-xl);
 }
 
 /* Image Container */
@@ -64,7 +68,6 @@
   padding: 1rem;
   flex: 1;
 }
-
 
 /* Description spacing */
 .content > :global(.description) {
@@ -101,8 +104,6 @@
   line-height: 1;
   font-weight: 500;
 }
-
-
 
 /* Loading Skeleton */
 .skeletonCard {
@@ -245,7 +246,7 @@
   .card:hover .image {
     transform: none;
   }
-  
+
   .card.clickable:active {
     transform: scale(0.98);
   }
@@ -257,12 +258,12 @@
   .image {
     transition: none;
   }
-  
+
   .card:hover,
   .card.clickable:active {
     transform: none;
   }
-  
+
   .card:hover .image,
   .card.clickable:active .image {
     transform: none;

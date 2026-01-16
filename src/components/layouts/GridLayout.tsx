@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import type { Photo } from '../../domain/entities/Photo'
 import { EmptyState } from '../common/EmptyState/EmptyState'
+import type { Photo } from '../../domain/entities/Photo'
 import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoOverlay } from '../common/PhotoOverlay/PhotoOverlay'
 import styles from './GridLayout.module.scss'
+import { useState } from 'react'
 
 /**
  * Props for the GridLayout component
@@ -78,11 +78,7 @@ export function GridLayout({
   return (
     <div className={styles.grid}>
       {photos.map((photo) => (
-        <GridItem
-          key={photo.id}
-          photo={photo}
-          onClick={onPhotoClick}
-        />
+        <GridItem key={photo.id} photo={photo} onClick={onPhotoClick} />
       ))}
     </div>
   )

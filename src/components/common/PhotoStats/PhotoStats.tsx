@@ -34,7 +34,9 @@ export function PhotoStats({
   className,
 }: PhotoStatsProps) {
   return (
-    <div className={`${styles.stats} ${styles[`stats-${size}`]} ${lightTheme ? styles.statsLight : ''} ${className || ''}`}>
+    <div
+      className={`${styles.stats} ${styles[`stats-${size}`]} ${lightTheme ? styles.statsLight : ''} ${className || ''}`}
+    >
       <span className={styles.statItem}>
         <svg
           className={styles.statIcon}

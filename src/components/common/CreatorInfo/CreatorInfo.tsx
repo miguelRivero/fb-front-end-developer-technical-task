@@ -31,7 +31,9 @@ export function CreatorInfo({
   className,
 }: CreatorInfoProps) {
   return (
-    <div className={`${styles.creatorInfo} ${styles[`creatorInfo-${size}`]} ${lightTheme ? styles['creatorInfo-light'] : ''} ${className || ''}`}>
+    <div
+      className={`${styles.creatorInfo} ${styles[`creatorInfo-${size}`]} ${lightTheme ? styles['creatorInfo-light'] : ''} ${className || ''}`}
+    >
       <img
         src={photo.creator.profileImageUrl}
         alt={`${photo.creator.name}'s profile`}
@@ -43,7 +45,9 @@ export function CreatorInfo({
       <div className={styles.creatorDetails}>
         <span className={styles.creatorName}>{photo.creator.name}</span>
         {showUsername && (
-          <span className={styles.creatorUsername}>@{photo.creator.username}</span>
+          <span className={styles.creatorUsername}>
+            @{photo.creator.username}
+          </span>
         )}
       </div>
     </div>

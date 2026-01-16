@@ -30,7 +30,9 @@ export function PhotoDescription({
   if (!description) return null
 
   return (
-    <div className={`${styles.description} ${styles[`description-${size}`]} ${className || ''}`}>
+    <div
+      className={`${styles.description} ${styles[`description-${size}`]} ${className || ''}`}
+    >
       <p
         className={styles.descriptionText}
         style={{

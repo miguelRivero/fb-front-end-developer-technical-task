@@ -22,10 +22,27 @@
 
 .gridItem {
   position: relative;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  transition: transform 250ms ease-out, 
+              box-shadow 250ms ease-out;
+  will-change: transform, box-shadow;
 }
 
 .gridItem.clickable {
   cursor: pointer;
+}
+
+.gridItem.clickable:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.gridItem:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--border-radius-lg);
 }
 
 .imageWrapper {
@@ -112,5 +129,24 @@
   
   .skeleton {
     opacity: 0.7;
+  }
+  
+  .gridItem {
+    transition: none;
+  }
+  
+  .gridItem:hover {
+    transform: none;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .gridItem:hover {
+    transform: none;
+  }
+  
+  .gridItem.clickable:active {
+    transform: scale(0.98);
   }
 }

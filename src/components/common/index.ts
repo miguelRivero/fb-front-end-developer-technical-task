@@ -1,6 +1,6 @@
 /**
  * Common Components
- * 
+ *
  * Shared UI components used across different layouts.
  */
 

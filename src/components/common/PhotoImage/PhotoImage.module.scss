@@ -31,7 +31,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 300ms ease-out;
+  transition: transform var(--transition-slow, 300ms) ease-out;
   will-change: transform;
 }
 

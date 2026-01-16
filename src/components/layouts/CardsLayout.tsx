@@ -1,6 +1,6 @@
-import type { Photo } from '../../domain/entities/Photo'
 import { CreatorInfo } from '../common/CreatorInfo/CreatorInfo'
 import { EmptyState } from '../common/EmptyState/EmptyState'
+import type { Photo } from '../../domain/entities/Photo'
 import { PhotoDescription } from '../common/PhotoDescription/PhotoDescription'
 import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoStats } from '../common/PhotoStats/PhotoStats'
@@ -119,17 +119,16 @@ export function CardsLayout({
           >
             {/* Photo Image */}
             <div className={styles.imageContainer}>
-              <PhotoImage
-                photo={photo}
-                urlType="regular"
-                aspectRatio="4/3"
-              />
+              <PhotoImage photo={photo} urlType="regular" aspectRatio="4/3" />
             </div>
 
             {/* Card Content */}
             <div className={styles.content}>
               <CreatorInfo photo={photo} size="md" showUsername lightTheme />
-              <PhotoDescription description={photo.altDescription} maxLines={2} />
+              <PhotoDescription
+                description={photo.altDescription}
+                maxLines={2}
+              />
               <div className={styles.metadata}>
                 <PhotoStats photo={photo} lightTheme size="sm" />
                 {/* Dimensions */}

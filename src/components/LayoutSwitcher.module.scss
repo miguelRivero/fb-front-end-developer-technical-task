@@ -20,7 +20,10 @@
   font-size: var(--font-size-sm);
   font-weight: 500;
   cursor: pointer;
-  transition: all 200ms ease-out;
+  transition: transform var(--transition-base, 200ms) ease-out,
+              background-color var(--transition-base, 200ms) ease-out,
+              color var(--transition-base, 200ms) ease-out,
+              box-shadow var(--transition-base, 200ms) ease-out;
   outline: none;
   position: relative;
   will-change: transform, background-color, box-shadow;

@@ -37,3 +37,4 @@ lerna-debug.log*
 guides/
 .git-rewrite-options.md
 new-agent-prompt.md
+new-agent-prompt2.md

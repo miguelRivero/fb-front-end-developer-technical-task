@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import type { Photo } from '../../../domain/entities/Photo'
 import styles from './PhotoImage.module.scss'
+import { useState } from 'react'
 
 /**
  * Props for PhotoImage component
@@ -39,7 +39,8 @@ export function PhotoImage({
   const [isLoaded, setIsLoaded] = useState(false)
 
   const imageUrl = photo.urls[urlType]
-  const altText = photo.altDescription || `Photo by ${photo.creator.name}` || 'Photo'
+  const altText =
+    photo.altDescription || `Photo by ${photo.creator.name}` || 'Photo'
 
   return (
     <div

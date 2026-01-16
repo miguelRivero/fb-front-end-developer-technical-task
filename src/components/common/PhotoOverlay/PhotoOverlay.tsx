@@ -1,7 +1,6 @@
 import type { Photo } from '../../../domain/entities/Photo'
-import { capitalizeFirst } from '../../../utils/stringUtils'
-import { CreatorInfo } from '../CreatorInfo/CreatorInfo'
 import { PhotoStats } from '../PhotoStats/PhotoStats'
+import { capitalizeFirst } from '../../../utils/stringUtils'
 import styles from './PhotoOverlay.module.scss'
 
 /**

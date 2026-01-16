@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import type { Photo } from '../../domain/entities/Photo'
 import { CreatorInfo } from '../common/CreatorInfo/CreatorInfo'
 import { EmptyState } from '../common/EmptyState/EmptyState'
+import type { Photo } from '../../domain/entities/Photo'
 import { PhotoDescription } from '../common/PhotoDescription/PhotoDescription'
 import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoStats } from '../common/PhotoStats/PhotoStats'
 import styles from './ListLayout.module.scss'
+import { useState } from 'react'
 
 /**
  * Props for the ListLayout component
@@ -85,61 +85,93 @@ export function ListLayout({
   return (
     <div className={styles.list}>
       {photos.map((photo, index) => {
-        // Generate alt text with fallback chain
-        const altText =
-          photo.altDescription || `Photo by ${photo.creator.name}` || 'Photo'
-
-        // Handle click event
-        const handleClick = () => {
-          if (onPhotoClick) {
-            onPhotoClick(photo)
-          }
-        }
-
         const isLast = index === photos.length - 1
-
-        const [isHovered, setIsHovered] = useState(false)
-
         return (
-          <article
+          <ListItem
             key={photo.id}
-            className={`${styles.listItem} ${onPhotoClick ? styles.clickable : ''} ${isLast ? styles.lastItem : ''}`}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={handleClick}
-            role={onPhotoClick ? 'button' : undefined}
-            tabIndex={onPhotoClick ? 0 : undefined}
-            onKeyDown={(e) => {
-              if (onPhotoClick && (e.key === 'Enter' || e.key === ' ')) {
-                e.preventDefault()
-                handleClick()
-              }
-            }}
-            aria-label={
-              onPhotoClick ? `View photo by ${photo.creator.name}` : undefined
-            }
-          >
-            {/* Photo Thumbnail */}
-            <div className={styles.thumbnailContainer}>
-              <PhotoImage
-                photo={photo}
-                urlType="small"
-                isHovered={isHovered}
-                aspectRatio="4/3"
-              />
-            </div>
-
-            {/* Metadata */}
-            <div className={styles.metadata}>
-              <CreatorInfo photo={photo} size="md" showUsername lightTheme />
-              <PhotoDescription description={photo.altDescription} maxLines={2} />
-              <div className={styles.statsContainer}>
-                <PhotoStats photo={photo} showViews showLikesLabel lightTheme size="sm" />
-              </div>
-            </div>
-          </article>
+            photo={photo}
+            isLast={isLast}
+            onPhotoClick={onPhotoClick}
+          />
         )
       })}
     </div>
+  )
+}
+
+function ListItem({
+  photo,
+  isLast,
+  onPhotoClick,
+}: {
+  photo: Photo
+  isLast: boolean
+  onPhotoClick?: (photo: Photo) => void
+}) {
+  const [isHovered, setIsHovered] = useState(false)
+
+  const handleClick = () => {
+    if (onPhotoClick) {
+      onPhotoClick(photo)
+    }
+  }
+
+  return (
+    <article
+      className={`${styles.listItem} ${onPhotoClick ? styles.clickable : ''} ${isLast ? styles.lastItem : ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={handleClick}
+      role={onPhotoClick ? 'button' : undefined}
+      tabIndex={onPhotoClick ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (onPhotoClick && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault()
+          handleClick()
+        }
+      }}
+      aria-label={
+        onPhotoClick ? `View photo by ${photo.creator.name}` : undefined
+      }
+    >
+      {/* Photo Thumbnail */}
+      <div className={styles.thumbnailContainer}>
+        <PhotoImage
+          photo={photo}
+          urlType="small"
+          isHovered={isHovered}
+          aspectRatio="4/3"
+        />
+      </div>
+
+      {/* Metadata */}
+      <div className={styles.metadata}>
+        <CreatorInfo photo={photo} size="md" showUsername lightTheme />
+        <PhotoDescription description={photo.altDescription} maxLines={2} />
+        <div className={styles.statsContainer}>
+          <PhotoStats
+            photo={photo}
+            showViews
+            showLikesLabel
+            lightTheme
+            size="sm"
+          />
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className={styles.actions}>
+        <button
+          className={styles.actionButton}
+          onClick={(e) => {
+            e.stopPropagation()
+            handleClick()
+          }}
+          aria-label={`View details for photo by ${photo.creator.name}`}
+        >
+          View details
+        </button>
+      </div>
+    </article>
   )
 }
