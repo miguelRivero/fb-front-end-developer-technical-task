@@ -58,8 +58,26 @@ export function CarouselLayout({
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [hoveredPhotoId, setHoveredPhotoId] = useState<string | null>(null)
+  const [slidesPerView, setSlidesPerView] = useState(1)
 
   const minSwipeDistance = 50
+
+  // Calculate slides per view based on window width
+  useEffect(() => {
+    const updateSlidesPerView = () => {
+      if (window.innerWidth >= 1024) {
+        setSlidesPerView(3)
+      } else if (window.innerWidth >= 768) {
+        setSlidesPerView(2)
+      } else {
+        setSlidesPerView(1)
+      }
+    }
+
+    updateSlidesPerView()
+    window.addEventListener('resize', updateSlidesPerView)
+    return () => window.removeEventListener('resize', updateSlidesPerView)
+  }, [])
 
   const goToSlide = useCallback(
     (index: number) => {
@@ -133,41 +151,6 @@ export function CarouselLayout({
     return <EmptyState />
   }
 
-  // Calculate visible photos based on current index
-  // Desktop: show 3 (prev, current, next)
-  // Tablet: show 2 (current, next)
-  // Mobile: show 1 (current)
-  const getVisiblePhotos = () => {
-    const visible: Array<{
-      photo: Photo
-      position: 'prev' | 'current' | 'next'
-    }> = []
-
-    // Always include current
-    visible.push({
-      photo: photos[currentIndex],
-      position: 'current',
-    })
-
-    // Add previous photo
-    const prevIndex = currentIndex === 0 ? photos.length - 1 : currentIndex - 1
-    visible.push({
-      photo: photos[prevIndex],
-      position: 'prev',
-    })
-
-    // Add next photo
-    const nextIndex = currentIndex === photos.length - 1 ? 0 : currentIndex + 1
-    visible.push({
-      photo: photos[nextIndex],
-      position: 'next',
-    })
-
-    return visible
-  }
-
-  const visiblePhotos = getVisiblePhotos()
-
   return (
     <div className={styles.carouselContainer}>
       {/* Main Carousel */}
@@ -178,16 +161,19 @@ export function CarouselLayout({
         onTouchEnd={onTouchEnd}
       >
         <div className={styles.imageContainer}>
-          <div className={styles.slidesWrapper}>
-            {visiblePhotos.map(({ photo, position }) => {
-              const isActive = position === 'current'
+          <div 
+            className={`${styles.slidesWrapper} ${isTransitioning ? styles.transitioning : ''}`}
+            style={{
+              transform: `translateX(calc(-${currentIndex} * (100% + 1rem) / ${slidesPerView}))`,
+            }}
+          >
+            {photos.map((photo, index) => {
+              const isActive = index === currentIndex
               const isHovered = hoveredPhotoId === photo.id
               return (
                 <div
-                  key={`${photo.id}-${position}`}
-                  className={`${styles.slide} ${styles[`slide-${position}`]} ${
-                    isActive ? styles.slideActive : ''
-                  }`}
+                  key={photo.id}
+                  className={styles.slide}
                   onMouseEnter={() => setHoveredPhotoId(photo.id)}
                   onMouseLeave={() => setHoveredPhotoId(null)}
                 >
