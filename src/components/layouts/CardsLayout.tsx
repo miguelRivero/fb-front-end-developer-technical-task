@@ -10,6 +10,7 @@ import { formatPhotoDate } from '../../utils/dateUtils'
 import styles from './CardsLayout.module.scss'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 import { useMemo } from 'react'
+import { useClickable } from '../../hooks/useClickable'
 
 /**
  * Props for the CardsLayout component
@@ -152,28 +153,20 @@ function CardItem({
     [photo.createdAt]
   )
 
-  // Handle click event
-  const handleClick = () => {
-    if (onPhotoClick) {
-      onPhotoClick(photo)
-    }
-  }
+  const { onClick, onKeyDown, role, tabIndex, 'aria-label': ariaLabel } = useClickable(
+    onPhotoClick,
+    photo,
+    `View photo by ${photo.creator.name || 'unknown'}`
+  )
 
   return (
     <article
       className={`${styles.card} ${onPhotoClick ? styles.clickable : ''}`}
-      onClick={handleClick}
-      role={onPhotoClick ? 'button' : undefined}
-      tabIndex={onPhotoClick ? 0 : undefined}
-      onKeyDown={(e) => {
-        if (onPhotoClick && (e.key === 'Enter' || e.key === ' ')) {
-          e.preventDefault()
-          handleClick()
-        }
-      }}
-      aria-label={
-        onPhotoClick ? `View photo by ${photo.creator.name}` : undefined
-      }
+      onClick={onClick}
+      role={role}
+      tabIndex={tabIndex}
+      onKeyDown={onKeyDown}
+      aria-label={ariaLabel}
     >
       {/* Photo Image */}
       <div className={styles.imageContainer}>
