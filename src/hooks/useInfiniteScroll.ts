@@ -62,6 +62,7 @@ export function useInfiniteScroll({
   const sentinelNodeRef = useRef<HTMLDivElement | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
   const lastLoadTimeRef = useRef<number>(0)
+  const inFlightRef = useRef(false)
   const MIN_LOAD_INTERVAL = 500 // Minimum time between loads in milliseconds
 
   // Memoize loadMore callback to prevent unnecessary observer re-creation
@@ -70,13 +71,14 @@ export function useInfiniteScroll({
     const now = Date.now()
     const timeSinceLastLoad = now - lastLoadTimeRef.current
     const shouldSkipLoad =
-      !hasMore || loading || timeSinceLastLoad < MIN_LOAD_INTERVAL
+      !hasMore || loading || inFlightRef.current || timeSinceLastLoad < MIN_LOAD_INTERVAL
 
     if (shouldSkipLoad) {
       return
     }
 
     lastLoadTimeRef.current = now
+    inFlightRef.current = true
     try {
       await loadMore()
     } catch (error) {
@@ -85,6 +87,8 @@ export function useInfiniteScroll({
       if (import.meta.env.DEV) {
         console.error('Error loading more items:', error)
       }
+    } finally {
+      inFlightRef.current = false
     }
   }, [loadMore, hasMore, loading])
 

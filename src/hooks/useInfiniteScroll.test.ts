@@ -155,6 +155,39 @@ describe('useInfiniteScroll', () => {
       expect(loadMore.mock.calls.length).toBeLessThanOrEqual(2)
     })
 
+    it('should not start a second load while the first is still in-flight', async () => {
+      let resolveLoad: (() => void) | undefined
+      const loadMore = vi.fn().mockImplementation(
+        () =>
+          new Promise<void>((resolve) => {
+            resolveLoad = resolve
+          })
+      )
+
+      const { result } = renderHook(() =>
+        useInfiniteScroll({
+          loadMore,
+          hasMore: true,
+          loading: false,
+        })
+      )
+
+      const sentinel = document.createElement('div')
+      result.current(sentinel as unknown as HTMLDivElement)
+
+      // Trigger intersection multiple times while the first promise is unresolved
+      intersectionObserverMock.triggerIntersection(sentinel, true)
+      intersectionObserverMock.triggerIntersection(sentinel, true)
+      intersectionObserverMock.triggerIntersection(sentinel, true)
+
+      await waitFor(() => {
+        expect(loadMore).toHaveBeenCalledTimes(1)
+      })
+
+      // Resolve the in-flight load to avoid dangling promises
+      resolveLoad?.()
+    })
+
     it('should allow loads after minimum interval', async () => {
       const loadMore = vi.fn().mockResolvedValue(undefined)
       const { result } = renderHook(() =>
