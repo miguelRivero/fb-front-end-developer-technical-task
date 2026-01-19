@@ -7,6 +7,7 @@ A modern React TypeScript photo gallery application that fetches photos from the
 - 🖼️ **Multiple Layout Views**: Grid, Carousel, List, and Cards layouts
 - 🔄 **Smooth Layout Switching**: Seamless transitions between different views
 - 📱 **Responsive Design**: Works beautifully across all device sizes
+- ⬆️ **Scroll to Top**: Floating button appears after scrolling for quick navigation
 - ⚡ **Performance Optimized**: Efficient photo loading and rendering
 - 🎨 **Modern UI**: Clean, minimal interface with smooth animations
 - ♿ **Accessible**: Built with accessibility best practices

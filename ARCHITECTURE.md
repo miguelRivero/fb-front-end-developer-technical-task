@@ -365,6 +365,11 @@ src/components/
 - **Props**: `photo`, `urlType`, `isHovered`, `aspectRatio`, `priority`, `onClick`
 - **Used in**: GridLayout, CarouselLayout, ListLayout, CardsLayout
 
+#### ScrollToTopButton
+
+- **Purpose**: Floating button that appears after scrolling and smoothly scrolls the page back to the top
+- **Used in**: App shell (global)
+
 #### PhotoOverlay
 
 - **Purpose**: Overlay with photo title, creator, and stats
