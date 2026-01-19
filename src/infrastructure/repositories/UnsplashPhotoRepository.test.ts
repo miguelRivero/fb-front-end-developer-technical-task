@@ -2,14 +2,11 @@ import type { UnsplashPhoto, UnsplashResponse } from '../../types/unsplash'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
+import { createUnsplashHttpClient } from '../http/createUnsplashHttpClient'
+import type { HttpClient } from '../http/createUnsplashHttpClient'
 import { UnsplashPhotoRepository } from './UnsplashPhotoRepository'
-import axios from 'axios'
 
-// Mock axios
-vi.mock('axios')
-const mockedAxios = vi.mocked(axios)
-
-// Mock UnsplashApiAdapter
+// Mock UnsplashApiAdapter (keep repository tests focused on orchestration + error mapping).
 vi.mock('../adapters/UnsplashApiAdapter', async () => {
   const actual = await vi.importActual('../adapters/UnsplashApiAdapter')
   return {
@@ -37,25 +34,41 @@ vi.mock('../adapters/UnsplashApiAdapter', async () => {
   }
 })
 
+function makePhoto(id: string): UnsplashPhoto {
+  return {
+    id,
+    urls: {
+      raw: 'https://example.com/raw',
+      full: 'https://example.com/full',
+      regular: 'https://example.com/regular',
+      small: 'https://example.com/small',
+      thumb: 'https://example.com/thumb',
+    },
+    alt_description: `Photo ${id}`,
+    user: {
+      name: 'Test User',
+      username: 'testuser',
+      profile_image: {
+        small: 'https://example.com/profile.jpg',
+      },
+    },
+    width: 4000,
+    height: 3000,
+    likes: 100,
+    created_at: '2024-01-15T10:30:00Z',
+  }
+}
+
 describe('UnsplashPhotoRepository', () => {
   let repository: UnsplashPhotoRepository
-  let mockAxiosClient: {
-    get: ReturnType<typeof vi.fn>
-  }
+  let mockHttpClient: HttpClient
+  let getMock: ReturnType<typeof vi.fn>
 
   beforeEach(() => {
     vi.clearAllMocks()
-
-    // Create mock axios client
-    mockAxiosClient = {
-      get: vi.fn(),
-    }
-
-    // Mock axios.create to return our mock client
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mockedAxios.create.mockReturnValue(mockAxiosClient as any)
-
-    repository = new UnsplashPhotoRepository()
+    getMock = vi.fn()
+    mockHttpClient = { get: getMock }
+    repository = new UnsplashPhotoRepository(mockHttpClient)
   })
 
   afterEach(() => {
@@ -63,14 +76,14 @@ describe('UnsplashPhotoRepository', () => {
   })
 
   describe('searchPhotos with query', () => {
-    it('should call correct API endpoint', async () => {
+    it('should call correct API endpoint and params', async () => {
       const mockResponse: UnsplashResponse = {
         results: [],
         total: 0,
         total_pages: 0,
       }
 
-      mockAxiosClient.get.mockResolvedValue({ data: mockResponse })
+      getMock.mockResolvedValue(mockResponse)
 
       await repository.searchPhotos({
         query: 'mountains',
@@ -78,67 +91,45 @@ describe('UnsplashPhotoRepository', () => {
         perPage: 20,
       })
 
-      expect(mockAxiosClient.get).toHaveBeenCalledWith('/search/photos', {
-        params: {
-          query: 'mountains',
-          page: 1,
-          per_page: 20,
-        },
-      })
+      expect(getMock).toHaveBeenCalledWith(
+        '/search/photos',
+        expect.objectContaining({
+          params: {
+            query: 'mountains',
+            page: 1,
+            per_page: 20,
+          },
+        })
+      )
     })
 
-    it('should pass correct parameters', async () => {
+    it('should pass AbortSignal when provided', async () => {
       const mockResponse: UnsplashResponse = {
         results: [],
         total: 0,
         total_pages: 0,
       }
 
-      mockAxiosClient.get.mockResolvedValue({ data: mockResponse })
+      getMock.mockResolvedValue(mockResponse)
+      const controller = new AbortController()
 
       await repository.searchPhotos({
         query: 'ocean',
         page: 2,
         perPage: 15,
+        signal: controller.signal,
       })
 
-      expect(mockAxiosClient.get).toHaveBeenCalledWith(
+      expect(getMock).toHaveBeenCalledWith(
         '/search/photos',
         expect.objectContaining({
-          params: {
-            query: 'ocean',
-            page: 2,
-            per_page: 15,
-          },
+          signal: controller.signal,
         })
       )
     })
 
     it('should convert Unsplash photos to domain entities', async () => {
-      const mockUnsplashPhotos: UnsplashPhoto[] = [
-        {
-          id: 'photo-1',
-          urls: {
-            raw: 'https://example.com/raw',
-            full: 'https://example.com/full',
-            regular: 'https://example.com/regular',
-            small: 'https://example.com/small',
-            thumb: 'https://example.com/thumb',
-          },
-          alt_description: 'Test photo',
-          user: {
-            name: 'John Doe',
-            username: 'johndoe',
-            profile_image: {
-              small: 'https://example.com/profile.jpg',
-            },
-          },
-          width: 4000,
-          height: 3000,
-          likes: 100,
-          created_at: '2024-01-15T10:30:00Z',
-        },
-      ]
+      const mockUnsplashPhotos: UnsplashPhoto[] = [makePhoto('photo-1')]
 
       const mockResponse: UnsplashResponse = {
         results: mockUnsplashPhotos,
@@ -146,7 +137,7 @@ describe('UnsplashPhotoRepository', () => {
         total_pages: 1,
       }
 
-      mockAxiosClient.get.mockResolvedValue({ data: mockResponse })
+      getMock.mockResolvedValue(mockResponse)
 
       const result = await repository.searchPhotos({
         query: 'test',
@@ -156,7 +147,25 @@ describe('UnsplashPhotoRepository', () => {
 
       expect(result.photos).toHaveLength(1)
       expect(result.photos[0].id).toBe('photo-1')
-      expect(result.photos[0].altDescription).toBe('Test photo')
+    })
+
+    it('should calculate hasMore using total_pages', async () => {
+      // Even if the current page returns fewer than perPage items, total_pages is authoritative.
+      const mockResponse: UnsplashResponse = {
+        results: [makePhoto('p1')],
+        total: 100,
+        total_pages: 5,
+      }
+
+      getMock.mockResolvedValue(mockResponse)
+
+      const result = await repository.searchPhotos({
+        query: 'test',
+        page: 1,
+        perPage: 20,
+      })
+
+      expect(result.hasMore).toBe(true)
     })
 
     it('should return PhotoSearchResult with correct structure', async () => {
@@ -166,7 +175,7 @@ describe('UnsplashPhotoRepository', () => {
         total_pages: 0,
       }
 
-      mockAxiosClient.get.mockResolvedValue({ data: mockResponse })
+      getMock.mockResolvedValue(mockResponse)
 
       const result = await repository.searchPhotos({
         query: 'test',
@@ -178,120 +187,14 @@ describe('UnsplashPhotoRepository', () => {
       expect(result).toHaveProperty('currentPage')
       expect(result).toHaveProperty('hasMore')
       expect(result.currentPage).toBe(1)
-    })
-
-    it('should calculate hasMore correctly for full page', async () => {
-      const mockUnsplashPhotos: UnsplashPhoto[] = Array.from(
-        { length: 20 },
-        (_, i) => ({
-          id: `photo-${i}`,
-          urls: {
-            raw: 'https://example.com/raw',
-            full: 'https://example.com/full',
-            regular: 'https://example.com/regular',
-            small: 'https://example.com/small',
-            thumb: 'https://example.com/thumb',
-          },
-          alt_description: `Photo ${i}`,
-          user: {
-            name: 'Test User',
-            username: 'testuser',
-            profile_image: {
-              small: 'https://example.com/profile.jpg',
-            },
-          },
-          width: 4000,
-          height: 3000,
-          likes: 100,
-          created_at: '2024-01-15T10:30:00Z',
-        })
-      )
-
-      const mockResponse: UnsplashResponse = {
-        results: mockUnsplashPhotos,
-        total: 100,
-        total_pages: 5,
-      }
-
-      mockAxiosClient.get.mockResolvedValue({ data: mockResponse })
-
-      const result = await repository.searchPhotos({
-        query: 'test',
-        page: 1,
-        perPage: 20,
-      })
-
-      expect(result.hasMore).toBe(true)
-    })
-
-    it('should calculate hasMore correctly for partial page', async () => {
-      const mockUnsplashPhotos: UnsplashPhoto[] = Array.from(
-        { length: 10 },
-        (_, i) => ({
-          id: `photo-${i}`,
-          urls: {
-            raw: 'https://example.com/raw',
-            full: 'https://example.com/full',
-            regular: 'https://example.com/regular',
-            small: 'https://example.com/small',
-            thumb: 'https://example.com/thumb',
-          },
-          alt_description: `Photo ${i}`,
-          user: {
-            name: 'Test User',
-            username: 'testuser',
-            profile_image: {
-              small: 'https://example.com/profile.jpg',
-            },
-          },
-          width: 4000,
-          height: 3000,
-          likes: 100,
-          created_at: '2024-01-15T10:30:00Z',
-        })
-      )
-
-      const mockResponse: UnsplashResponse = {
-        results: mockUnsplashPhotos,
-        total: 10,
-        total_pages: 1,
-      }
-
-      mockAxiosClient.get.mockResolvedValue({ data: mockResponse })
-
-      const result = await repository.searchPhotos({
-        query: 'test',
-        page: 1,
-        perPage: 20,
-      })
-
-      expect(result.hasMore).toBe(false)
-    })
-
-    it('should calculate hasMore correctly for empty result', async () => {
-      const mockResponse: UnsplashResponse = {
-        results: [],
-        total: 0,
-        total_pages: 0,
-      }
-
-      mockAxiosClient.get.mockResolvedValue({ data: mockResponse })
-
-      const result = await repository.searchPhotos({
-        query: 'test',
-        page: 1,
-        perPage: 20,
-      })
-
       expect(result.hasMore).toBe(false)
     })
   })
 
   describe('searchPhotos without query (curated photos)', () => {
-    it('should call correct endpoint', async () => {
+    it('should call correct endpoint and params', async () => {
       const mockPhotos: UnsplashPhoto[] = []
-
-      mockAxiosClient.get.mockResolvedValue({ data: mockPhotos })
+      getMock.mockResolvedValue(mockPhotos)
 
       await repository.searchPhotos({
         query: '',
@@ -299,41 +202,19 @@ describe('UnsplashPhotoRepository', () => {
         perPage: 20,
       })
 
-      expect(mockAxiosClient.get).toHaveBeenCalledWith('/photos', {
-        params: {
-          page: 1,
-          per_page: 20,
-        },
-      })
+      expect(getMock).toHaveBeenCalledWith(
+        '/photos',
+        expect.objectContaining({
+          params: {
+            page: 1,
+            per_page: 20,
+          },
+        })
+      )
     })
 
-    it('should handle response correctly', async () => {
-      const mockPhotos: UnsplashPhoto[] = [
-        {
-          id: 'photo-1',
-          urls: {
-            raw: 'https://example.com/raw',
-            full: 'https://example.com/full',
-            regular: 'https://example.com/regular',
-            small: 'https://example.com/small',
-            thumb: 'https://example.com/thumb',
-          },
-          alt_description: 'Test photo',
-          user: {
-            name: 'John Doe',
-            username: 'johndoe',
-            profile_image: {
-              small: 'https://example.com/profile.jpg',
-            },
-          },
-          width: 4000,
-          height: 3000,
-          likes: 100,
-          created_at: '2024-01-15T10:30:00Z',
-        },
-      ]
-
-      mockAxiosClient.get.mockResolvedValue({ data: mockPhotos })
+    it('should set hasMore based on page size for curated photos', async () => {
+      getMock.mockResolvedValue([makePhoto('p1')])
 
       const result = await repository.searchPhotos({
         query: '',
@@ -341,11 +222,11 @@ describe('UnsplashPhotoRepository', () => {
         perPage: 20,
       })
 
-      expect(result.photos).toHaveLength(1)
+      expect(result.hasMore).toBe(false)
     })
   })
 
-  describe('Error Handling', () => {
+  describe('Error handling', () => {
     it('should handle network errors (no response)', async () => {
       const networkError = {
         isAxiosError: true,
@@ -353,8 +234,7 @@ describe('UnsplashPhotoRepository', () => {
         message: 'Network Error',
       }
 
-      mockedAxios.isAxiosError = vi.fn().mockReturnValue(true)
-      mockAxiosClient.get.mockRejectedValue(networkError)
+      getMock.mockRejectedValue(networkError)
 
       await expect(
         repository.searchPhotos({
@@ -362,23 +242,10 @@ describe('UnsplashPhotoRepository', () => {
           page: 1,
           perPage: 20,
         })
-      ).rejects.toThrow(PhotoRepositoryError)
-
-      try {
-        await repository.searchPhotos({
-          query: 'test',
-          page: 1,
-          perPage: 20,
-        })
-      } catch (error) {
-        expect(error).toBeInstanceOf(PhotoRepositoryError)
-        if (error instanceof PhotoRepositoryError) {
-          expect(error.type).toBe('network')
-        }
-      }
+      ).rejects.toMatchObject({ name: 'PhotoRepositoryError', type: 'network' })
     })
 
-    it('should handle rate limit errors (403)', async () => {
+    it('should handle rate limit errors (403 + message)', async () => {
       const rateLimitError = {
         isAxiosError: true,
         response: {
@@ -390,8 +257,7 @@ describe('UnsplashPhotoRepository', () => {
         message: 'Rate limit exceeded',
       }
 
-      mockedAxios.isAxiosError = vi.fn().mockReturnValue(true)
-      mockAxiosClient.get.mockRejectedValue(rateLimitError)
+      getMock.mockRejectedValue(rateLimitError)
 
       await expect(
         repository.searchPhotos({
@@ -399,20 +265,30 @@ describe('UnsplashPhotoRepository', () => {
           page: 1,
           perPage: 20,
         })
-      ).rejects.toThrow(PhotoRepositoryError)
+      ).rejects.toMatchObject({ name: 'PhotoRepositoryError', type: 'rate_limit' })
+    })
 
-      try {
-        await repository.searchPhotos({
+    it('should handle rate limit errors (429)', async () => {
+      const rateLimitError = {
+        isAxiosError: true,
+        response: {
+          status: 429,
+          data: {
+            errors: ['Rate limit exceeded'],
+          },
+        },
+        message: 'Too Many Requests',
+      }
+
+      getMock.mockRejectedValue(rateLimitError)
+
+      await expect(
+        repository.searchPhotos({
           query: 'test',
           page: 1,
           perPage: 20,
         })
-      } catch (error) {
-        expect(error).toBeInstanceOf(PhotoRepositoryError)
-        if (error instanceof PhotoRepositoryError) {
-          expect(error.type).toBe('rate_limit')
-        }
-      }
+      ).rejects.toMatchObject({ name: 'PhotoRepositoryError', type: 'rate_limit' })
     })
 
     it('should handle invalid API key (401)', async () => {
@@ -427,8 +303,7 @@ describe('UnsplashPhotoRepository', () => {
         message: 'Unauthorized',
       }
 
-      mockedAxios.isAxiosError = vi.fn().mockReturnValue(true)
-      mockAxiosClient.get.mockRejectedValue(authError)
+      getMock.mockRejectedValue(authError)
 
       await expect(
         repository.searchPhotos({
@@ -436,36 +311,18 @@ describe('UnsplashPhotoRepository', () => {
           page: 1,
           perPage: 20,
         })
-      ).rejects.toThrow(PhotoRepositoryError)
-
-      try {
-        await repository.searchPhotos({
-          query: 'test',
-          page: 1,
-          perPage: 20,
-        })
-      } catch (error) {
-        expect(error).toBeInstanceOf(PhotoRepositoryError)
-        if (error instanceof PhotoRepositoryError) {
-          expect(error.type).toBe('api_error')
-        }
-      }
+      ).rejects.toMatchObject({ name: 'PhotoRepositoryError', type: 'api_error' })
     })
 
-    it('should handle other API errors', async () => {
-      const apiError = {
+    it('should map timeouts to network errors', async () => {
+      const timeoutError = {
         isAxiosError: true,
-        response: {
-          status: 500,
-          data: {
-            errors: ['Internal server error'],
-          },
-        },
-        message: 'Request failed',
+        code: 'ECONNABORTED',
+        response: undefined,
+        message: 'timeout of 10000ms exceeded',
       }
 
-      mockedAxios.isAxiosError = vi.fn().mockReturnValue(true)
-      mockAxiosClient.get.mockRejectedValue(apiError)
+      getMock.mockRejectedValue(timeoutError)
 
       await expect(
         repository.searchPhotos({
@@ -473,34 +330,20 @@ describe('UnsplashPhotoRepository', () => {
           page: 1,
           perPage: 20,
         })
-      ).rejects.toThrow(PhotoRepositoryError)
-
-      try {
-        await repository.searchPhotos({
-          query: 'test',
-          page: 1,
-          perPage: 20,
-        })
-      } catch (error) {
-        expect(error).toBeInstanceOf(PhotoRepositoryError)
-        if (error instanceof PhotoRepositoryError) {
-          expect(error.type).toBe('api_error')
-        }
-      }
+      ).rejects.toMatchObject({ name: 'PhotoRepositoryError', type: 'network' })
     })
 
-    it('should convert to PhotoRepositoryError', async () => {
-      const error = {
+    it('should preserve originalError on PhotoRepositoryError', async () => {
+      const apiError = {
         isAxiosError: true,
         response: {
           status: 500,
           data: {},
         },
-        message: 'Unknown error',
+        message: 'Request failed',
       }
 
-      mockedAxios.isAxiosError = vi.fn().mockReturnValue(true)
-      mockAxiosClient.get.mockRejectedValue(error)
+      getMock.mockRejectedValue(apiError)
 
       try {
         await repository.searchPhotos({
@@ -518,9 +361,7 @@ describe('UnsplashPhotoRepository', () => {
 
     it('should handle unknown errors', async () => {
       const unknownError = new Error('Unknown error')
-
-      mockedAxios.isAxiosError = vi.fn().mockReturnValue(false)
-      mockAxiosClient.get.mockRejectedValue(unknownError)
+      getMock.mockRejectedValue(unknownError)
 
       await expect(
         repository.searchPhotos({
@@ -528,129 +369,21 @@ describe('UnsplashPhotoRepository', () => {
           page: 1,
           perPage: 20,
         })
-      ).rejects.toThrow(PhotoRepositoryError)
+      ).rejects.toMatchObject({ name: 'PhotoRepositoryError', type: 'unknown' })
+    })
 
-      try {
-        await repository.searchPhotos({
+    it('should fail with api_error when access key is missing (via default http client)', async () => {
+      // Use the real http client wrapper but with a missing key override. It should throw before axios is used.
+      const client = createUnsplashHttpClient({ accessKey: '' })
+      const repo = new UnsplashPhotoRepository(client)
+
+      await expect(
+        repo.searchPhotos({
           query: 'test',
           page: 1,
           perPage: 20,
         })
-      } catch (error) {
-        expect(error).toBeInstanceOf(PhotoRepositoryError)
-        if (error instanceof PhotoRepositoryError) {
-          expect(error.type).toBe('unknown')
-        }
-      }
-    })
-  })
-
-  describe('hasMore Edge Cases', () => {
-    it('should handle empty array result', async () => {
-      const mockResponse: UnsplashResponse = {
-        results: [],
-        total: 0,
-        total_pages: 0,
-      }
-
-      mockAxiosClient.get.mockResolvedValue({ data: mockResponse })
-
-      const result = await repository.searchPhotos({
-        query: 'test',
-        page: 1,
-        perPage: 20,
-      })
-
-      expect(result.hasMore).toBe(false)
-      expect(result.photos).toHaveLength(0)
-    })
-
-    it('should handle partial page result', async () => {
-      const mockUnsplashPhotos: UnsplashPhoto[] = Array.from(
-        { length: 15 },
-        (_, i) => ({
-          id: `photo-${i}`,
-          urls: {
-            raw: 'https://example.com/raw',
-            full: 'https://example.com/full',
-            regular: 'https://example.com/regular',
-            small: 'https://example.com/small',
-            thumb: 'https://example.com/thumb',
-          },
-          alt_description: `Photo ${i}`,
-          user: {
-            name: 'Test User',
-            username: 'testuser',
-            profile_image: {
-              small: 'https://example.com/profile.jpg',
-            },
-          },
-          width: 4000,
-          height: 3000,
-          likes: 100,
-          created_at: '2024-01-15T10:30:00Z',
-        })
-      )
-
-      const mockResponse: UnsplashResponse = {
-        results: mockUnsplashPhotos,
-        total: 15,
-        total_pages: 1,
-      }
-
-      mockAxiosClient.get.mockResolvedValue({ data: mockResponse })
-
-      const result = await repository.searchPhotos({
-        query: 'test',
-        page: 1,
-        perPage: 20,
-      })
-
-      expect(result.hasMore).toBe(false)
-    })
-
-    it('should handle full page result', async () => {
-      const mockUnsplashPhotos: UnsplashPhoto[] = Array.from(
-        { length: 20 },
-        (_, i) => ({
-          id: `photo-${i}`,
-          urls: {
-            raw: 'https://example.com/raw',
-            full: 'https://example.com/full',
-            regular: 'https://example.com/regular',
-            small: 'https://example.com/small',
-            thumb: 'https://example.com/thumb',
-          },
-          alt_description: `Photo ${i}`,
-          user: {
-            name: 'Test User',
-            username: 'testuser',
-            profile_image: {
-              small: 'https://example.com/profile.jpg',
-            },
-          },
-          width: 4000,
-          height: 3000,
-          likes: 100,
-          created_at: '2024-01-15T10:30:00Z',
-        })
-      )
-
-      const mockResponse: UnsplashResponse = {
-        results: mockUnsplashPhotos,
-        total: 100,
-        total_pages: 5,
-      }
-
-      mockAxiosClient.get.mockResolvedValue({ data: mockResponse })
-
-      const result = await repository.searchPhotos({
-        query: 'test',
-        page: 1,
-        perPage: 20,
-      })
-
-      expect(result.hasMore).toBe(true)
+      ).rejects.toMatchObject({ name: 'PhotoRepositoryError', type: 'api_error' })
     })
   })
 })

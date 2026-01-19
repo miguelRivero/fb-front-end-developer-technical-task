@@ -1,4 +1,4 @@
-import type { UnsplashPhoto, FetchPhotosError } from '../../types/unsplash'
+import type { UnsplashPhoto } from '../../types/unsplash'
 import type { Photo } from '../../domain/entities/Photo'
 
 /**
@@ -75,18 +75,5 @@ export class UnsplashApiAdapter {
    */
   static toDomainPhotos(unsplashPhotos: UnsplashPhoto[]): Photo[] {
     return unsplashPhotos.map(this.toDomainPhoto)
-  }
-
-  /**
-   * Converts a FetchPhotosError to a standard Error.
-   * 
-   * Note: This method is currently unused but kept for potential
-   * error transformation needs in the future.
-   * 
-   * @param error - FetchPhotosError from infrastructure layer
-   * @returns Standard Error object
-   */
-  static toRepositoryError(error: FetchPhotosError): Error {
-    return new Error(`${error.type}: ${error.message}`)
   }
 }

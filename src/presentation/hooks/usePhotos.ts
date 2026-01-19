@@ -18,6 +18,19 @@ function getPerPageForViewport(): number {
   return PAGINATION_CONFIG.DESKTOP_PER_PAGE
 }
 
+function isAbortError(error: unknown): boolean {
+  return error instanceof Error && error.name === 'AbortError'
+}
+
+function startNewRequest(
+  abortControllerRef: React.MutableRefObject<AbortController | null>
+): AbortController {
+  abortControllerRef.current?.abort()
+  const controller = new AbortController()
+  abortControllerRef.current = controller
+  return controller
+}
+
 /**
  * Custom hook: usePhotos
  * 
@@ -70,12 +83,7 @@ export function usePhotos() {
    */
   const fetchPhotos = useCallback(
     async (query: string = DEFAULT_SEARCH_QUERY) => {
-      // Cancel previous request if it exists
-      abortControllerRef.current?.abort()
-
-      // Create new AbortController for this request
-      const controller = new AbortController()
-      abortControllerRef.current = controller
+      const controller = startNewRequest(abortControllerRef)
       perPageRef.current = getPerPageForViewport()
 
       dispatch({ type: 'FETCH_START', query })
@@ -106,7 +114,7 @@ export function usePhotos() {
         }
 
         // Handle AbortError gracefully (don't show as user error)
-        if (error instanceof Error && error.name === 'AbortError') {
+        if (isAbortError(error)) {
           return
         }
 
@@ -128,12 +136,7 @@ export function usePhotos() {
       return
     }
 
-    // Cancel previous request if it exists
-    abortControllerRef.current?.abort()
-
-    // Create new AbortController for this request
-    const controller = new AbortController()
-    abortControllerRef.current = controller
+    const controller = startNewRequest(abortControllerRef)
 
     dispatch({ type: 'LOAD_MORE_START' })
 
@@ -162,7 +165,7 @@ export function usePhotos() {
       }
 
       // Handle AbortError gracefully (don't show as user error)
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (isAbortError(error)) {
         return
       }
 

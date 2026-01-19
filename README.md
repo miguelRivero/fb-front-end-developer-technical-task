@@ -39,9 +39,16 @@ cd fb-front-end-developer-technical-task
 npm install
 ```
 
-3. Create a `.env` file in the root directory:
+3. Create your local env file:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env`:
 ```env
 VITE_UNSPLASH_ACCESS_KEY=your_unsplash_access_key_here
+VITE_UNSPLASH_TIMEOUT_MS=10000
 ```
 
 You can get a free Unsplash API key from [Unsplash Developers](https://unsplash.com/developers).
@@ -277,7 +284,10 @@ Create a `.env` file in the root directory:
 
 ```env
 VITE_UNSPLASH_ACCESS_KEY=your_unsplash_access_key_here
+VITE_UNSPLASH_TIMEOUT_MS=10000
 ```
+
+`VITE_UNSPLASH_TIMEOUT_MS` is optional and defaults to `10000` if not provided.
 
 **Note**: Never commit your `.env` file to version control. It's already included in `.gitignore`.
 
