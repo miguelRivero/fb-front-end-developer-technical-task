@@ -369,8 +369,13 @@ describe('GridLayout Integration Tests', () => {
   })
 
   describe('grid item rendering', () => {
-    it('should render photo overlay on hover', async () => {
-      const user = userEvent.setup()
+    it('should render photo overlay by default', async () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 800,
+      })
+
       const photos = createMockPhotoArray(1)
       const onPhotoClick = vi.fn()
 
@@ -384,10 +389,9 @@ describe('GridLayout Integration Tests', () => {
       )
 
       const photoElement = screen.getByLabelText(`View photo by ${photos[0].creator.name}`)
-      
-      await user.hover(photoElement)
+      expect(photoElement).toBeInTheDocument()
 
-      // Overlay should be visible (check for creator name or stats)
+      // Overlay should be visible without hover (check for creator name or stats)
       await waitFor(() => {
         expect(screen.getByText(new RegExp(photos[0].creator.name))).toBeInTheDocument()
       })

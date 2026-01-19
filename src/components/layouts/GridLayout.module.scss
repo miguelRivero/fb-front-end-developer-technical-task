@@ -38,10 +38,17 @@
   outline-offset: var(--focus-outline-offset);
 }
 
-.gridItem:hover {
-  transform: var(--transform-scale-hover);
-  box-shadow: var(--shadow-lg);
-  border-radius: var(--border-radius-lg);
+/* Desktop-only hover feedback */
+@media (min-width: 1024px) {
+  .gridItem:hover {
+    transform: var(--transform-scale-hover);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--border-radius-lg);
+  }
+}
+
+.gridItem.clickable:active {
+  transform: var(--transform-scale-active);
 }
 
 .imageWrapper {
@@ -133,20 +140,14 @@
   .gridItem {
     transition: none;
   }
-  
-  .gridItem:hover {
-    transform: none;
-  }
 }
 
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
+  /* No hover styles in grid; keep an active feedback for tap. */
   .gridItem:hover {
     transform: none;
-  }
-  
-  .gridItem.clickable:active {
-    transform: var(--transform-scale-active);
+    box-shadow: none;
   }
 }
 

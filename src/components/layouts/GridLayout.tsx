@@ -9,6 +9,8 @@ import styles from './GridLayout.module.scss'
 import { useClickable } from '../../hooks/useClickable'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 import { useState } from 'react'
+import { useViewportWidth } from '../../hooks/useViewportWidth'
+import { isBelowDesktopViewport as isBelowDesktopViewportWidth } from '../../utils/viewport'
 
 /**
  * Props for the GridLayout component
@@ -54,6 +56,10 @@ export function GridLayout({
   loadMore,
   hasMore = false,
 }: GridLayoutProps) {
+  const viewportWidth = useViewportWidth()
+  const isBelowDesktopViewport =
+    viewportWidth !== null ? isBelowDesktopViewportWidth(viewportWidth) : false
+
   // Set up infinite scroll if loadMore is provided
   const sentinelRef = useInfiniteScroll({
     loadMore: loadMore || (() => {}),
@@ -93,7 +99,12 @@ export function GridLayout({
     <>
       <div className={styles.grid}>
         {photos.map((photo) => (
-          <GridItem key={photo.id} photo={photo} onClick={onPhotoClick} />
+          <GridItem
+            key={photo.id}
+            photo={photo}
+            onClick={onPhotoClick}
+            isBelowDesktopViewport={isBelowDesktopViewport}
+          />
         ))}
       </div>
       {/* Loading indicator for "load more" */}
@@ -128,11 +139,15 @@ export function GridLayout({
 const GridItem = React.memo(function GridItem({
   photo,
   onClick,
+  isBelowDesktopViewport,
 }: {
   photo: Photo
   onClick?: (photo: Photo) => void
+  isBelowDesktopViewport: boolean
 }) {
   const [isHovered, setIsHovered] = useState(false)
+  const showOverlay = isBelowDesktopViewport || isHovered
+  const showImageHover = !isBelowDesktopViewport && isHovered
 
   const { onClick: handleClick, onKeyDown, role, tabIndex, 'aria-label': ariaLabel } =
     useClickable(onClick, photo, `View photo by ${photo.creator.name || 'unknown'}`)
@@ -151,10 +166,10 @@ const GridItem = React.memo(function GridItem({
         <PhotoImage
           photo={photo}
           urlType="regular"
-          isHovered={isHovered}
+          isHovered={showImageHover}
           aspectRatio="4/3"
         />
-        <PhotoOverlay photo={photo} isVisible={isHovered} showViews />
+        <PhotoOverlay photo={photo} isVisible={showOverlay} showViews />
       </div>
     </div>
   )

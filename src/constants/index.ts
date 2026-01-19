@@ -39,6 +39,18 @@ export const PAGINATION_CONFIG = {
 } as const
 
 /**
+ * Responsive breakpoints (in px).
+ *
+ * Keep these in one place to avoid drift between layouts.
+ */
+export const RESPONSIVE_BREAKPOINTS = {
+  /** >= 768px is treated as tablet */
+  TABLET_MIN_WIDTH: 768,
+  /** >= 1024px is treated as desktop */
+  DESKTOP_MIN_WIDTH: 1024,
+} as const
+
+/**
  * Application Defaults
  *
  * Defaults that affect behavior and should have a single source of truth.

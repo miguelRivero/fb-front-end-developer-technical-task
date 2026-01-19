@@ -6,7 +6,12 @@ import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoOverlay } from '../common/PhotoOverlay/PhotoOverlay'
 import type React from 'react'
 import styles from './CarouselLayout.module.scss'
-import { UI_CONSTANTS } from '../../constants'
+import { RESPONSIVE_BREAKPOINTS, UI_CONSTANTS } from '../../constants'
+import { useViewportWidth } from '../../hooks/useViewportWidth'
+import {
+  getCarouselSlidesPerView,
+  isBelowDesktopViewport as isBelowDesktopViewportWidth,
+} from '../../utils/viewport'
 
 /**
  * Props for the CarouselLayout component
@@ -54,12 +59,17 @@ export function CarouselLayout({
   loading,
   error,
 }: CarouselLayoutProps) {
+  const viewportWidth = useViewportWidth()
+  // Default to desktop behavior in non-browser environments.
+  const widthForLayout = viewportWidth ?? RESPONSIVE_BREAKPOINTS.DESKTOP_MIN_WIDTH
+  const slidesPerView = getCarouselSlidesPerView(widthForLayout)
+  const isBelowDesktopViewport = isBelowDesktopViewportWidth(widthForLayout)
+
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [hoveredPhotoId, setHoveredPhotoId] = useState<string | null>(null)
-  const [slidesPerView, setSlidesPerView] = useState(1)
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
   const preloadedImagesRef = useRef<Map<string, HTMLImageElement>>(new Map())
 
@@ -158,23 +168,6 @@ export function CarouselLayout({
       })
       preloadedImages.clear()
     }
-  }, [])
-
-  // Calculate slides per view based on window width
-  useEffect(() => {
-    const updateSlidesPerView = () => {
-      if (window.innerWidth >= 1024) {
-        setSlidesPerView(3)
-      } else if (window.innerWidth >= 768) {
-        setSlidesPerView(2)
-      } else {
-        setSlidesPerView(1)
-      }
-    }
-
-    updateSlidesPerView()
-    window.addEventListener('resize', updateSlidesPerView)
-    return () => window.removeEventListener('resize', updateSlidesPerView)
   }, [])
 
   const goToSlide = useCallback(
@@ -279,14 +272,20 @@ export function CarouselLayout({
               const isHovered = hoveredPhotoId === photo.id
               const isImageLoaded = loadedImages.has(photo.id)
               const shouldShowLoading = !isImageLoaded
+              const showOverlay = isBelowDesktopViewport ? isActive : isHovered
+              const showImageHover = !isBelowDesktopViewport && isHovered
               
               return (
                 <div
                   key={photo.id}
                   className={styles.slide}
                   data-testid="carousel-slide"
-                  onMouseEnter={() => setHoveredPhotoId(photo.id)}
-                  onMouseLeave={() => setHoveredPhotoId(null)}
+                  onMouseEnter={
+                    isBelowDesktopViewport ? undefined : () => setHoveredPhotoId(photo.id)
+                  }
+                  onMouseLeave={
+                    isBelowDesktopViewport ? undefined : () => setHoveredPhotoId(null)
+                  }
                 >
                   <div className={styles.slideImageWrapper}>
                     {shouldShowLoading && (
@@ -297,7 +296,7 @@ export function CarouselLayout({
                     <PhotoImage
                       photo={photo}
                       urlType="regular"
-                      isHovered={isHovered}
+                      isHovered={showImageHover}
                       aspectRatio="4/3"
                       priority={isActive}
                       onImageLoad={() => handleImageLoad(photo.id)}
@@ -305,7 +304,7 @@ export function CarouselLayout({
                     {isImageLoaded && (
                       <PhotoOverlay
                         photo={photo}
-                        isVisible={isHovered}
+                        isVisible={showOverlay}
                         showViews
                         className={isActive ? styles.overlayLarge : ''}
                       />
