@@ -7,10 +7,32 @@ import type { Photo } from '../../domain/entities/Photo'
  * Adapts Unsplash API responses to domain entities.
  * This adapter belongs to the infrastructure layer and handles
  * the translation between external API format and domain model.
+ * 
+ * Clean Architecture: This adapter ensures the domain layer remains
+ * independent of external API structures. It converts infrastructure
+ * types (UnsplashPhoto) to domain entities (Photo).
+ * 
+ * Responsibilities:
+ * - Map Unsplash API response format to domain Photo entity
+ * - Handle field name transformations (snake_case to camelCase)
+ * - Extract and structure nested data (creator, dimensions, URLs)
+ * - Maintain type safety during transformation
  */
 export class UnsplashApiAdapter {
   /**
-   * Maps Unsplash API photo to domain Photo entity
+   * Maps a single Unsplash API photo response to a domain Photo entity.
+   * 
+   * Transforms the infrastructure representation (UnsplashPhoto) into
+   * the domain representation (Photo), handling field mappings and
+   * data structure transformations.
+   * 
+   * @param unsplashPhoto - Unsplash API photo response object
+   * @returns Domain Photo entity
+   * 
+   * @example
+   * ```ts
+   * const domainPhoto = UnsplashApiAdapter.toDomainPhoto(unsplashApiResponse)
+   * ```
    */
   static toDomainPhoto(unsplashPhoto: UnsplashPhoto): Photo {
     return {
@@ -38,14 +60,31 @@ export class UnsplashApiAdapter {
   }
 
   /**
-   * Maps array of Unsplash photos to domain Photo entities
+   * Maps an array of Unsplash API photo responses to domain Photo entities.
+   * 
+   * Efficiently transforms multiple infrastructure photos to domain entities
+   * using the toDomainPhoto method.
+   * 
+   * @param unsplashPhotos - Array of Unsplash API photo response objects
+   * @returns Array of domain Photo entities
+   * 
+   * @example
+   * ```ts
+   * const domainPhotos = UnsplashApiAdapter.toDomainPhotos(unsplashApiResults)
+   * ```
    */
   static toDomainPhotos(unsplashPhotos: UnsplashPhoto[]): Photo[] {
     return unsplashPhotos.map(this.toDomainPhoto)
   }
 
   /**
-   * Converts FetchPhotosError to PhotoRepositoryError
+   * Converts a FetchPhotosError to a standard Error.
+   * 
+   * Note: This method is currently unused but kept for potential
+   * error transformation needs in the future.
+   * 
+   * @param error - FetchPhotosError from infrastructure layer
+   * @returns Standard Error object
    */
   static toRepositoryError(error: FetchPhotosError): Error {
     return new Error(`${error.type}: ${error.message}`)

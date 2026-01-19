@@ -5,21 +5,40 @@ import styles from './PhotoDescription.module.scss'
  * Props for PhotoDescription component
  */
 interface PhotoDescriptionProps {
-  /** Description text */
+  /** Photo description text (can be null if not available) */
   description: string | null
-  /** Maximum number of lines to show (default: 2) */
+  /** Maximum number of lines to display before truncating (default: 2) */
   maxLines?: number
-  /** Size variant */
+  /** Size variant - 'sm' (small) or 'md' (medium, default) */
   size?: 'sm' | 'md'
-  /** Additional className */
+  /** Additional CSS class names to apply */
   className?: string
 }
 
 /**
  * PhotoDescription Component
  *
- * Displays photo description with text truncation.
- * Automatically capitalizes first character.
+ * Displays photo description with automatic text truncation and capitalization.
+ * Handles null/empty descriptions gracefully by returning null.
+ *
+ * Features:
+ * - Multi-line text truncation with ellipsis
+ * - Automatic first character capitalization
+ * - Null-safe handling (returns null if no description)
+ * - Size variants for different contexts
+ * - CSS-based line clamping for performance
+ *
+ * @param props - PhotoDescription component props
+ * @returns PhotoDescription component or null if no description
+ *
+ * @example
+ * ```tsx
+ * <PhotoDescription
+ *   description={photo.altDescription}
+ *   maxLines={2}
+ *   size="md"
+ * />
+ * ```
  */
 export function PhotoDescription({
   description,

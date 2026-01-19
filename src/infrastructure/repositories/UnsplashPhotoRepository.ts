@@ -13,6 +13,14 @@ import { UnsplashApiAdapter } from '../adapters/UnsplashApiAdapter'
  * 
  * Clean Architecture: This class depends on the domain interface (PhotoRepository),
  * not the other way around. The domain defines the contract, infrastructure implements it.
+ * 
+ * Responsibilities:
+ * - Make HTTP requests to Unsplash API
+ * - Handle API authentication and headers
+ * - Transform API responses to domain entities
+ * - Handle and categorize errors (rate limits, network, API errors)
+ * - Implement pagination support
+ * - Manage request timeouts
  */
 export class UnsplashPhotoRepository implements PhotoRepository {
   private readonly client = axios.create({
@@ -23,6 +31,25 @@ export class UnsplashPhotoRepository implements PhotoRepository {
     timeout: 10000, // 10 seconds
   })
 
+  /**
+   * Searches for photos using the Unsplash API.
+   * 
+   * Implements the PhotoRepository interface by fetching photos from Unsplash.
+   * Supports both search queries and curated photos (when no query provided).
+   * 
+   * @param params - Search parameters including query, page, and perPage
+   * @returns Promise resolving to PhotoSearchResult with photos and pagination info
+   * @throws PhotoRepositoryError if the operation fails (rate limit, network, or API error)
+   * 
+   * @example
+   * ```ts
+   * const result = await repository.searchPhotos({
+   *   query: 'nature',
+   *   page: 1,
+   *   perPage: 20
+   * })
+   * ```
+   */
   async searchPhotos(params: PhotoSearchParams): Promise<PhotoSearchResult> {
     const { query = 'nature', page = 1, perPage = 20 } = params
 
@@ -72,7 +99,16 @@ export class UnsplashPhotoRepository implements PhotoRepository {
   }
 
   /**
-   * Handles axios errors and converts them to FetchPhotosError format
+   * Handles axios errors and converts them to FetchPhotosError format.
+   * 
+   * Categorizes errors into specific types:
+   * - rate_limit: 403 status with rate limit message
+   * - api_error: 401 (invalid key) or other API errors
+   * - network: No response received (connection issues)
+   * - unknown: Unexpected error types
+   * 
+   * @param error - Error from axios request (can be any type)
+   * @returns FetchPhotosError with categorized type and user-friendly message
    */
   private handleError(error: unknown): FetchPhotosError {
     if (axios.isAxiosError(error)) {

@@ -5,23 +5,44 @@ import styles from './CreatorInfo.module.scss'
  * Props for CreatorInfo component
  */
 interface CreatorInfoProps {
-  /** Photo entity to get creator info from */
+  /** Photo domain entity containing creator information */
   photo: Photo
-  /** Size variant */
+  /** Size variant - 'sm' (small), 'md' (medium, default), or 'lg' (large) */
   size?: 'sm' | 'md' | 'lg'
-  /** Show username (default: true) */
+  /** Whether to display the creator's username (default: true) */
   showUsername?: boolean
-  /** Use light theme (for cards/list, default: false for overlays) */
+  /** Use light theme styling (for cards/list layouts, default: false for dark overlays) */
   lightTheme?: boolean
-  /** Additional className */
+  /** Additional CSS class names to apply */
   className?: string
 }
 
 /**
  * CreatorInfo Component
  *
- * Displays creator avatar, name, and username.
- * Reusable across different layouts.
+ * Displays creator attribution with profile image, name, and optional username.
+ * Reusable across different layouts with theme and size variants.
+ *
+ * Features:
+ * - Profile image avatar
+ * - Creator name display
+ * - Optional username with @ prefix
+ * - Theme variants (dark for overlays, light for cards)
+ * - Size variants for different contexts
+ * - Lazy loading for profile images
+ *
+ * @param props - CreatorInfo component props
+ * @returns CreatorInfo component
+ *
+ * @example
+ * ```tsx
+ * <CreatorInfo
+ *   photo={photo}
+ *   size="md"
+ *   showUsername={true}
+ *   lightTheme={true}
+ * />
+ * ```
  */
 export function CreatorInfo({
   photo,

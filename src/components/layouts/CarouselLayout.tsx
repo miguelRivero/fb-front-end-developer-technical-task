@@ -68,6 +68,8 @@ export function CarouselLayout({
   // Ensure currentIndex is always valid when photos change
   useEffect(() => {
     if (photos.length === 0) {
+      // Reset index when photos array becomes empty
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCurrentIndex(0)
       return
     }
@@ -135,23 +137,26 @@ export function CarouselLayout({
       }
     })
 
-    // Cleanup function
+    // Cleanup function - capture ref value to avoid stale closure
+    const preloadedImages = preloadedImagesRef.current
     return () => {
       // Clean up preloaded images when component unmounts or dependencies change
-      preloadedImagesRef.current.forEach((img) => {
+      preloadedImages.forEach((img) => {
         img.src = ''
       })
-      preloadedImagesRef.current.clear()
+      preloadedImages.clear()
     }
   }, [currentIndex, slidesPerView, photos, loadedImages, handleImageLoad])
 
   // Cleanup on unmount
   useEffect(() => {
+    // Capture ref value to avoid stale closure
+    const preloadedImages = preloadedImagesRef.current
     return () => {
-      preloadedImagesRef.current.forEach((img) => {
+      preloadedImages.forEach((img) => {
         img.src = ''
       })
-      preloadedImagesRef.current.clear()
+      preloadedImages.clear()
     }
   }, [])
 

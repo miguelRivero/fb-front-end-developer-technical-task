@@ -29,7 +29,7 @@ export function formatPhotoDate(dateString: string): string {
       month: 'short',
       day: 'numeric',
     })
-  } catch (error) {
+  } catch {
     // Handle edge cases (null, undefined, invalid format)
     if (import.meta.env.DEV) {
       console.warn('Invalid date string provided to formatPhotoDate:', dateString)

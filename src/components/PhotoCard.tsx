@@ -50,7 +50,7 @@ export function PhotoCard({ photo, onClick, className }: PhotoCardProps) {
   }
 
   // Handle image error (fallback to placeholder or hide)
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  const handleImageError = () => {
     // Could set a placeholder image here if needed
     // For now, we'll let the browser handle it
     console.warn('Failed to load image:', photo.urls.regular)

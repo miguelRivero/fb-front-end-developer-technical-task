@@ -6,28 +6,52 @@ import { useState } from 'react'
  * Props for PhotoImage component
  */
 interface PhotoImageProps {
-  /** Photo entity */
+  /** Photo domain entity containing image URLs and metadata */
   photo: Photo
-  /** Image URL to use (default: regular) */
+  /** Image URL size to use - 'thumb' (smallest), 'small', 'regular' (default), or 'full' (largest) */
   urlType?: 'thumb' | 'small' | 'regular' | 'full'
-  /** Whether image is hovered */
+  /** Whether the image is currently hovered (enables hover effects) */
   isHovered?: boolean
-  /** Aspect ratio (default: 'auto') */
+  /** Aspect ratio constraint - 'auto' (natural), '4/3', '16/10', or 'square' */
   aspectRatio?: 'auto' | '4/3' | '16/10' | 'square'
-  /** Loading priority */
+  /** Whether to load image with priority (eager loading) - useful for above-the-fold images */
   priority?: boolean
-  /** Additional className */
+  /** Additional CSS class names to apply */
   className?: string
-  /** Click handler */
+  /** Optional click handler for image interactions */
   onClick?: () => void
-  /** Callback when image loads */
+  /** Callback function invoked when image successfully loads */
   onImageLoad?: () => void
 }
 
 /**
  * PhotoImage Component
  *
- * Reusable photo image component with hover effects and loading states.
+ * Reusable photo image component with hover effects, loading states, and error handling.
+ * Provides consistent image display across all layouts with proper accessibility support.
+ *
+ * Features:
+ * - Automatic skeleton loading state
+ * - Error state handling with fallback UI
+ * - Hover effects for interactive images
+ * - Configurable aspect ratios
+ * - Lazy/eager loading support
+ * - Proper alt text generation
+ * - Responsive image sizing
+ *
+ * @param props - PhotoImage component props
+ * @returns PhotoImage component
+ *
+ * @example
+ * ```tsx
+ * <PhotoImage
+ *   photo={photo}
+ *   urlType="regular"
+ *   isHovered={isHovered}
+ *   aspectRatio="4/3"
+ *   onImageLoad={() => console.log('Image loaded')}
+ * />
+ * ```
  */
 export function PhotoImage({
   photo,

@@ -5,25 +5,46 @@ import styles from './PhotoStats.module.scss'
  * Props for PhotoStats component
  */
 interface PhotoStatsProps {
-  /** Photo entity to display stats for */
+  /** Photo domain entity containing engagement metrics */
   photo: Photo
-  /** Show views stat (default: false) */
+  /** Whether to display view count statistics (default: false) */
   showViews?: boolean
-  /** Show "likes" label text (default: false) */
+  /** Whether to show "likes" text label after the number (default: false) */
   showLikesLabel?: boolean
-  /** Use light theme (for cards/list, default: false for overlays) */
+  /** Use light theme styling (for cards/list layouts, default: false for dark overlays) */
   lightTheme?: boolean
-  /** Size variant */
+  /** Size variant - 'sm' (small), 'md' (medium, default), or 'lg' (large) */
   size?: 'sm' | 'md' | 'lg'
-  /** Additional className */
+  /** Additional CSS class names to apply */
   className?: string
 }
 
 /**
  * PhotoStats Component
  *
- * Displays photo statistics (likes, views) with icons.
- * Reusable across different layouts.
+ * Displays photo engagement statistics (likes, optional views) with icons.
+ * Reusable across different layouts with theme and size variants.
+ *
+ * Features:
+ * - Formatted number display (e.g., "1,234")
+ * - Icon-based visual indicators
+ * - Theme variants (dark for overlays, light for cards)
+ * - Size variants for different contexts
+ * - Accessible icon usage
+ *
+ * @param props - PhotoStats component props
+ * @returns PhotoStats component
+ *
+ * @example
+ * ```tsx
+ * <PhotoStats
+ *   photo={photo}
+ *   showViews={true}
+ *   showLikesLabel={true}
+ *   lightTheme={true}
+ *   size="sm"
+ * />
+ * ```
  */
 export function PhotoStats({
   photo,

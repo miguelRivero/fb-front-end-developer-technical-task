@@ -1,0 +1,9 @@
+reviews:
+  path_filters:
+    - "src/**"
+    - "package.json"
+    - "tsconfig*.json"
+    - "vite.config.*"
+    - "vitest.config.*"
+    - "!src/**/*.test.*"
+    - "!src/test/**"

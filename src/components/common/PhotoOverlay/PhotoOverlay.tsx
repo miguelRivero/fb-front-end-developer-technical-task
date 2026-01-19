@@ -7,21 +7,40 @@ import styles from './PhotoOverlay.module.scss'
  * Props for PhotoOverlay component
  */
 interface PhotoOverlayProps {
-  /** Photo entity to display */
+  /** Photo domain entity containing metadata to display */
   photo: Photo
-  /** Whether overlay is visible */
+  /** Whether the overlay should be visible (typically controlled by hover state) */
   isVisible: boolean
-  /** Show views stat (default: false) */
+  /** Whether to display view count statistics (default: false) */
   showViews?: boolean
-  /** Additional className */
+  /** Additional CSS class names to apply */
   className?: string
 }
 
 /**
  * PhotoOverlay Component
  *
- * Displays photo information overlay with title, creator, and stats.
- * Used in grid and carousel layouts.
+ * Displays photo information overlay with title, creator information, and statistics.
+ * Typically shown on hover in grid and carousel layouts to provide additional context.
+ *
+ * Features:
+ * - Smooth fade-in/fade-out transitions
+ * - Photo title (from alt description)
+ * - Creator attribution
+ * - Engagement statistics (likes, optional views)
+ * - Dark theme optimized for overlaying on images
+ *
+ * @param props - PhotoOverlay component props
+ * @returns PhotoOverlay component
+ *
+ * @example
+ * ```tsx
+ * <PhotoOverlay
+ *   photo={photo}
+ *   isVisible={isHovered}
+ *   showViews={true}
+ * />
+ * ```
  */
 export function PhotoOverlay({
   photo,
