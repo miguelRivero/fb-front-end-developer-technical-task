@@ -62,6 +62,9 @@ export function PhotoUseCasesProvider({
   )
 }
 
+// This file intentionally exports a hook alongside a provider, which is a common
+// pattern for context modules. Fast Refresh still works correctly for the provider.
+// eslint-disable-next-line react-refresh/only-export-components
 export function usePhotoUseCases() {
   const context = useContext(PhotoUseCasesContext)
   if (!context) {

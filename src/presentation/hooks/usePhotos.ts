@@ -1,8 +1,9 @@
-import { useContext, useCallback, useRef, useEffect } from 'react'
-import { PhotoContext } from '../context/PhotoContext'
-import { usePhotoUseCases } from '../context/PhotoUseCasesContext'
 import { DEFAULT_SEARCH_QUERY, PAGINATION_CONFIG } from '../../constants'
+import { useCallback, useContext, useEffect, useRef } from 'react'
+
+import { PhotoContext } from '../context/PhotoContext'
 import { toUiError } from '../errors/UiError'
+import { usePhotoUseCases } from '../context/PhotoUseCasesContext'
 
 function getPerPageForViewport(): number {
   // Be defensive for non-browser environments / test runners.
@@ -72,6 +73,8 @@ export function usePhotos() {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
+      // Intentionally abort the *latest* request on unmount.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       abortControllerRef.current?.abort()
     }
   }, [])

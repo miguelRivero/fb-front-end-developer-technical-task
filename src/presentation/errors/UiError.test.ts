@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
 import { UiError, toUiError } from './UiError'
+import { describe, expect, it } from 'vitest'
 
 describe('UiError Advanced Scenarios', () => {
   it('should handle circular reference objects in originalError', () => {
-    const circularObj: any = { name: 'CircularError' }
+    const circularObj: { name: string; self?: unknown } = { name: 'CircularError' }
     circularObj.self = circularObj
 
     expect(() => {
@@ -58,7 +57,7 @@ describe('toUiError', () => {
   })
 
   it('should fall back to unknown kind for unrecognized type', () => {
-    const uiError = toUiError({ type: 'weird', message: 'Oops' } as any)
+    const uiError = toUiError({ type: 'weird', message: 'Oops' })
     expect(uiError.kind).toBe('unknown')
     expect(uiError.message).toBe('Oops')
   })
