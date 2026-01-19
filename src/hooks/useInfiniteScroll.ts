@@ -59,7 +59,7 @@ export function useInfiniteScroll({
   rootMargin = '200px',
   threshold = 0,
 }: UseInfiniteScrollOptions) {
-  const sentinelRef = useRef<HTMLDivElement>(null)
+  const sentinelNodeRef = useRef<HTMLDivElement | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
   const lastLoadTimeRef = useRef<number>(0)
   const MIN_LOAD_INTERVAL = 500 // Minimum time between loads in milliseconds
@@ -88,42 +88,43 @@ export function useInfiniteScroll({
     }
   }, [loadMore, hasMore, loading])
 
+  const disconnectObserver = useCallback(() => {
+    observerRef.current?.disconnect()
+    observerRef.current = null
+  }, [])
+
+  const attachObserver = useCallback(
+    (sentinel: HTMLDivElement | null) => {
+      sentinelNodeRef.current = sentinel
+      disconnectObserver()
+
+      if (!sentinel) return
+      if (!hasMore) return
+      if (typeof IntersectionObserver === 'undefined') return
+
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          const [entry] = entries
+          if (entry?.isIntersecting) {
+            void loadMoreCallback()
+          }
+        },
+        { rootMargin, threshold }
+      )
+
+      observerRef.current.observe(sentinel)
+    },
+    [disconnectObserver, hasMore, loadMoreCallback, rootMargin, threshold]
+  )
+
+  // Re-bind observer when options change and we already have a node.
   useEffect(() => {
-    const sentinel = sentinelRef.current
-    if (!sentinel) {
-      return
-    }
+    if (!sentinelNodeRef.current) return
+    attachObserver(sentinelNodeRef.current)
+  }, [attachObserver])
 
-    // Don't create observer if no more items available
-    if (!hasMore) {
-      return
-    }
+  // Cleanup on unmount
+  useEffect(() => disconnectObserver, [disconnectObserver])
 
-    // Create Intersection Observer
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries
-        if (entry?.isIntersecting) {
-          loadMoreCallback()
-        }
-      },
-      {
-        rootMargin,
-        threshold,
-      }
-    )
-
-    // Observe the sentinel element
-    observerRef.current.observe(sentinel)
-
-    // Cleanup function
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect()
-        observerRef.current = null
-      }
-    }
-  }, [loadMoreCallback, hasMore, rootMargin, threshold])
-
-  return sentinelRef
+  return attachObserver
 }

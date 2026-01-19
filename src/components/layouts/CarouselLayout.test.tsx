@@ -63,7 +63,7 @@ describe('CarouselLayout Integration Tests', () => {
       )
 
       // All slides should be in the DOM
-      const slides = container.querySelectorAll('[class*="slide"]')
+      const slides = container.querySelectorAll('[data-testid="carousel-slide"]')
       expect(slides.length).toBe(photos.length)
     })
   })
@@ -332,7 +332,7 @@ describe('CarouselLayout Integration Tests', () => {
         />
       )
 
-      const dots = container.querySelectorAll('[class*="dot"]')
+      const dots = container.querySelectorAll('[data-testid="carousel-dot"]')
       expect(dots.length).toBe(photos.length)
     })
 
@@ -346,7 +346,7 @@ describe('CarouselLayout Integration Tests', () => {
         />
       )
 
-      const dots = container.querySelectorAll('[class*="dot"]')
+      const dots = container.querySelectorAll('[data-testid="carousel-dot"]')
       expect(dots.length).toBeGreaterThan(0)
 
       // At least one dot should be active
@@ -365,7 +365,7 @@ describe('CarouselLayout Integration Tests', () => {
         />
       )
 
-      const dots = container.querySelectorAll('[class*="dot"]')
+      const dots = container.querySelectorAll('[data-testid="carousel-dot"]')
       if (dots.length > 0) {
         const secondDot = dots[1] as HTMLElement
         await user.click(secondDot)

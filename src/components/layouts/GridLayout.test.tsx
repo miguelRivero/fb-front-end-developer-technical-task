@@ -291,7 +291,7 @@ describe('GridLayout Integration Tests', () => {
         />
       )
 
-      const sentinel = document.querySelector('[aria-hidden="true"]')
+      const sentinel = document.querySelector('[data-testid="infinite-scroll-sentinel"]')
       expect(sentinel).toBeInTheDocument()
     })
 
@@ -308,7 +308,7 @@ describe('GridLayout Integration Tests', () => {
         />
       )
 
-      const sentinel = document.querySelector('[aria-hidden="true"]')
+      const sentinel = document.querySelector('[data-testid="infinite-scroll-sentinel"]')
       expect(sentinel).not.toBeInTheDocument()
     })
 
@@ -326,7 +326,7 @@ describe('GridLayout Integration Tests', () => {
         />
       )
 
-      const sentinel = container.querySelector('[aria-hidden="true"]')
+      const sentinel = container.querySelector('[data-testid="infinite-scroll-sentinel"]')
       expect(sentinel).toBeInTheDocument()
 
       // Trigger intersection
@@ -372,10 +372,12 @@ describe('GridLayout Integration Tests', () => {
     it('should render photo overlay on hover', async () => {
       const user = userEvent.setup()
       const photos = createMockPhotoArray(1)
+      const onPhotoClick = vi.fn()
 
       renderWithProviders(
         <GridLayout
           photos={photos}
+          onPhotoClick={onPhotoClick}
           loading={false}
           hasMore={false}
         />
@@ -387,7 +389,7 @@ describe('GridLayout Integration Tests', () => {
 
       // Overlay should be visible (check for creator name or stats)
       await waitFor(() => {
-        expect(screen.getByText(photos[0].creator.name)).toBeInTheDocument()
+        expect(screen.getByText(new RegExp(photos[0].creator.name))).toBeInTheDocument()
       })
     })
 

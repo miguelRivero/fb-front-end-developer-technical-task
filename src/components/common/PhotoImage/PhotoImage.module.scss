@@ -6,6 +6,11 @@
   width: 100%;
 }
 
+.aspect-auto {
+  /* Natural aspect ratio (no constraint) */
+  aspect-ratio: auto;
+}
+
 
 .aspect-4\/3 {
   aspect-ratio: 4 / 3;

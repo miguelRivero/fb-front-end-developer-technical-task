@@ -284,6 +284,7 @@ export function CarouselLayout({
                 <div
                   key={photo.id}
                   className={styles.slide}
+                  data-testid="carousel-slide"
                   onMouseEnter={() => setHoveredPhotoId(photo.id)}
                   onMouseLeave={() => setHoveredPhotoId(null)}
                 >
@@ -390,6 +391,7 @@ export function CarouselLayout({
                   index === currentIndex ? styles.dotActive : ''
                 }`}
                 aria-label={`Go to slide ${index + 1} of ${photos.length}`}
+                data-testid="carousel-dot"
               />
             )
           })}

@@ -12,34 +12,38 @@ import type { Photo } from '../domain/entities/Photo'
  * Creates a mock Photo domain entity
  */
 export function createMockPhoto(overrides?: Partial<Photo>): Photo {
-  const id = overrides?.id || `photo-${Math.random().toString(36).substr(2, 9)}`
+  const id = overrides?.id ?? `photo-${Math.random().toString(36).substr(2, 9)}`
   
   return {
     id,
     urls: {
-      raw: `https://images.unsplash.com/photo-${id}?raw`,
-      full: `https://images.unsplash.com/photo-${id}?full`,
-      regular: `https://images.unsplash.com/photo-${id}?regular`,
-      small: `https://images.unsplash.com/photo-${id}?small`,
-      thumb: `https://images.unsplash.com/photo-${id}?thumb`,
-      ...overrides?.urls,
+      raw: overrides?.urls?.raw ?? `https://images.unsplash.com/photo-${id}?raw`,
+      full: overrides?.urls?.full ?? `https://images.unsplash.com/photo-${id}?full`,
+      regular:
+        overrides?.urls?.regular ?? `https://images.unsplash.com/photo-${id}?regular`,
+      small:
+        overrides?.urls?.small ?? `https://images.unsplash.com/photo-${id}?small`,
+      thumb:
+        overrides?.urls?.thumb ?? `https://images.unsplash.com/photo-${id}?thumb`,
     },
-    altDescription: overrides?.altDescription ?? 'A beautiful photo',
+    // Preserve explicit null/empty values in overrides
+    altDescription:
+      overrides && Object.prototype.hasOwnProperty.call(overrides, 'altDescription')
+        ? overrides.altDescription ?? null
+        : 'A beautiful photo',
     creator: {
-      name: overrides?.creator?.name || 'John Doe',
-      username: overrides?.creator?.username || 'johndoe',
+      name: overrides?.creator?.name ?? 'John Doe',
+      username: overrides?.creator?.username ?? 'johndoe',
       profileImageUrl:
-        overrides?.creator?.profileImageUrl ||
+        overrides?.creator?.profileImageUrl ??
         'https://images.unsplash.com/profile-default.jpg',
-      ...overrides?.creator,
     },
     dimensions: {
-      width: overrides?.dimensions?.width || 4000,
-      height: overrides?.dimensions?.height || 3000,
-      ...overrides?.dimensions,
+      width: overrides?.dimensions?.width ?? 4000,
+      height: overrides?.dimensions?.height ?? 3000,
     },
     likes: overrides?.likes ?? 100,
-    createdAt: overrides?.createdAt || '2024-01-15T10:30:00Z',
+    createdAt: overrides?.createdAt ?? '2024-01-15T10:30:00Z',
   }
 }
 
@@ -52,6 +56,16 @@ export function createMockPhotoArray(count: number): Photo[] {
       id: `photo-${index}`,
       altDescription: `Photo ${index + 1}`,
       likes: (index + 1) * 10,
+      creator: {
+        name: `Creator ${index + 1}`,
+        username: `creator${index + 1}`,
+        profileImageUrl: 'https://images.unsplash.com/profile-default.jpg',
+      },
+      dimensions: {
+        width: 4000 + index,
+        height: 3000 + index,
+      },
+      createdAt: `2024-01-${String((index % 28) + 1).padStart(2, '0')}T10:30:00Z`,
     })
   )
 }

@@ -129,7 +129,6 @@ After installation, verify your setup is working correctly:
 - `npm run format` - Format code with Prettier
 - `npm run test` - Run tests
 - `npm run test:ui` - Run tests with UI
-- `npm run test:coverage` - Run tests with coverage
 - `npm run type-check` - Run TypeScript type checking
 
 ## Project Structure
@@ -204,8 +203,6 @@ npm run test
 # Run tests with UI
 npm run test:ui
 
-# Run tests with coverage
-npm run test:coverage
 ```
 
 ### Development Guidelines

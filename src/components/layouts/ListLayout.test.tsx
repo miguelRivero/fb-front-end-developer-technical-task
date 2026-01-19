@@ -204,8 +204,9 @@ describe('ListLayout Integration Tests', () => {
         />
       )
 
-      const images = screen.getAllByRole('img')
-      expect(images).toHaveLength(photos.length)
+      // Only count the photo images (CreatorInfo also renders an avatar <img>)
+      const photoImages = screen.getAllByAltText(/Photo \d+/)
+      expect(photoImages).toHaveLength(photos.length)
     })
   })
 
@@ -344,7 +345,7 @@ describe('ListLayout Integration Tests', () => {
         />
       )
 
-      const sentinel = document.querySelector('[aria-hidden="true"]')
+      const sentinel = document.querySelector('[data-testid="infinite-scroll-sentinel"]')
       expect(sentinel).toBeInTheDocument()
     })
 
@@ -362,7 +363,7 @@ describe('ListLayout Integration Tests', () => {
         />
       )
 
-      const sentinel = container.querySelector('[aria-hidden="true"]')
+      const sentinel = container.querySelector('[data-testid="infinite-scroll-sentinel"]')
       expect(sentinel).toBeInTheDocument()
 
       // Trigger intersection

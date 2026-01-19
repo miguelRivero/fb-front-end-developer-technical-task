@@ -66,7 +66,14 @@ export function PhotoImage({
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
 
-  const imageUrl = photo.urls[urlType]
+  const imageUrl =
+    photo.urls[urlType] ||
+    photo.urls.regular ||
+    photo.urls.small ||
+    photo.urls.thumb ||
+    photo.urls.full ||
+    photo.urls.raw ||
+    'about:blank'
   // Improved alt text with better null handling
   const altText =
     photo.altDescription ||

@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
 import type React from 'react'
+import { useCallback } from 'react'
 
 /**
  * Custom hook: useClickable
@@ -42,7 +42,7 @@ export function useClickable<T>(
   )
 
   return {
-    onClick: handleClick,
+    onClick: onClick ? handleClick : undefined,
     onKeyDown: handleKeyDown,
     role: onClick ? ('button' as const) : undefined,
     tabIndex: onClick ? (0 as const) : undefined,

@@ -1,5 +1,6 @@
+import type { FetchPhotosError, UnsplashPhoto, UnsplashResponse } from '../types/unsplash'
+
 import axios from 'axios'
-import type { UnsplashPhoto, UnsplashResponse, FetchPhotosError } from '../types/unsplash'
 
 /**
  * Configured axios client for Unsplash API requests

@@ -30,7 +30,8 @@ describe('useInfiniteScroll', () => {
         })
       )
 
-      expect(result.current.current).toBeDefined()
+      expect(result.current).toBeDefined()
+      expect(typeof result.current).toBe('function')
       expect(intersectionObserverMock).toBeDefined()
     })
 
@@ -94,19 +95,10 @@ describe('useInfiniteScroll', () => {
 
       // Create a mock element
       const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
+      result.current(sentinel as unknown as HTMLDivElement)
 
       // Wait for observer to be set up, then trigger intersection
-      await waitFor(() => {
-        if (sentinel.parentNode || result.current.current) {
-          intersectionObserverMock.triggerIntersection(sentinel, true)
-          return true
-        }
-        return false
-      })
+      intersectionObserverMock.triggerIntersection(sentinel, true)
 
       await waitFor(() => {
         expect(loadMore).toHaveBeenCalled()
@@ -124,10 +116,7 @@ describe('useInfiniteScroll', () => {
       )
 
       const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
+      result.current(sentinel as unknown as HTMLDivElement)
 
       // Trigger non-intersecting
       intersectionObserverMock.triggerIntersection(sentinel, false)
@@ -151,10 +140,7 @@ describe('useInfiniteScroll', () => {
       )
 
       const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
+      result.current(sentinel as unknown as HTMLDivElement)
 
       // Trigger intersection multiple times rapidly
       intersectionObserverMock.triggerIntersection(sentinel, true)
@@ -180,10 +166,7 @@ describe('useInfiniteScroll', () => {
       )
 
       const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
+      result.current(sentinel as unknown as HTMLDivElement)
 
       // Trigger first intersection
       intersectionObserverMock.triggerIntersection(sentinel, true)
@@ -212,10 +195,7 @@ describe('useInfiniteScroll', () => {
       )
 
       const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
+      result.current(sentinel as unknown as HTMLDivElement)
 
       intersectionObserverMock.triggerIntersection(sentinel, true)
 
@@ -238,18 +218,12 @@ describe('useInfiniteScroll', () => {
         }
       )
 
+      const sentinel = document.createElement('div')
+      result.current(sentinel as unknown as HTMLDivElement)
+
       // Change hasMore to true
       rerender({ hasMore: true })
-
-      const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
-
-      await waitFor(() => {
-        intersectionObserverMock.triggerIntersection(sentinel, true)
-      })
+      intersectionObserverMock.triggerIntersection(sentinel, true)
 
       await waitFor(() => {
         expect(loadMore).toHaveBeenCalled()
@@ -269,10 +243,7 @@ describe('useInfiniteScroll', () => {
       )
 
       const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
+      result.current(sentinel as unknown as HTMLDivElement)
 
       intersectionObserverMock.triggerIntersection(sentinel, true)
 
@@ -295,18 +266,12 @@ describe('useInfiniteScroll', () => {
         }
       )
 
+      const sentinel = document.createElement('div')
+      result.current(sentinel as unknown as HTMLDivElement)
+
       // Change loading to false
       rerender({ loading: false })
-
-      const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
-
-      await waitFor(() => {
-        intersectionObserverMock.triggerIntersection(sentinel, true)
-      })
+      intersectionObserverMock.triggerIntersection(sentinel, true)
 
       await waitFor(() => {
         expect(loadMore).toHaveBeenCalled()
@@ -325,7 +290,7 @@ describe('useInfiniteScroll', () => {
         })
       )
 
-      expect(result.current.current).toBeDefined()
+      expect(result.current).toBeDefined()
 
       unmount()
 
@@ -352,17 +317,12 @@ describe('useInfiniteScroll', () => {
       )
 
       const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
+      result.current(sentinel as unknown as HTMLDivElement)
 
       // Change loadMore
       rerender({ loadMore: loadMore2 })
 
-      await waitFor(() => {
-        intersectionObserverMock.triggerIntersection(sentinel, true)
-      })
+      intersectionObserverMock.triggerIntersection(sentinel, true)
 
       await waitFor(() => {
         expect(loadMore2).toHaveBeenCalled()
@@ -429,14 +389,8 @@ describe('useInfiniteScroll', () => {
       )
 
       const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
-
-      await waitFor(() => {
-        intersectionObserverMock.triggerIntersection(sentinel, true)
-      })
+      result.current(sentinel as unknown as HTMLDivElement)
+      intersectionObserverMock.triggerIntersection(sentinel, true)
 
       await waitFor(() => {
         expect(loadMore).toHaveBeenCalled()
@@ -464,10 +418,7 @@ describe('useInfiniteScroll', () => {
       )
 
       const sentinel = document.createElement('div')
-      if (result.current.current) {
-        // @ts-expect-error - Setting ref current for test
-        result.current.current = sentinel
-      }
+      result.current(sentinel as unknown as HTMLDivElement)
 
       // Trigger first intersection (will error)
       intersectionObserverMock.triggerIntersection(sentinel, true)

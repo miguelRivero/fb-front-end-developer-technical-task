@@ -8,7 +8,6 @@ import styles from './ListLayout.module.scss'
 import { useState } from 'react'
 import React from 'react'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
-import { useLoadingState } from '../../hooks/useLoadingState'
 import { useClickable } from '../../hooks/useClickable'
 import type { BaseLayoutProps } from '../../types/layout'
 import { UI_CONSTANTS } from '../../constants'
@@ -65,12 +64,10 @@ export function ListLayout({
     loading: loadingMore, // Use dedicated loadingMore state
   })
 
-  // Use shared loading state hook
-  const { isInitialLoading, isLoadingMore: isLoadingMoreFromHook } = useLoadingState(
-    loading || false,
-    photos
-  )
-  const isLoadingMore = loadingMore || isLoadingMoreFromHook
+  // `loading` is treated as initial loading (show skeleton instead of photos).
+  // Pagination uses the explicit `loadingMore` prop.
+  const isInitialLoading = !!loading
+  const isLoadingMore = !!loadingMore
 
   // Handle error state
   if (error) {
@@ -128,7 +125,12 @@ export function ListLayout({
     )}
       {/* Sentinel element for infinite scroll */}
       {hasMore && loadMore && (
-        <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
+        <div
+          ref={sentinelRef}
+          className={styles.sentinel}
+          aria-hidden="true"
+          data-testid="infinite-scroll-sentinel"
+        />
       )}
     </>
   )

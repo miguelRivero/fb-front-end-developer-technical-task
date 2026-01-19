@@ -51,6 +51,7 @@ export function CreatorInfo({
   lightTheme = false,
   className,
 }: CreatorInfoProps) {
+  const username = photo.creator.username
   return (
     <div
       className={`${styles.creatorInfo} ${styles[`creatorInfo-${size}`]} ${lightTheme ? styles['creatorInfo-light'] : ''} ${className || ''}`}
@@ -65,9 +66,9 @@ export function CreatorInfo({
       />
       <div className={styles.creatorDetails}>
         <span className={styles.creatorName}>{photo.creator.name}</span>
-        {showUsername && (
+        {showUsername && username && (
           <span className={`${styles.creatorUsername} creatorUsername`}>
-            @{photo.creator.username}
+            @{username}
           </span>
         )}
       </div>

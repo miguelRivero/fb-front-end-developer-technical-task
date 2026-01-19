@@ -169,10 +169,10 @@ describe('PhotoStats', () => {
   describe('accessibility', () => {
     it('should have aria-hidden on icons', () => {
       const photo = createMockPhoto()
-      render(<PhotoStats photo={photo} />)
+      const { container } = render(<PhotoStats photo={photo} />)
 
-      const icons = screen.getAllByRole('img', { hidden: true })
-      // SVGs with aria-hidden="true" should be present
+      // SVG icons should be hidden from assistive tech
+      const icons = container.querySelectorAll('svg[aria-hidden="true"]')
       expect(icons.length).toBeGreaterThan(0)
     })
 

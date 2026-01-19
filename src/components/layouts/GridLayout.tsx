@@ -8,7 +8,6 @@ import { UI_CONSTANTS } from '../../constants'
 import styles from './GridLayout.module.scss'
 import { useClickable } from '../../hooks/useClickable'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
-import { useLoadingState } from '../../hooks/useLoadingState'
 import { useState } from 'react'
 
 /**
@@ -62,12 +61,10 @@ export function GridLayout({
     loading: loadingMore, // Use dedicated loadingMore state
   })
 
-  // Use shared loading state hook
-  const { isInitialLoading, isLoadingMore: isLoadingMoreFromHook } = useLoadingState(
-    loading || false,
-    photos
-  )
-  const isLoadingMore = loadingMore || isLoadingMoreFromHook
+  // `loading` is treated as initial loading (show skeleton instead of photos).
+  // Pagination uses the explicit `loadingMore` prop.
+  const isInitialLoading = !!loading
+  const isLoadingMore = !!loadingMore
 
   // Handle error state
   if (error) {
@@ -113,7 +110,12 @@ export function GridLayout({
       )}
       {/* Sentinel element for infinite scroll */}
       {hasMore && loadMore && (
-        <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
+        <div
+          ref={sentinelRef}
+          className={styles.sentinel}
+          aria-hidden="true"
+          data-testid="infinite-scroll-sentinel"
+        />
       )}
     </>
   )

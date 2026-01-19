@@ -9,6 +9,7 @@ import { CardsLayout } from './CardsLayout'
 import { renderWithProviders } from '../../test/utils'
 import { createMockPhotoArray, createMockIntersectionObserver, createMockMatchMedia } from '../../test/mocks'
 import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
+import { formatPhotoDate } from '../../utils/dateUtils'
 
 describe('CardsLayout Integration Tests', () => {
   let mockIntersectionObserver: ReturnType<typeof createMockIntersectionObserver>
@@ -114,10 +115,9 @@ describe('CardsLayout Integration Tests', () => {
         />
       )
 
-      // Date should be formatted and displayed
-      // The exact format depends on dateUtils, but should be visible
-      const dateElements = screen.getAllByText(/\d{1,2}\/\d{1,2}\/\d{4}/)
-      expect(dateElements.length).toBeGreaterThan(0)
+      photos.forEach((photo) => {
+        expect(screen.getByText(formatPhotoDate(photo.createdAt))).toBeInTheDocument()
+      })
     })
 
     it('should display photo stats (likes)', () => {
@@ -133,7 +133,7 @@ describe('CardsLayout Integration Tests', () => {
 
       photos.forEach((photo) => {
         // Stats should include likes count
-        expect(screen.getByText(new RegExp(photo.likes.toString()))).toBeInTheDocument()
+        expect(screen.getByText(new RegExp(`\\b${photo.likes}\\b`))).toBeInTheDocument()
       })
     })
   })
@@ -204,8 +204,9 @@ describe('CardsLayout Integration Tests', () => {
         />
       )
 
-      const images = screen.getAllByRole('img')
-      expect(images).toHaveLength(photos.length)
+      // Only count the photo images (CreatorInfo also renders an avatar <img>)
+      const photoImages = screen.getAllByAltText(/Photo \d+/)
+      expect(photoImages).toHaveLength(photos.length)
     })
   })
 
@@ -344,7 +345,7 @@ describe('CardsLayout Integration Tests', () => {
         />
       )
 
-      const sentinel = document.querySelector('[aria-hidden="true"]')
+      const sentinel = document.querySelector('[data-testid="infinite-scroll-sentinel"]')
       expect(sentinel).toBeInTheDocument()
     })
 
@@ -362,7 +363,7 @@ describe('CardsLayout Integration Tests', () => {
         />
       )
 
-      const sentinel = container.querySelector('[aria-hidden="true"]')
+      const sentinel = container.querySelector('[data-testid="infinite-scroll-sentinel"]')
       expect(sentinel).toBeInTheDocument()
 
       // Trigger intersection
@@ -419,9 +420,9 @@ describe('CardsLayout Integration Tests', () => {
         />
       )
 
-      // Dates should be formatted (check for date pattern)
-      const dateElements = screen.getAllByText(/\d{1,2}\/\d{1,2}\/\d{4}/)
-      expect(dateElements.length).toBeGreaterThan(0)
+      photos.forEach((photo) => {
+        expect(screen.getByText(formatPhotoDate(photo.createdAt))).toBeInTheDocument()
+      })
     })
   })
 
