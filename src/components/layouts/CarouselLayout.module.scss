@@ -61,11 +61,11 @@
   height: 100%;
   background: linear-gradient(
     90deg,
-    #f3f4f6 0%,
-    #e5e7eb 25%,
-    #f9fafb 50%,
-    #e5e7eb 75%,
-    #f3f4f6 100%
+    var(--muted) 0%,
+    var(--border) 25%,
+    var(--background) 50%,
+    var(--border) 75%,
+    var(--muted) 100%
   );
   background-size: 200% 100%;
   animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
@@ -109,7 +109,7 @@
 
 .navButton {
   position: absolute;
-  top: calc(50% - 1.25rem);
+  top: 50%;
   transform: var(--transform-translate-center);
   width: 2.5rem;
   height: 2.5rem;
@@ -243,7 +243,7 @@
   aspect-ratio: 16 / 10;
   border-radius: var(--border-radius-xl);
   background: var(--muted);
-  animation: pulse-loading 1.5s ease-in-out infinite;
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .skeletonImage {
@@ -251,11 +251,11 @@
   height: 100%;
   background: linear-gradient(
     90deg,
-    #f3f4f6 0%,
-    #e5e7eb 25%,
-    #f9fafb 50%,
-    #e5e7eb 75%,
-    #f3f4f6 100%
+    var(--muted) 0%,
+    var(--border) 25%,
+    var(--background) 50%,
+    var(--border) 75%,
+    var(--muted) 100%
   );
   background-size: 200% 100%;
   animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out)
@@ -284,12 +284,12 @@
 
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
-  .skeleton,
+  .slideSkeleton,
   .skeletonImage {
     animation: none;
   }
 
-  .skeleton {
+  .slideSkeleton {
     opacity: var(--opacity-muted);
   }
 }

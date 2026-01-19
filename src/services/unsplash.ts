@@ -24,14 +24,14 @@ export const unsplashClient = axios.create({
  * Fetches photos from Unsplash API with pagination support
  *
  * @param params - Fetch parameters
- * @param params.query - Search query (defaults to 'nature' if not provided)
+ * @param params.query - Search query (when omitted, fetches curated photos)
  * @param params.page - Page number for pagination (defaults to 1)
  * @param params.perPage - Number of photos per page (defaults to 20)
  * @returns Promise that resolves to an array of UnsplashPhoto objects
  * @throws {FetchPhotosError} Throws typed error for rate limits, auth issues, network errors, or unknown errors
  *
  * @example
- * // Fetch default nature photos
+ * // Fetch curated photos (no query)
  * const photos = await fetchPhotos({})
  *
  * @example
@@ -48,7 +48,7 @@ export async function fetchPhotos(params: {
   page?: number
   perPage?: number
 }): Promise<UnsplashPhoto[]> {
-  const { query = 'nature', page = 1, perPage = 20 } = params
+  const { query, page = 1, perPage = 20 } = params
 
   try {
     if (query) {

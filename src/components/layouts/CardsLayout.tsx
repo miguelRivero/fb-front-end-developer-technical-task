@@ -1,15 +1,15 @@
+import type { BaseLayoutProps } from '../../types/layout'
 import { CreatorInfo } from '../common/CreatorInfo/CreatorInfo'
 import { EmptyState } from '../common/EmptyState/EmptyState'
 import type { Photo } from '../../domain/entities/Photo'
 import { PhotoDescription } from '../common/PhotoDescription/PhotoDescription'
 import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoStats } from '../common/PhotoStats/PhotoStats'
+import { UI_CONSTANTS } from '../../constants'
+import { formatPhotoDate } from '../../utils/dateUtils'
 import styles from './CardsLayout.module.scss'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 import { useLoadingState } from '../../hooks/useLoadingState'
-import type { BaseLayoutProps } from '../../types/layout'
-import { UI_CONSTANTS } from '../../constants'
-import { formatPhotoDate } from '../../utils/dateUtils'
 import { useMemo } from 'react'
 
 /**
@@ -103,7 +103,7 @@ export function CardsLayout({
         {photos.map((photo) => (
           <CardItem key={photo.id} photo={photo} onPhotoClick={onPhotoClick} />
         ))}
-    </div>
+      </div>
     {/* Loading indicator for "load more" */}
     {isLoadingMore && (
       <div className={styles.loadingMore}>
@@ -176,6 +176,7 @@ function CardItem({
         <PhotoDescription
           description={photo.altDescription}
           maxLines={2}
+          className="description"
         />
         <div className={styles.metadata}>
           <PhotoStats photo={photo} lightTheme size="sm" />

@@ -164,6 +164,7 @@ const ListItem = React.memo(function ListItem({
           urlType="small"
           isHovered={isHovered}
           aspectRatio="4/3"
+          className={styles.thumbnail}
         />
       </div>
 

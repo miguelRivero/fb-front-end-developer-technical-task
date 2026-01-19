@@ -69,7 +69,7 @@
 @media (max-width: 640px) {
   .button {
     padding: 0.625rem;
-    min-width: 2.5rem;
+    min-width: 2.75rem; /* 44px to maintain WCAG touch target size */
     justify-content: center;
   }
 

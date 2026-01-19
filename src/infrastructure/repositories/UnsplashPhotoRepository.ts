@@ -51,7 +51,7 @@ export class UnsplashPhotoRepository implements PhotoRepository {
    * ```
    */
   async searchPhotos(params: PhotoSearchParams): Promise<PhotoSearchResult> {
-    const { query = 'nature', page = 1, perPage = 20 } = params
+    const { query, page = 1, perPage = 20 } = params
 
     try {
       let unsplashPhotos: UnsplashPhoto[]

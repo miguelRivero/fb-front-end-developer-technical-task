@@ -81,8 +81,13 @@
   transition: background-color var(--transition-base);
 }
 
+.errorDetailsSummary:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
 .errorDetailsSummary:hover {
-  background: #f3f4f6;
+  background: var(--muted);
 }
 
 .errorDetailsSummary::-webkit-details-marker {
@@ -116,8 +121,8 @@
 .errorStack {
   margin-top: var(--spacing-md);
   padding: var(--spacing-md);
-  background: #1f2937;
-  color: #f9fafb;
+  background: var(--muted);
+  color: var(--foreground);
   border-radius: var(--border-radius-sm);
   font-size: var(--font-size-xs);
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
@@ -151,7 +156,7 @@
 
 .retryButton {
   background: var(--color-primary);
-  color: white;
+  color: var(--primary-foreground);
 }
 
 .retryButton:hover {

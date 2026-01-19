@@ -18,9 +18,10 @@
   border-radius: var(--border-radius-xl);
   transition:
     background-color 250ms ease-out,
-    box-shadow 250ms ease-out;
+    box-shadow 250ms ease-out,
+    transform 250ms ease-out;
   position: relative;
-  will-change: background-color, box-shadow;
+  will-change: background-color, box-shadow, transform;
 }
 
 .listItem.clickable {
@@ -37,12 +38,18 @@
   background-color: var(--card);
   box-shadow: var(--shadow-xl);
   border-radius: var(--border-radius-xl);
+  transform: var(--transform-scale-hover-small);
 }
 
 /* Thumbnail Container */
 .thumbnailContainer {
   flex-shrink: 0;
   width: 12rem; /* sm:w-48 */
+}
+
+/* PhotoImage wrapper (passed via `className`) */
+.thumbnail {
+  width: 100%;
 }
 
 @media (max-width: 640px) {
@@ -117,11 +124,11 @@
   border-radius: var(--border-radius-md);
   background: linear-gradient(
     90deg,
-    #f3f4f6 0%,
-    #e5e7eb 25%,
-    #f9fafb 50%,
-    #e5e7eb 75%,
-    #f3f4f6 100%
+    var(--muted) 0%,
+    var(--border) 25%,
+    var(--background) 50%,
+    var(--border) 75%,
+    var(--muted) 100%
   );
   background-size: 200% 100%;
   animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out)
@@ -142,11 +149,11 @@
   border-radius: var(--border-radius-sm);
   background: linear-gradient(
     90deg,
-    #f3f4f6 0%,
-    #e5e7eb 25%,
-    #f9fafb 50%,
-    #e5e7eb 75%,
-    #f3f4f6 100%
+    var(--muted) 0%,
+    var(--border) 25%,
+    var(--background) 50%,
+    var(--border) 75%,
+    var(--muted) 100%
   );
   background-size: 200% 100%;
   animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out)
@@ -161,11 +168,11 @@
   border-radius: var(--border-radius-sm);
   background: linear-gradient(
     90deg,
-    #f3f4f6 0%,
-    #e5e7eb 25%,
-    #f9fafb 50%,
-    #e5e7eb 75%,
-    #f3f4f6 100%
+    var(--muted) 0%,
+    var(--border) 25%,
+    var(--background) 50%,
+    var(--border) 75%,
+    var(--muted) 100%
   );
   background-size: 200% 100%;
   animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out)
@@ -233,7 +240,7 @@
     transform: none; /* Disable transform on touch devices */
   }
 
-  .listItem:hover .thumbnail {
+  .listItem:hover .thumbnail img {
     transform: none;
   }
 
@@ -245,7 +252,7 @@
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   .listItem,
-  .thumbnail {
+  .thumbnail img {
     transition: none;
   }
 
@@ -254,8 +261,8 @@
     transform: none;
   }
 
-  .listItem:hover .thumbnail,
-  .listItem.clickable:active .thumbnail {
+  .listItem:hover .thumbnail img,
+  .listItem.clickable:active .thumbnail img {
     transform: none;
   }
 }

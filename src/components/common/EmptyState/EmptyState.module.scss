@@ -4,7 +4,17 @@
   justify-content: center;
   min-height: 400px;
   padding: 2rem;
-  animation: fadeIn var(--transition-base, 200ms) ease-out;
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 2rem;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fadeIn var(--transition-base, 200ms) ease-out;
+  }
+}
 }
 
 .emptyStateText {

@@ -1,15 +1,15 @@
+import type { BaseLayoutProps } from '../../types/layout'
 import { EmptyState } from '../common/EmptyState/EmptyState'
 import type { Photo } from '../../domain/entities/Photo'
 import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoOverlay } from '../common/PhotoOverlay/PhotoOverlay'
-import styles from './GridLayout.module.scss'
-import { useState } from 'react'
 import React from 'react'
+import { UI_CONSTANTS } from '../../constants'
+import styles from './GridLayout.module.scss'
+import { useClickable } from '../../hooks/useClickable'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 import { useLoadingState } from '../../hooks/useLoadingState'
-import { useClickable } from '../../hooks/useClickable'
-import type { BaseLayoutProps } from '../../types/layout'
-import { UI_CONSTANTS } from '../../constants'
+import { useState } from 'react'
 
 /**
  * Props for the GridLayout component
@@ -129,8 +129,7 @@ const GridItem = React.memo(function GridItem({
   const [isHovered, setIsHovered] = useState(false)
 
   const { onClick: handleClick, onKeyDown, role, tabIndex, 'aria-label': ariaLabel } =
-    useClickable(onClick, photo, `View photo by ${photo.creator.name}`)
-
+    useClickable(onClick, photo, `View photo by ${photo.creator.name || 'unknown'}`)
   return (
     <div
       className={`${styles.gridItem} ${onClick ? styles.clickable : ''}`}

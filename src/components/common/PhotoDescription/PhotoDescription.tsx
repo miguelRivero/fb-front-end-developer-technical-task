@@ -53,7 +53,7 @@ export function PhotoDescription({
       className={`${styles.description} ${styles[`description-${size}`]} ${className || ''}`}
     >
       <p
-        className={styles.descriptionText}
+        className={styles['description-text']}
         style={{
           WebkitLineClamp: maxLines,
         }}

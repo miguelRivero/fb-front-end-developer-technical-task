@@ -66,7 +66,7 @@ export function CreatorInfo({
       <div className={styles.creatorDetails}>
         <span className={styles.creatorName}>{photo.creator.name}</span>
         {showUsername && (
-          <span className={styles.creatorUsername}>
+          <span className={`${styles.creatorUsername} creatorUsername`}>
             @{photo.creator.username}
           </span>
         )}
