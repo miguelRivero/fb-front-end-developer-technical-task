@@ -19,6 +19,16 @@ function wrapper({ children }: { children: React.ReactNode }) {
   )
 }
 
+function deferred<T>() {
+  let resolve!: (value: T) => void
+  let reject!: (reason?: unknown) => void
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+  return { promise, resolve, reject }
+}
+
 describe('usePhotos', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -212,6 +222,64 @@ describe('usePhotos', () => {
       // Should have new photos, not error from cancellation
       expect(result.current.photos).toHaveLength(2)
       expect(result.current.loading).toBe(false)
+    })
+
+    it('should handle concurrent fetches (last request wins)', async () => {
+      const photos1 = createMockPhotoArray(1)
+      const photos2 = createMockPhotoArray(2)
+
+      const d1 = deferred<{
+        photos: typeof photos1
+        currentPage: number
+        hasMore: boolean
+      }>()
+      const d2 = deferred<{
+        photos: typeof photos2
+        currentPage: number
+        hasMore: boolean
+      }>()
+
+      mockExecute.mockImplementation(({ query }: { query: string }) => {
+        if (query === 'query1') return d1.promise
+        if (query === 'query2') return d2.promise
+        throw new Error(`Unexpected query: ${query}`)
+      })
+
+      const { result } = renderHook(() => usePhotos(), {
+        wrapper,
+      })
+
+      let p1: Promise<void> | undefined
+      let p2: Promise<void> | undefined
+
+      act(() => {
+        p1 = result.current.fetchPhotos('query1')
+      })
+
+      act(() => {
+        p2 = result.current.fetchPhotos('query2')
+      })
+
+      expect(result.current.searchQuery).toBe('query2')
+      expect(result.current.loading).toBe(true)
+
+      d2.resolve({ photos: photos2, currentPage: 1, hasMore: true })
+      await act(async () => {
+        await p2
+      })
+
+      expect(result.current.loading).toBe(false)
+      expect(result.current.photos).toEqual(photos2)
+      expect(result.current.searchQuery).toBe('query2')
+
+      // Even if the first request resolves later, it should not overwrite state.
+      d1.resolve({ photos: photos1, currentPage: 1, hasMore: true })
+      await act(async () => {
+        await p1
+      })
+
+      expect(result.current.photos).toEqual(photos2)
+      expect(result.current.searchQuery).toBe('query2')
     })
 
     it('should convert non-UiError to UiError', async () => {

@@ -51,7 +51,17 @@ export const DEFAULT_SEARCH_QUERY = 'nature' as const
  *
  * Centralized configuration for infrastructure adapters/repositories.
  */
-const timeoutFromEnv = Number(import.meta.env.VITE_UNSPLASH_TIMEOUT_MS)
-export const UNSPLASH_API_TIMEOUT_MS = (Number.isFinite(timeoutFromEnv)
-  ? timeoutFromEnv
-  : 10_000) as number
+export function parsePositiveNumber(
+  value: unknown,
+  fallback: number
+): number {
+  const num = typeof value === 'number' ? value : Number(value)
+  return Number.isFinite(num) && num > 0 ? num : fallback
+}
+
+const timeoutFromEnv = parsePositiveNumber(
+  import.meta.env.VITE_UNSPLASH_TIMEOUT_MS,
+  10_000
+)
+
+export const UNSPLASH_API_TIMEOUT_MS = timeoutFromEnv
