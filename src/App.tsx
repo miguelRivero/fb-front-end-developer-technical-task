@@ -7,6 +7,7 @@ import { GridLayout } from './components/layouts/GridLayout'
 import { LayoutSwitcher } from './components/LayoutSwitcher'
 import { ListLayout } from './components/layouts/ListLayout'
 import { EmptyState } from './components/common/EmptyState/EmptyState'
+import { ScrollToTopButton } from './components/common/ScrollToTopButton/ScrollToTopButton'
 import styles from './App.module.scss'
 import { useEffect } from 'react'
 import { DEFAULT_SEARCH_QUERY } from './constants'
@@ -179,6 +180,8 @@ function App() {
             </div>
           </div>
         </div>
+
+        <ScrollToTopButton />
       </div>
     </ErrorBoundary>
   )
