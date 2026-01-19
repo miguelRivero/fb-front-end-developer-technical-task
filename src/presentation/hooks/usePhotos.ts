@@ -68,6 +68,7 @@ export function usePhotos() {
           query,
           page: 1,
           perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
+          signal: controller.signal,
         })
 
         // Check if request was aborted
@@ -124,6 +125,7 @@ export function usePhotos() {
         query: state.searchQuery,
         page: state.currentPage + 1,
         perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
+        signal: controller.signal,
       })
 
       // Check if request was aborted

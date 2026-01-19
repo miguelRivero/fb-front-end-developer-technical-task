@@ -52,7 +52,7 @@ export class UnsplashPhotoRepository implements PhotoRepository {
    * ```
    */
   async searchPhotos(params: PhotoSearchParams): Promise<PhotoSearchResult> {
-    const { query, page = 1, perPage = 20 } = params
+    const { query, page = 1, perPage = 20, signal } = params
 
     try {
       let unsplashPhotos: UnsplashPhoto[]
@@ -65,6 +65,7 @@ export class UnsplashPhotoRepository implements PhotoRepository {
             page,
             per_page: perPage,
           },
+          signal,
         })
         unsplashPhotos = response.data.results
       } else {
@@ -74,6 +75,7 @@ export class UnsplashPhotoRepository implements PhotoRepository {
             page,
             per_page: perPage,
           },
+          signal,
         })
         unsplashPhotos = response.data
       }

@@ -53,6 +53,11 @@ export interface PhotoSearchParams {
   readonly query?: string
   readonly page: number
   readonly perPage: number
+  /**
+   * Optional cancellation signal.
+   * When provided, the repository may use it to cancel in-flight requests.
+   */
+  readonly signal?: AbortSignal
 }
 
 /**

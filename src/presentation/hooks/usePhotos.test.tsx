@@ -77,11 +77,14 @@ describe('usePhotos', () => {
         await result.current.fetchPhotos('mountains')
       })
 
-      expect(mockExecute).toHaveBeenCalledWith({
-        query: 'mountains',
-        page: 1,
-        perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
-      })
+      expect(mockExecute).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: 'mountains',
+          page: 1,
+          perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
+          signal: expect.any(Object),
+        })
+      )
     })
 
     it('should default query to "nature" when not provided', async () => {
@@ -100,11 +103,14 @@ describe('usePhotos', () => {
         await result.current.fetchPhotos()
       })
 
-      expect(mockExecute).toHaveBeenCalledWith({
-        query: DEFAULT_SEARCH_QUERY,
-        page: 1,
-        perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
-      })
+      expect(mockExecute).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: DEFAULT_SEARCH_QUERY,
+          page: 1,
+          perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
+          signal: expect.any(Object),
+        })
+      )
     })
 
     it('should dispatch FETCH_START action', async () => {
@@ -347,11 +353,15 @@ describe('usePhotos', () => {
       })
 
       expect(mockExecute).toHaveBeenCalledTimes(2)
-      expect(mockExecute).toHaveBeenNthCalledWith(2, {
-        query: 'test',
-        page: 2, // Next page
-        perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
-      })
+      expect(mockExecute).toHaveBeenNthCalledWith(
+        2,
+        expect.objectContaining({
+          query: 'test',
+          page: 2, // Next page
+          perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
+          signal: expect.any(Object),
+        })
+      )
     })
 
     it('should append photos correctly', async () => {
