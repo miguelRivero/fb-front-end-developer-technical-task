@@ -123,10 +123,7 @@ describe('App Integration Tests - User Flows', () => {
       renderWithProviders(<App />)
 
       // Layout container should be present
-      const layoutContainer = document.querySelector(
-        '[class*="layoutContainer"]'
-      )
-      expect(layoutContainer).toBeInTheDocument()
+      expect(screen.getByTestId('app-layout-container')).toBeInTheDocument()
     })
   })
 

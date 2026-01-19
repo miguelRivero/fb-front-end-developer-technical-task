@@ -79,7 +79,11 @@ export function ListLayout({
     return (
       <div className={styles.list}>
         {Array.from({ length: UI_CONSTANTS.SKELETON_COUNT }).map((_, index) => (
-          <div key={index} className={styles.skeletonItem}>
+          <div
+            key={index}
+            className={styles.skeletonItem}
+            data-testid="photo-skeleton"
+          >
             <div className={styles.skeletonThumbnail} />
             <div className={styles.skeletonContent}>
               <div className={styles.skeletonLine} />
@@ -109,10 +113,14 @@ export function ListLayout({
       </div>
     {/* Loading indicator for "load more" */}
     {isLoadingMore && (
-      <div className={styles.loadingMore}>
+      <div className={styles.loadingMore} data-testid="loading-more">
         <div className={styles.list}>
           {Array.from({ length: UI_CONSTANTS.LOADING_MORE_COUNT }).map((_, index) => (
-            <div key={`loading-${index}`} className={styles.skeletonItem}>
+            <div
+              key={`loading-${index}`}
+              className={styles.skeletonItem}
+              data-testid="photo-skeleton"
+            >
               <div className={styles.skeletonThumbnail} />
               <div className={styles.skeletonContent}>
                 <div className={styles.skeletonLine} />

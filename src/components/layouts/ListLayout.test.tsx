@@ -150,7 +150,7 @@ describe('ListLayout Integration Tests', () => {
       )
 
       // Should show skeleton items
-      const skeletons = document.querySelectorAll('[class*="skeleton"]')
+      const skeletons = screen.getAllByTestId('photo-skeleton')
       expect(skeletons.length).toBeGreaterThan(0)
     })
 
@@ -189,8 +189,7 @@ describe('ListLayout Integration Tests', () => {
       expect(images.length).toBeGreaterThanOrEqual(photos.length)
       
       // Should have loading more skeletons
-      const loadingMoreSkeletons = document.querySelectorAll('[class*="loadingMore"]')
-      expect(loadingMoreSkeletons.length).toBeGreaterThan(0)
+      expect(screen.getByTestId('loading-more')).toBeInTheDocument()
     })
 
     it('should not show loading more when loadingMore is false', () => {

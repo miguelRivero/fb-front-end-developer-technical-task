@@ -76,7 +76,11 @@ export function CardsLayout({
     return (
       <div className={styles.grid}>
         {Array.from({ length: UI_CONSTANTS.SKELETON_COUNT }).map((_, index) => (
-          <div key={index} className={styles.skeletonCard}>
+          <div
+            key={index}
+            className={styles.skeletonCard}
+            data-testid="photo-skeleton"
+          >
             <div className={styles.skeletonImage} />
             <div className={styles.skeletonContent}>
               <div className={styles.skeletonLine} />
@@ -103,10 +107,14 @@ export function CardsLayout({
       </div>
     {/* Loading indicator for "load more" */}
     {isLoadingMore && (
-      <div className={styles.loadingMore}>
+      <div className={styles.loadingMore} data-testid="loading-more">
         <div className={styles.grid}>
           {Array.from({ length: UI_CONSTANTS.LOADING_MORE_COUNT }).map((_, index) => (
-            <div key={`loading-${index}`} className={styles.skeletonCard}>
+            <div
+              key={`loading-${index}`}
+              className={styles.skeletonCard}
+              data-testid="photo-skeleton"
+            >
               <div className={styles.skeletonImage} />
               <div className={styles.skeletonContent}>
                 <div className={styles.skeletonLine} />

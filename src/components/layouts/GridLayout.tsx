@@ -76,7 +76,7 @@ export function GridLayout({
     return (
       <div className={styles.grid}>
         {Array.from({ length: UI_CONSTANTS.SKELETON_COUNT }).map((_, index) => (
-          <div key={index} className={styles.skeleton}>
+          <div key={index} className={styles.skeleton} data-testid="photo-skeleton">
             <div className={styles.skeletonImage} />
           </div>
         ))}
@@ -98,10 +98,14 @@ export function GridLayout({
       </div>
       {/* Loading indicator for "load more" */}
       {isLoadingMore && (
-        <div className={styles.loadingMore}>
+        <div className={styles.loadingMore} data-testid="loading-more">
           <div className={styles.grid}>
             {Array.from({ length: UI_CONSTANTS.LOADING_MORE_COUNT }).map((_, index) => (
-              <div key={`loading-${index}`} className={styles.skeleton}>
+              <div
+                key={`loading-${index}`}
+                className={styles.skeleton}
+                data-testid="photo-skeleton"
+              >
                 <div className={styles.skeletonImage} />
               </div>
             ))}
