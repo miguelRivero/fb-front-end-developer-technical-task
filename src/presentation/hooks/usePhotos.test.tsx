@@ -3,23 +3,21 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { DEFAULT_SEARCH_QUERY, PAGINATION_CONFIG } from '../../constants'
 import { PhotoProvider } from '../context/PhotoContext'
+import { PhotoUseCasesProvider } from '../context/PhotoUseCasesContext'
 import { createMockPhotoArray } from '../../test/mocks'
 import { usePhotos } from './usePhotos'
 import { UiError } from '../errors/UiError'
 
-// Mock the use case - use hoisted to ensure it's available when module loads
-const mockExecute = vi.hoisted(() => vi.fn())
+const mockExecute = vi.fn()
+const stubUseCase = { execute: mockExecute }
 
-vi.mock('../../application/use-cases/FetchPhotosUseCase', () => {
-  return {
-    FetchPhotosUseCase: class {
-      execute = mockExecute
-    },
-  }
-})
-vi.mock('../../infrastructure/repositories', () => ({
-  photoRepository: {},
-}))
+function wrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <PhotoUseCasesProvider fetchPhotosUseCase={stubUseCase}>
+      <PhotoProvider>{children}</PhotoProvider>
+    </PhotoUseCasesProvider>
+  )
+}
 
 describe('usePhotos', () => {
   beforeEach(() => {
@@ -35,7 +33,7 @@ describe('usePhotos', () => {
   describe('Hook Returns', () => {
     it('should return correct state values', () => {
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       expect(result.current).toHaveProperty('photos')
@@ -72,7 +70,7 @@ describe('usePhotos', () => {
       })
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       await act(async () => {
@@ -95,7 +93,7 @@ describe('usePhotos', () => {
       })
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       await act(async () => {
@@ -118,7 +116,7 @@ describe('usePhotos', () => {
       })
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       act(() => {
@@ -143,7 +141,7 @@ describe('usePhotos', () => {
       })
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       await act(async () => {
@@ -161,7 +159,7 @@ describe('usePhotos', () => {
       mockExecute.mockRejectedValue(error)
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       await act(async () => {
@@ -184,7 +182,7 @@ describe('usePhotos', () => {
       )
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       // Start fetch
@@ -215,7 +213,7 @@ describe('usePhotos', () => {
       mockExecute.mockRejectedValue(genericError)
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       await act(async () => {
@@ -230,7 +228,7 @@ describe('usePhotos', () => {
   describe('loadMore', () => {
     it('should prevent loading if already loading', async () => {
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       // Set loading state
@@ -264,7 +262,7 @@ describe('usePhotos', () => {
       })
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       // Initial fetch
@@ -290,7 +288,7 @@ describe('usePhotos', () => {
       })
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       // Initial fetch
@@ -335,7 +333,7 @@ describe('usePhotos', () => {
         })
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       // Initial fetch
@@ -373,7 +371,7 @@ describe('usePhotos', () => {
         })
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       // Initial fetch
@@ -402,7 +400,7 @@ describe('usePhotos', () => {
       })
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       // Initial fetch
@@ -451,7 +449,7 @@ describe('usePhotos', () => {
         )
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       // Initial fetch
@@ -479,7 +477,7 @@ describe('usePhotos', () => {
       })
 
       const { result } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       // Set up some state
@@ -503,7 +501,7 @@ describe('usePhotos', () => {
   describe('Memoization', () => {
     it('should memoize useCase instance', () => {
       const { result, rerender } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       // Verify hook works correctly
@@ -519,7 +517,7 @@ describe('usePhotos', () => {
 
     it('should memoize callbacks', () => {
       const { result, rerender } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       const firstFetchPhotos = result.current.fetchPhotos
@@ -545,7 +543,7 @@ describe('usePhotos', () => {
       )
 
       const { result, unmount } = renderHook(() => usePhotos(), {
-        wrapper: PhotoProvider,
+        wrapper,
       })
 
       act(() => {

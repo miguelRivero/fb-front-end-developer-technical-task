@@ -15,8 +15,20 @@ import {
 import { type ReactElement } from 'react'
 import { PhotoProvider } from '../presentation/context/PhotoContext'
 import { LayoutProvider } from '../presentation/context/LayoutContext'
+import {
+  PhotoUseCasesProvider,
+  type FetchPhotosUseCaseLike,
+} from '../presentation/context/PhotoUseCasesContext'
 import type { Photo } from '../domain/entities/Photo'
 import { createMockPhoto, createMockPhotoArray } from './mocks'
+
+const testFetchPhotosUseCase: FetchPhotosUseCaseLike = {
+  execute: async () => ({
+    photos: [],
+    currentPage: 1,
+    hasMore: false,
+  }),
+}
 
 /**
  * Options for renderWithProviders
@@ -53,9 +65,11 @@ export function renderWithProviders(
   const { initialPhotos, initialLoading, initialLayout, ...renderOptions } = options
   function AllTheProviders({ children }: { children: React.ReactNode }) {
     return (
-      <PhotoProvider>
-        <LayoutProvider>{children}</LayoutProvider>
-      </PhotoProvider>
+      <PhotoUseCasesProvider fetchPhotosUseCase={testFetchPhotosUseCase}>
+        <PhotoProvider>
+          <LayoutProvider>{children}</LayoutProvider>
+        </PhotoProvider>
+      </PhotoUseCasesProvider>
     )
   }
 
@@ -79,9 +93,11 @@ export function renderHookWithProviders<TProps, TResult>(
 
   function wrapper({ children }: { children: React.ReactNode }) {
     return (
-      <PhotoProvider>
-        <LayoutProvider>{children}</LayoutProvider>
-      </PhotoProvider>
+      <PhotoUseCasesProvider fetchPhotosUseCase={testFetchPhotosUseCase}>
+        <PhotoProvider>
+          <LayoutProvider>{children}</LayoutProvider>
+        </PhotoProvider>
+      </PhotoUseCasesProvider>
     )
   }
 

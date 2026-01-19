@@ -1,7 +1,6 @@
-import { useContext, useCallback, useMemo, useRef, useEffect } from 'react'
+import { useContext, useCallback, useRef, useEffect } from 'react'
 import { PhotoContext } from '../context/PhotoContext'
-import { FetchPhotosUseCase } from '../../application/use-cases/FetchPhotosUseCase'
-import { photoRepository } from '../../infrastructure/repositories'
+import { usePhotoUseCases } from '../context/PhotoUseCasesContext'
 import { DEFAULT_SEARCH_QUERY, PAGINATION_CONFIG } from '../../constants'
 import { toUiError } from '../errors/UiError'
 
@@ -35,13 +34,8 @@ export function usePhotos() {
     throw new Error('usePhotos must be used within a PhotoProvider')
   }
 
+  const { fetchPhotosUseCase } = usePhotoUseCases()
   const { state, dispatch } = context
-
-  // Create use case instance with repository (memoized to prevent recreation)
-  const fetchPhotosUseCase = useMemo(
-    () => new FetchPhotosUseCase(photoRepository),
-    []
-  )
 
   // AbortController ref for request cancellation
   const abortControllerRef = useRef<AbortController | null>(null)
