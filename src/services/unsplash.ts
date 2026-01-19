@@ -1,6 +1,7 @@
 import type { FetchPhotosError, UnsplashPhoto, UnsplashResponse } from '../types/unsplash'
 
 import axios from 'axios'
+import { UNSPLASH_API_TIMEOUT_MS } from '../constants'
 
 /**
  * Configured axios client for Unsplash API requests
@@ -18,7 +19,7 @@ export const unsplashClient = axios.create({
   headers: {
     Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`,
   },
-  timeout: 10000, // 10 seconds
+  timeout: UNSPLASH_API_TIMEOUT_MS,
 })
 
 /**

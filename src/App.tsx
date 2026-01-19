@@ -9,6 +9,7 @@ import { ListLayout } from './components/layouts/ListLayout'
 import { EmptyState } from './components/common/EmptyState/EmptyState'
 import styles from './App.module.scss'
 import { useEffect } from 'react'
+import { DEFAULT_SEARCH_QUERY } from './constants'
 import { useLayout } from './presentation/hooks/useLayout'
 import { usePhotos } from './presentation/hooks/usePhotos'
 
@@ -18,7 +19,7 @@ function App() {
 
   useEffect(() => {
     // Initial fetch on mount
-    fetchPhotos('nature')
+    fetchPhotos(DEFAULT_SEARCH_QUERY)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // Only run on mount
 

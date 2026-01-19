@@ -37,3 +37,21 @@ export const PAGINATION_CONFIG = {
   /** Number of photos per page on desktop devices */
   DESKTOP_PER_PAGE: 20,
 } as const
+
+/**
+ * Application Defaults
+ *
+ * Defaults that affect behavior and should have a single source of truth.
+ * These are intentionally kept small (avoid config sprawl).
+ */
+export const DEFAULT_SEARCH_QUERY = 'nature' as const
+
+/**
+ * Infrastructure Configuration
+ *
+ * Centralized configuration for infrastructure adapters/repositories.
+ */
+const timeoutFromEnv = Number(import.meta.env.VITE_UNSPLASH_TIMEOUT_MS)
+export const UNSPLASH_API_TIMEOUT_MS = (Number.isFinite(timeoutFromEnv)
+  ? timeoutFromEnv
+  : 10_000) as number

@@ -2,13 +2,14 @@
  * Integration tests for GridLayout component
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { createMockIntersectionObserver, createMockMatchMedia, createMockPhotoArray } from '../../test/mocks'
 import { screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+
 import { GridLayout } from './GridLayout'
 import { renderWithProviders } from '../../test/utils'
-import { createMockPhotoArray, createMockIntersectionObserver, createMockMatchMedia } from '../../test/mocks'
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
+import userEvent from '@testing-library/user-event'
+import { UiError } from '../../presentation/errors/UiError'
 
 describe('GridLayout Integration Tests', () => {
   let mockIntersectionObserver: ReturnType<typeof createMockIntersectionObserver>
@@ -170,7 +171,7 @@ describe('GridLayout Integration Tests', () => {
 
   describe('error state', () => {
     it('should display error message when error is provided', () => {
-      const error = new PhotoRepositoryError('Failed to fetch photos', 'network')
+      const error = new UiError('Failed to fetch photos', 'network')
       
       renderWithProviders(
         <GridLayout
@@ -186,7 +187,7 @@ describe('GridLayout Integration Tests', () => {
 
     it('should not display photos when error exists', () => {
       const photos = createMockPhotoArray(3)
-      const error = new PhotoRepositoryError('Network error', 'network')
+      const error = new UiError('Network error', 'network')
       
       renderWithProviders(
         <GridLayout

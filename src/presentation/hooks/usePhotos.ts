@@ -2,8 +2,8 @@ import { useContext, useCallback, useMemo, useRef, useEffect } from 'react'
 import { PhotoContext } from '../context/PhotoContext'
 import { FetchPhotosUseCase } from '../../application/use-cases/FetchPhotosUseCase'
 import { photoRepository } from '../../infrastructure/repositories'
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
-import { PAGINATION_CONFIG } from '../../constants'
+import { DEFAULT_SEARCH_QUERY, PAGINATION_CONFIG } from '../../constants'
+import { toUiError } from '../errors/UiError'
 
 /**
  * Custom hook: usePhotos
@@ -56,10 +56,10 @@ export function usePhotos() {
   /**
    * Fetches photos using the provided query
    * 
-   * @param query - Search query (defaults to 'nature' if not provided)
+   * @param query - Search query (defaults to DEFAULT_SEARCH_QUERY if not provided)
    */
   const fetchPhotos = useCallback(
-    async (query: string = 'nature') => {
+    async (query: string = DEFAULT_SEARCH_QUERY) => {
       // Cancel previous request if it exists
       abortControllerRef.current?.abort()
 
@@ -98,17 +98,10 @@ export function usePhotos() {
           return
         }
 
-        // Ensure error is PhotoRepositoryError
-        const photoError =
-          error instanceof PhotoRepositoryError
-            ? error
-            : new PhotoRepositoryError(
-                error instanceof Error ? error.message : 'Failed to fetch photos',
-                'unknown',
-                error
-              )
-
-        dispatch({ type: 'FETCH_ERROR', error: photoError })
+        dispatch({
+          type: 'FETCH_ERROR',
+          error: toUiError(error, 'Failed to fetch photos'),
+        })
       }
     },
     [dispatch, fetchPhotosUseCase]
@@ -160,17 +153,10 @@ export function usePhotos() {
         return
       }
 
-      // Ensure error is PhotoRepositoryError
-      const photoError =
-        error instanceof PhotoRepositoryError
-          ? error
-          : new PhotoRepositoryError(
-              error instanceof Error ? error.message : 'Failed to load more photos',
-              'unknown',
-              error
-            )
-
-      dispatch({ type: 'FETCH_ERROR', error: photoError })
+      dispatch({
+        type: 'FETCH_ERROR',
+        error: toUiError(error, 'Failed to load more photos'),
+      })
     }
   }, [dispatch, fetchPhotosUseCase, state.hasMore, state.loadingMore, state.loading, state.searchQuery, state.currentPage])
 

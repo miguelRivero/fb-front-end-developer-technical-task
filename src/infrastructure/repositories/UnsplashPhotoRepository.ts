@@ -2,6 +2,7 @@ import axios from 'axios'
 import type { PhotoRepository } from '../../domain/repositories/PhotoRepository'
 import type { PhotoSearchParams, PhotoSearchResult } from '../../domain/entities/Photo'
 import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
+import { UNSPLASH_API_TIMEOUT_MS } from '../../constants'
 import type { UnsplashPhoto, UnsplashResponse, FetchPhotosError } from '../../types/unsplash'
 import { UnsplashApiAdapter } from '../adapters/UnsplashApiAdapter'
 
@@ -28,7 +29,7 @@ export class UnsplashPhotoRepository implements PhotoRepository {
     headers: {
       Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`,
     },
-    timeout: 10000, // 10 seconds
+    timeout: UNSPLASH_API_TIMEOUT_MS,
   })
 
   /**

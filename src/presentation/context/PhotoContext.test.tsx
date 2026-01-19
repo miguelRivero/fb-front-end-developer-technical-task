@@ -2,8 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { PhotoProvider, PhotoContext } from './PhotoContext'
 import { createMockPhotoArray } from '../../test/mocks'
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
 import { useContext } from 'react'
+import { DEFAULT_SEARCH_QUERY } from '../../constants'
+import { UiError } from '../errors/UiError'
 
 describe('PhotoContext', () => {
   describe('Initial State', () => {
@@ -18,8 +19,8 @@ describe('PhotoContext', () => {
         loadingMore: false,
         error: null,
         currentPage: 1,
-        searchQuery: 'nature',
-        hasMore: true,
+        searchQuery: DEFAULT_SEARCH_QUERY,
+        hasMore: false,
       })
     })
   })
@@ -74,11 +75,7 @@ describe('PhotoContext', () => {
         wrapper: PhotoProvider,
       })
 
-      const error = new PhotoRepositoryError(
-        'Network error',
-        'network',
-        new Error('Failed to fetch')
-      )
+      const error = new UiError('Network error', 'network', new Error('Failed to fetch'))
 
       act(() => {
         result.current?.dispatch({ type: 'FETCH_ERROR', error })
@@ -178,8 +175,8 @@ describe('PhotoContext', () => {
         loadingMore: false,
         error: null,
         currentPage: 1,
-        searchQuery: 'nature',
-        hasMore: true,
+        searchQuery: DEFAULT_SEARCH_QUERY,
+        hasMore: false,
       })
     })
   })
@@ -221,11 +218,7 @@ describe('PhotoContext', () => {
 
       expect(result.current?.state.loading).toBe(true)
 
-      const error = new PhotoRepositoryError(
-        'API error',
-        'api_error',
-        new Error('Request failed')
-      )
+      const error = new UiError('API error', 'api_error', new Error('Request failed'))
 
       act(() => {
         result.current?.dispatch({ type: 'FETCH_ERROR', error })
@@ -284,7 +277,7 @@ describe('PhotoContext', () => {
       })
 
       // Set an error
-      const error = new PhotoRepositoryError('Test error', 'unknown')
+      const error = new UiError('Test error', 'unknown')
       act(() => {
         result.current?.dispatch({ type: 'FETCH_ERROR', error })
       })
@@ -305,7 +298,7 @@ describe('PhotoContext', () => {
       })
 
       // Set an error
-      const error = new PhotoRepositoryError('Test error', 'unknown')
+      const error = new UiError('Test error', 'unknown')
       act(() => {
         result.current?.dispatch({ type: 'FETCH_ERROR', error })
       })
@@ -324,7 +317,7 @@ describe('PhotoContext', () => {
       })
 
       // Initial error
-      const error1 = new PhotoRepositoryError('Network error', 'network')
+      const error1 = new UiError('Network error', 'network')
       act(() => {
         result.current?.dispatch({ type: 'FETCH_ERROR', error: error1 })
       })

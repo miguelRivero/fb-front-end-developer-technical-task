@@ -1,6 +1,7 @@
 import { createContext, useReducer, type ReactNode } from 'react'
 import type { Photo } from '../../domain/entities/Photo'
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
+import { DEFAULT_SEARCH_QUERY } from '../../constants'
+import type { UiError } from '../errors/UiError'
 
 /**
  * Presentation Layer: PhotoContext
@@ -24,7 +25,7 @@ export interface PhotoState {
   /** Loading state indicator for loading more photos (pagination) */
   loadingMore: boolean
   /** Error state (null when no error) */
-  error: PhotoRepositoryError | null
+  error: UiError | null
   /** Current page number */
   currentPage: number
   /** Current search query */
@@ -39,7 +40,7 @@ export interface PhotoState {
 export type PhotoAction =
   | { type: 'FETCH_START'; query: string }
   | { type: 'FETCH_SUCCESS'; photos: Photo[]; page: number; hasMore: boolean }
-  | { type: 'FETCH_ERROR'; error: PhotoRepositoryError }
+  | { type: 'FETCH_ERROR'; error: UiError }
   | { type: 'LOAD_MORE_START' }
   | { type: 'LOAD_MORE_SUCCESS'; photos: Photo[]; hasMore: boolean }
   | { type: 'RESET' }
@@ -53,8 +54,9 @@ const initialState: PhotoState = {
   loadingMore: false,
   error: null,
   currentPage: 1,
-  searchQuery: 'nature',
-  hasMore: true,
+  searchQuery: DEFAULT_SEARCH_QUERY,
+  // Unknown until we get a response; avoid implying pagination is available.
+  hasMore: false,
 }
 
 /**

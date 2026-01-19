@@ -1,11 +1,11 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { PAGINATION_CONFIG } from '../../constants'
+import { DEFAULT_SEARCH_QUERY, PAGINATION_CONFIG } from '../../constants'
 import { PhotoProvider } from '../context/PhotoContext'
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
 import { createMockPhotoArray } from '../../test/mocks'
 import { usePhotos } from './usePhotos'
+import { UiError } from '../errors/UiError'
 
 // Mock the use case - use hoisted to ensure it's available when module loads
 const mockExecute = vi.hoisted(() => vi.fn())
@@ -103,7 +103,7 @@ describe('usePhotos', () => {
       })
 
       expect(mockExecute).toHaveBeenCalledWith({
-        query: 'nature',
+        query: DEFAULT_SEARCH_QUERY,
         page: 1,
         perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
       })
@@ -157,7 +157,7 @@ describe('usePhotos', () => {
     })
 
     it('should dispatch FETCH_ERROR on failure', async () => {
-      const error = new PhotoRepositoryError('Network error', 'network')
+      const error = new UiError('Network error', 'network')
       mockExecute.mockRejectedValue(error)
 
       const { result } = renderHook(() => usePhotos(), {
@@ -168,8 +168,8 @@ describe('usePhotos', () => {
         await result.current.fetchPhotos('sunset')
       })
 
-      expect(result.current.error).toBeInstanceOf(PhotoRepositoryError)
-      expect(result.current.error?.type).toBe('network')
+      expect(result.current.error).toBeInstanceOf(UiError)
+      expect((result.current.error as UiError).kind).toBe('network')
       expect(result.current.loading).toBe(false)
     })
 
@@ -210,7 +210,7 @@ describe('usePhotos', () => {
       expect(result.current.loading).toBe(false)
     })
 
-    it('should convert non-PhotoRepositoryError to PhotoRepositoryError', async () => {
+    it('should convert non-UiError to UiError', async () => {
       const genericError = new Error('Generic error')
       mockExecute.mockRejectedValue(genericError)
 
@@ -222,8 +222,8 @@ describe('usePhotos', () => {
         await result.current.fetchPhotos('test')
       })
 
-      expect(result.current.error).toBeInstanceOf(PhotoRepositoryError)
-      expect(result.current.error?.type).toBe('unknown')
+      expect(result.current.error).toBeInstanceOf(UiError)
+      expect((result.current.error as UiError).kind).toBe('unknown')
     })
   })
 
@@ -447,7 +447,7 @@ describe('usePhotos', () => {
           hasMore: true,
         })
         .mockRejectedValueOnce(
-          new PhotoRepositoryError('API error', 'api_error')
+          new UiError('API error', 'api_error')
         )
 
       const { result } = renderHook(() => usePhotos(), {
@@ -464,8 +464,8 @@ describe('usePhotos', () => {
         await result.current.loadMore()
       })
 
-      expect(result.current.error).toBeInstanceOf(PhotoRepositoryError)
-      expect(result.current.error?.type).toBe('api_error')
+      expect(result.current.error).toBeInstanceOf(UiError)
+      expect((result.current.error as UiError).kind).toBe('api_error')
     })
   })
 
@@ -494,8 +494,8 @@ describe('usePhotos', () => {
 
       expect(result.current.photos).toEqual([])
       expect(result.current.currentPage).toBe(1)
-      expect(result.current.searchQuery).toBe('nature')
-      expect(result.current.hasMore).toBe(true)
+      expect(result.current.searchQuery).toBe(DEFAULT_SEARCH_QUERY)
+      expect(result.current.hasMore).toBe(false)
       expect(result.current.error).toBeNull()
     })
   })
