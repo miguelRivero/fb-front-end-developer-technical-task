@@ -34,6 +34,13 @@ describe('usePhotos', () => {
     vi.clearAllMocks()
     // Reset mock implementation
     mockExecute.mockReset()
+
+    // Default to a desktop viewport unless a test overrides it.
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1200,
+    })
   })
 
   afterEach(() => {
@@ -91,7 +98,7 @@ describe('usePhotos', () => {
         expect.objectContaining({
           query: 'mountains',
           page: 1,
-          perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
+          perPage: PAGINATION_CONFIG.DESKTOP_PER_PAGE,
           signal: expect.any(Object),
         })
       )
@@ -117,7 +124,71 @@ describe('usePhotos', () => {
         expect.objectContaining({
           query: DEFAULT_SEARCH_QUERY,
           page: 1,
-          perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
+          perPage: PAGINATION_CONFIG.DESKTOP_PER_PAGE,
+          signal: expect.any(Object),
+        })
+      )
+    })
+
+    it('should use MOBILE_PER_PAGE on small viewports', async () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 500,
+      })
+
+      const mockPhotos = createMockPhotoArray(3)
+      mockExecute.mockResolvedValue({
+        photos: mockPhotos,
+        currentPage: 1,
+        hasMore: true,
+      })
+
+      const { result } = renderHook(() => usePhotos(), {
+        wrapper,
+      })
+
+      await act(async () => {
+        await result.current.fetchPhotos('mobile')
+      })
+
+      expect(mockExecute).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: 'mobile',
+          page: 1,
+          perPage: PAGINATION_CONFIG.MOBILE_PER_PAGE,
+          signal: expect.any(Object),
+        })
+      )
+    })
+
+    it('should use TABLET_PER_PAGE on tablet viewports', async () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 800,
+      })
+
+      const mockPhotos = createMockPhotoArray(3)
+      mockExecute.mockResolvedValue({
+        photos: mockPhotos,
+        currentPage: 1,
+        hasMore: true,
+      })
+
+      const { result } = renderHook(() => usePhotos(), {
+        wrapper,
+      })
+
+      await act(async () => {
+        await result.current.fetchPhotos('tablet')
+      })
+
+      expect(mockExecute).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: 'tablet',
+          page: 1,
+          perPage: PAGINATION_CONFIG.TABLET_PER_PAGE,
           signal: expect.any(Object),
         })
       )
@@ -426,7 +497,57 @@ describe('usePhotos', () => {
         expect.objectContaining({
           query: 'test',
           page: 2, // Next page
-          perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
+          perPage: PAGINATION_CONFIG.DESKTOP_PER_PAGE,
+          signal: expect.any(Object),
+        })
+      )
+    })
+
+    it('should keep perPage stable across loadMore even if viewport changes', async () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 500,
+      })
+
+      const initialPhotos = createMockPhotoArray(3)
+      mockExecute
+        .mockResolvedValueOnce({
+          photos: initialPhotos,
+          currentPage: 1,
+          hasMore: true,
+        })
+        .mockResolvedValueOnce({
+          photos: createMockPhotoArray(2),
+          currentPage: 2,
+          hasMore: true,
+        })
+
+      const { result } = renderHook(() => usePhotos(), {
+        wrapper,
+      })
+
+      await act(async () => {
+        await result.current.fetchPhotos('stable')
+      })
+
+      // Resize after initial fetch; loadMore should still use the original perPage.
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1200,
+      })
+
+      await act(async () => {
+        await result.current.loadMore()
+      })
+
+      expect(mockExecute).toHaveBeenNthCalledWith(
+        2,
+        expect.objectContaining({
+          query: 'stable',
+          page: 2,
+          perPage: PAGINATION_CONFIG.MOBILE_PER_PAGE,
           signal: expect.any(Object),
         })
       )

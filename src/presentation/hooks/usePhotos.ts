@@ -4,6 +4,20 @@ import { usePhotoUseCases } from '../context/PhotoUseCasesContext'
 import { DEFAULT_SEARCH_QUERY, PAGINATION_CONFIG } from '../../constants'
 import { toUiError } from '../errors/UiError'
 
+function getPerPageForViewport(): number {
+  // Be defensive for non-browser environments / test runners.
+  if (typeof window === 'undefined' || typeof window.innerWidth !== 'number') {
+    return PAGINATION_CONFIG.DEFAULT_PER_PAGE
+  }
+
+  const width = window.innerWidth
+
+  // Keep breakpoints aligned with the rest of the UI (e.g. CarouselLayout).
+  if (width < 768) return PAGINATION_CONFIG.MOBILE_PER_PAGE
+  if (width < 1024) return PAGINATION_CONFIG.TABLET_PER_PAGE
+  return PAGINATION_CONFIG.DESKTOP_PER_PAGE
+}
+
 /**
  * Custom hook: usePhotos
  * 
@@ -39,6 +53,8 @@ export function usePhotos() {
 
   // AbortController ref for request cancellation
   const abortControllerRef = useRef<AbortController | null>(null)
+  // Keep perPage stable across fetch + subsequent loadMore for the same search session.
+  const perPageRef = useRef<number>(PAGINATION_CONFIG.DEFAULT_PER_PAGE)
 
   // Cleanup on unmount
   useEffect(() => {
@@ -60,6 +76,7 @@ export function usePhotos() {
       // Create new AbortController for this request
       const controller = new AbortController()
       abortControllerRef.current = controller
+      perPageRef.current = getPerPageForViewport()
 
       dispatch({ type: 'FETCH_START', query })
 
@@ -67,7 +84,7 @@ export function usePhotos() {
         const result = await fetchPhotosUseCase.execute({
           query,
           page: 1,
-          perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
+          perPage: perPageRef.current,
           signal: controller.signal,
         })
 
@@ -124,7 +141,7 @@ export function usePhotos() {
       const result = await fetchPhotosUseCase.execute({
         query: state.searchQuery,
         page: state.currentPage + 1,
-        perPage: PAGINATION_CONFIG.DEFAULT_PER_PAGE,
+        perPage: perPageRef.current,
         signal: controller.signal,
       })
 
