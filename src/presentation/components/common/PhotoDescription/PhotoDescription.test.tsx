@@ -39,8 +39,8 @@ describe('PhotoDescription', () => {
 
       const element = screen.getByText(/This is a very long description/)
       expect(element).toBeInTheDocument()
-      // Verify truncation is applied via CSS (WebkitLineClamp)
-      expect(element).toHaveStyle({ WebkitLineClamp: '2' })
+      // Verify truncation is applied via inline CSS variable.
+      expect(element).toHaveStyle('--line-clamp: 2')
     })
 
     it('should truncate to custom maxLines', () => {
@@ -48,7 +48,7 @@ describe('PhotoDescription', () => {
       render(<PhotoDescription description={longDescription} maxLines={3} />)
 
       const element = screen.getByText(/This is a long description/)
-      expect(element).toHaveStyle({ WebkitLineClamp: '3' })
+      expect(element).toHaveStyle('--line-clamp: 3')
     })
 
     it('should allow single line display', () => {
@@ -56,7 +56,7 @@ describe('PhotoDescription', () => {
       render(<PhotoDescription description={description} maxLines={1} />)
 
       const element = screen.getByText('A single line description')
-      expect(element).toHaveStyle({ WebkitLineClamp: '1' })
+      expect(element).toHaveStyle('--line-clamp: 1')
     })
 
     it('should allow multiple lines', () => {
@@ -64,7 +64,7 @@ describe('PhotoDescription', () => {
       render(<PhotoDescription description={description} maxLines={5} />)
 
       const element = screen.getByText('A multi-line description')
-      expect(element).toHaveStyle({ WebkitLineClamp: '5' })
+      expect(element).toHaveStyle('--line-clamp: 5')
     })
   })
 
@@ -90,7 +90,7 @@ describe('PhotoDescription', () => {
 
       const element = screen.getByText(/^A/)
       expect(element).toBeInTheDocument()
-      expect(element).toHaveStyle({ WebkitLineClamp: '2' })
+      expect(element).toHaveStyle('--line-clamp: 2')
     })
 
     it('should truncate long text with ellipsis (CSS)', () => {
@@ -101,7 +101,7 @@ describe('PhotoDescription', () => {
       const element = screen.getByText(/This is a very long description/)
       expect(element).toBeInTheDocument()
       // Ellipsis is handled by CSS, not JavaScript
-      expect(element).toHaveStyle({ WebkitLineClamp: '2' })
+      expect(element).toHaveStyle('--line-clamp: 2')
     })
   })
 

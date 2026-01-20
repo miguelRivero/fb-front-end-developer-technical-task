@@ -57,7 +57,8 @@ export function PhotoDescription({
       <p
         className={styles['description-text']}
         style={{
-          WebkitLineClamp: maxLines,
+          // Used by both `line-clamp` and `-webkit-line-clamp` in the SCSS module.
+          ['--line-clamp' as string]: maxLines,
         }}
       >
         {capitalizeFirst(description)}

@@ -27,44 +27,50 @@
   overflow: hidden;
   transition: var(--transition-card);
   will-change: transform, box-shadow;
-}
 
-.gridItem.clickable {
-  cursor: pointer;
-}
+  &.clickable {
+    cursor: pointer;
 
-.gridItem.clickable:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+    &:focus-visible {
+      outline: var(--focus-outline);
+      outline-offset: var(--focus-outline-offset);
+    }
+
+    &:active {
+      transform: var(--transform-scale-active);
+    }
+  }
 }
 
 /* Desktop-only hover feedback */
 @media (min-width: 1024px) {
-  .gridItem:hover {
-    transform: var(--transform-scale-hover);
-    box-shadow: var(--shadow-lg);
-    border-radius: var(--border-radius-lg);
-  }
+  .gridItem {
+    &:hover {
+      transform: var(--transform-scale-hover);
+      box-shadow: var(--shadow-lg);
+      border-radius: var(--border-radius-lg);
 
-  .gridItem:hover [data-photo-overlay] {
-    opacity: 1;
-  }
+      [data-photo-overlay] {
+        opacity: 1;
+      }
 
-  .gridItem:hover .imageWrapper img {
-    transform: scale(1.05);
-  }
+      .imageWrapper img {
+        transform: scale(1.05);
+      }
+    }
 
-  .gridItem.clickable:focus-visible [data-photo-overlay] {
-    opacity: 1;
-  }
+    &.clickable {
+      &:focus-visible {
+        [data-photo-overlay] {
+          opacity: 1;
+        }
 
-  .gridItem.clickable:focus-visible .imageWrapper img {
-    transform: scale(1.05);
+        .imageWrapper img {
+          transform: scale(1.05);
+        }
+      }
+    }
   }
-}
-
-.gridItem.clickable:active {
-  transform: var(--transform-scale-active);
 }
 
 .imageWrapper {
@@ -162,17 +168,19 @@
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
   /* No hover styles in grid; keep an active feedback for tap. */
-  .gridItem:hover {
-    transform: none;
-    box-shadow: none;
-  }
+  .gridItem {
+    &:hover {
+      transform: none;
+      box-shadow: none;
 
-  .gridItem:hover [data-photo-overlay] {
-    opacity: 0;
-  }
+      [data-photo-overlay] {
+        opacity: 0;
+      }
 
-  .gridItem:hover .imageWrapper img {
-    transform: none;
+      .imageWrapper img {
+        transform: none;
+      }
+    }
   }
 }
 
