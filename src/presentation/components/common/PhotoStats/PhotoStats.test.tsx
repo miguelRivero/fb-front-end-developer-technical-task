@@ -42,7 +42,7 @@ describe('PhotoStats', () => {
 
       expect(screen.getByText('321')).toBeInTheDocument()
       expect(screen.getByText(/views/i)).toBeInTheDocument()
-      expect(screen.getByLabelText('views: 321')).toBeInTheDocument()
+      expect(screen.getByLabelText(/views:\s*321/i)).toBeInTheDocument()
     })
 
     it('should not display views when showViews is false', () => {
