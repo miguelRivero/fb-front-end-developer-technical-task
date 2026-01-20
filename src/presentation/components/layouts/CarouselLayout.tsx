@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@/presentation/components/common/icons'
 import { RESPONSIVE_BREAKPOINTS, UI_CONSTANTS } from '@/constants'
 import {
   getCarouselSlidesPerView,
@@ -7,7 +8,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { EmptyState } from '@/presentation/components/common/EmptyState/EmptyState'
 import type { Photo } from '@/domain/entities/Photo'
-import { ChevronLeftIcon, ChevronRightIcon } from '@/presentation/components/common/icons'
 import { PhotoImage } from '@/presentation/components/common/PhotoImage/PhotoImage'
 import { PhotoOverlay } from '@/presentation/components/common/PhotoOverlay/PhotoOverlay'
 import type React from 'react'
