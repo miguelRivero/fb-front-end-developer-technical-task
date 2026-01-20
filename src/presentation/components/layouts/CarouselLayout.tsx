@@ -62,6 +62,7 @@ export function CarouselLayout({ photos, onPhotoClick, loading, error }: Carouse
   const widthForLayout = viewportWidth ?? RESPONSIVE_BREAKPOINTS.DESKTOP_MIN_WIDTH
   const slidesPerView = getCarouselSlidesPerView(widthForLayout)
   const isBelowDesktopViewport = isBelowDesktopViewportWidth(widthForLayout)
+  const maxStartIndex = Math.max(0, photos.length - slidesPerView)
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -192,14 +193,9 @@ export function CarouselLayout({ photos, onPhotoClick, loading, error }: Carouse
   const goToSlide = useCallback(
     (index: number) => {
       if (!isMountedRef.current || isTransitioning || photos.length === 0) return
-      // Clamp index to valid range, accounting for slides per view
-      // When showing multiple slides, adjust so we don't go past the end
-      let validIndex = Math.max(0, Math.min(index, photos.length - 1))
-
-      // If we're showing multiple slides and near the end, adjust to show the last slide properly
-      if (slidesPerView > 1 && validIndex + slidesPerView > photos.length) {
-        validIndex = Math.max(0, photos.length - slidesPerView)
-      }
+      // Clamp to a valid start index so we don't render an incomplete "page"
+      // (e.g. avoid start index 9 when showing 3 slides per view).
+      const validIndex = Math.max(0, Math.min(index, maxStartIndex))
 
       if (transitionTimeoutRef.current) {
         clearTimeout(transitionTimeoutRef.current)
@@ -215,18 +211,18 @@ export function CarouselLayout({ photos, onPhotoClick, loading, error }: Carouse
         setIsTransitioning(false)
       }, UI_CONSTANTS.TRANSITION_DURATION)
     },
-    [isTransitioning, photos.length, slidesPerView]
+    [isTransitioning, maxStartIndex, photos.length]
   )
 
   const goToPrevious = useCallback(() => {
-    const newIndex = currentIndex === 0 ? photos.length - 1 : currentIndex - 1
+    const newIndex = currentIndex === 0 ? maxStartIndex : currentIndex - 1
     goToSlide(newIndex)
-  }, [currentIndex, photos.length, goToSlide])
+  }, [currentIndex, maxStartIndex, goToSlide])
 
   const goToNext = useCallback(() => {
-    const newIndex = currentIndex === photos.length - 1 ? 0 : currentIndex + 1
+    const newIndex = currentIndex === maxStartIndex ? 0 : currentIndex + 1
     goToSlide(newIndex)
-  }, [currentIndex, photos.length, goToSlide])
+  }, [currentIndex, maxStartIndex, goToSlide])
 
   // Touch handlers for swipe
   const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -362,19 +358,15 @@ export function CarouselLayout({ photos, onPhotoClick, loading, error }: Carouse
       {/* Desktop/Tablet Dot Indicators */}
       {photos.length > 0 && (
         <div className={styles.dots}>
-          {photos.map((photo, index) => {
-            // Only render dot if photo is valid
-            if (!photo) return null
-            return (
-              <button
-                key={photo.id || index}
-                onClick={() => goToSlide(index)}
-                className={`${styles.dot} ${index === currentIndex ? styles.dotActive : ''}`}
-                aria-label={`Go to slide ${index + 1} of ${photos.length}`}
-                data-testid="carousel-dot"
-              />
-            )
-          })}
+          {Array.from({ length: maxStartIndex + 1 }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`${styles.dot} ${index === currentIndex ? styles.dotActive : ''}`}
+              aria-label={`Go to position ${index + 1} of ${maxStartIndex + 1}`}
+              data-testid="carousel-dot"
+            />
+          ))}
         </div>
       )}
     </div>

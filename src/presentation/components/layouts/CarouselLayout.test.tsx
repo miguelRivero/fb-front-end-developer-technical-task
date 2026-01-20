@@ -355,7 +355,9 @@ describe('CarouselLayout Integration Tests', () => {
       )
 
       const dots = container.querySelectorAll('[data-testid="carousel-dot"]')
-      expect(dots.length).toBe(photos.length)
+      // With 3 slides per view (desktop), dots represent valid start positions.
+      // For 5 photos and 3-per-view => start indices 0..2 => 3 dots.
+      expect(dots.length).toBe(3)
     })
 
     it('should highlight active dot', () => {
