@@ -144,7 +144,7 @@
 }
 
 .card:active {
-  transform: translateY(-0.125em) scale(0.99);
+  transform: translateY(-0.125em) var(--transform-scale-active, scale(0.99));
 }
 
 .card:hover .image,
