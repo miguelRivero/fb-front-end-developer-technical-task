@@ -314,20 +314,29 @@ src/
 
 ```
 src/
-├── domain/              # Business entities and interfaces
-│   ├── entities/       # Photo, Layout
-│   └── repositories/   # PhotoRepository interface
-├── application/         # Use cases
-│   └── use-cases/      # FetchPhotosUseCase
-├── infrastructure/      # External implementations
-│   ├── repositories/   # UnsplashPhotoRepository
-│   └── adapters/       # UnsplashApiAdapter
-├── utils/               # Framework-agnostic utilities
-├── types/               # Shared TypeScript types
-├── presentation/        # React-specific
-│   ├── context/        # PhotoContext, LayoutContext
-│   ├── hooks/          # All custom React hooks (usePhotos, useLayout, useInfiniteScroll, useViewportWidth, useClickable)
-│   └── components/     # UI components
+├── application/           # Use cases (application workflows)
+│   └── use-cases/         # FetchPhotosUseCase
+├── constants/             # App-level constants (e.g. DEFAULT_SEARCH_QUERY)
+├── domain/                # Business entities and interfaces (ports)
+│   ├── entities/          # Photo, Layout
+│   └── repositories/      # PhotoRepository + PhotoRepositoryError
+├── infrastructure/        # External implementations (adapters/drivers)
+│   ├── adapters/          # UnsplashApiAdapter (maps external API → domain)
+│   ├── errors/            # Error mapping helpers (Unsplash/axios → stable error shapes)
+│   ├── http/              # HTTP client creation/config (axios)
+│   └── repositories/      # UnsplashPhotoRepository (implements PhotoRepository)
+├── presentation/          # React-specific UI + state orchestration
+│   ├── components/        # UI components (layouts + common building blocks)
+│   ├── context/           # Layout/Photo/use-cases providers
+│   ├── errors/            # UiError model + mapping (presentation-only)
+│   └── hooks/             # usePhotos/useLayout/useInfiniteScroll/etc
+├── styles/                # Global styling primitives (variables, animations)
+├── test/                  # Test utilities (setup, helpers, mocks)
+├── types/                 # Shared TS types (e.g. Unsplash DTOs)
+├── utils/                 # Framework-agnostic utilities (date/string/viewport)
+├── App.tsx                # App shell (header, layout switching, error boundaries)
+├── main.tsx               # Composition root (wire repository + providers)
+└── index.scss             # Global styles + Tailwind directives
 ```
 
 ## Component Structure

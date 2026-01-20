@@ -145,11 +145,29 @@ This project follows **Clean Architecture** principles with clear separation of 
 
 ```
 src/
-├── domain/              # Business entities and interfaces
-├── application/         # Use cases and application logic
-├── infrastructure/      # External services (API, storage)
-├── presentation/        # React-specific (context, hooks)
-└── components/          # UI components
+├── application/           # Use cases and application logic
+│   └── use-cases/
+├── constants/             # App-level constants (e.g. default search query)
+├── domain/                # Business entities and interfaces (ports)
+│   ├── entities/
+│   └── repositories/
+├── infrastructure/        # External implementations (adapters, HTTP, repos)
+│   ├── adapters/
+│   ├── errors/
+│   ├── http/
+│   └── repositories/
+├── presentation/          # React-specific (components, hooks, context)
+│   ├── components/
+│   ├── context/
+│   ├── errors/
+│   └── hooks/
+├── styles/                # Global styling primitives (variables, animations)
+├── test/                  # Test utilities (setup, helpers, mocks)
+├── types/                 # Shared TypeScript types (e.g. Unsplash DTOs)
+├── utils/                 # Framework-agnostic utilities
+├── App.tsx                # App shell (layout selection, error boundaries)
+├── main.tsx               # React root + providers wiring
+└── index.scss             # Global styles + Tailwind directives
 ```
 
 For detailed architecture documentation, see [ARCHITECTURE.md](./ARCHITECTURE.md).
@@ -222,8 +240,8 @@ npm run test:ui
    - React-specific code in `src/presentation/`
 
 2. **Component Organization**:
-   - Common components in `src/components/common/`
-   - Layout components in `src/components/layouts/`
+   - Common components in `src/presentation/components/common/`
+   - Layout components in `src/presentation/components/layouts/`
    - Extract shared logic to reduce duplication
 
 3. **Type Safety**:
@@ -262,7 +280,7 @@ Requires support for:
 - ES6+ JavaScript features
 - CSS Grid and Flexbox
 - Intersection Observer API
-- Fetch API (via Axios)
+- Network requests (Axios)
 
 ## API Configuration
 
