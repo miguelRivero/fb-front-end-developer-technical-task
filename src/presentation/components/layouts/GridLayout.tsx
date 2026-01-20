@@ -7,9 +7,9 @@ import React from 'react'
 import { UI_CONSTANTS } from '../../../constants'
 import { isBelowDesktopViewport as isBelowDesktopViewportWidth } from '../../../utils/viewport'
 import styles from './GridLayout.module.scss'
-import { useClickable } from '../../../shared/hooks/useClickable'
-import { useInfiniteScroll } from '../../../shared/hooks/useInfiniteScroll'
-import { useViewportWidth } from '../../../shared/hooks/useViewportWidth'
+import { useClickable } from '../../hooks/useClickable'
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
+import { useViewportWidth } from '../../hooks/useViewportWidth'
 
 /**
  * Props for the GridLayout component

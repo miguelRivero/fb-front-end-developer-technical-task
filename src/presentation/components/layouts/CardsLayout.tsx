@@ -8,8 +8,8 @@ import { PhotoStats } from '../common/PhotoStats/PhotoStats'
 import { UI_CONSTANTS } from '../../../constants'
 import { formatPhotoDate } from '../../../utils/dateUtils'
 import styles from './CardsLayout.module.scss'
-import { useClickable } from '../../../shared/hooks/useClickable'
-import { useInfiniteScroll } from '../../../shared/hooks/useInfiniteScroll'
+import { useClickable } from '../../hooks/useClickable'
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 import { useMemo } from 'react'
 
 /**

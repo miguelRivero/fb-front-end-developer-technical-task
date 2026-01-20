@@ -304,7 +304,7 @@ src/
 src/
   domain/        # Keep domain entities
   features/       # Feature-based for UI
-  shared/         # Shared utilities
+  utils/          # Shared (framework-agnostic) utilities
 ```
 
 **Pros**: Balance of structure and simplicity  
@@ -322,11 +322,11 @@ src/
 ├── infrastructure/      # External implementations
 │   ├── repositories/   # UnsplashPhotoRepository
 │   └── adapters/       # UnsplashApiAdapter
-├── shared/              # Framework-agnostic shared code
-│   └── hooks/           # useInfiniteScroll, useViewportWidth, useClickable
+├── utils/               # Framework-agnostic utilities
+├── types/               # Shared TypeScript types
 ├── presentation/        # React-specific
 │   ├── context/        # PhotoContext, LayoutContext
-│   ├── hooks/          # usePhotos, useLayout
+│   ├── hooks/          # All custom React hooks (usePhotos, useLayout, useInfiniteScroll, useViewportWidth, useClickable)
 │   └── components/     # UI components
 ```
 

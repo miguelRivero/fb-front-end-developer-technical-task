@@ -11,7 +11,7 @@ import { PhotoImage } from '../common/PhotoImage/PhotoImage'
 import { PhotoOverlay } from '../common/PhotoOverlay/PhotoOverlay'
 import type React from 'react'
 import styles from './CarouselLayout.module.scss'
-import { useViewportWidth } from '../../../shared/hooks/useViewportWidth'
+import { useViewportWidth } from '../../hooks/useViewportWidth'
 
 /**
  * Props for the CarouselLayout component

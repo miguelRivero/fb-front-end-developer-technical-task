@@ -8,8 +8,8 @@ import { PhotoStats } from '../common/PhotoStats/PhotoStats'
 import React from 'react'
 import { UI_CONSTANTS } from '../../../constants'
 import styles from './ListLayout.module.scss'
-import { useClickable } from '../../../shared/hooks/useClickable'
-import { useInfiniteScroll } from '../../../shared/hooks/useInfiniteScroll'
+import { useClickable } from '../../hooks/useClickable'
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 
 /**
  * Props for the ListLayout component

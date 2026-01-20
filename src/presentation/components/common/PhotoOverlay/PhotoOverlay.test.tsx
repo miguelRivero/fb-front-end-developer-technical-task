@@ -2,11 +2,11 @@
  * Tests for PhotoOverlay component
  */
 
-import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { render, screen } from '@testing-library/react'
 
-import { createMockPhoto } from '../../../../test/mocks'
 import { PhotoOverlay } from './PhotoOverlay'
+import { createMockPhoto } from '../../../../test/mocks'
 
 describe('PhotoOverlay', () => {
   it('should render a title and author attribution', () => {

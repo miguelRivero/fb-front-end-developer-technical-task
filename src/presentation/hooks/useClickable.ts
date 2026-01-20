@@ -3,16 +3,16 @@ import { useCallback } from 'react'
 
 /**
  * Custom hook: useClickable
- * 
+ *
  * Extracts duplicate click handler and keyboard navigation logic.
  * Provides consistent accessibility attributes and event handlers for clickable items.
- * 
+ *
  * @template T - Type of the item being clicked
  * @param onClick - Optional callback function when item is clicked
  * @param item - The item to pass to onClick callback
  * @param label - Label for aria-label attribute
  * @returns Object with event handlers and accessibility attributes
- * 
+ *
  * @example
  * ```tsx
  * const { onClick, onKeyDown, role, tabIndex, 'aria-label': ariaLabel } = useClickable(

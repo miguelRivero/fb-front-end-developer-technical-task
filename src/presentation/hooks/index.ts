@@ -7,3 +7,7 @@
  */
 export { usePhotos } from './usePhotos'
 export { useLayout } from './useLayout'
+export { useInfiniteScroll } from './useInfiniteScroll'
+export type { UseInfiniteScrollOptions } from './useInfiniteScroll'
+export { useViewportWidth } from './useViewportWidth'
+export { useClickable } from './useClickable'
