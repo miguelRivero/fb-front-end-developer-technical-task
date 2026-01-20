@@ -132,7 +132,7 @@ export function LayoutSwitcher() {
             onClick={() => handleLayoutChange(layout)}
             onKeyDown={(e) => handleKeyDown(e, layout)}
             aria-label={`Switch to ${layoutMetadata.displayName} layout`}
-            aria-current={isActive ? 'true' : 'false'}
+            aria-current={isActive ? 'true' : undefined}
             title={layoutMetadata.description}
           >
             {getLayoutIcon(layout)}
