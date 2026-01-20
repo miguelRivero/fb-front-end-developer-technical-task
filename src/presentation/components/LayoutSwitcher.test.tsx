@@ -187,33 +187,24 @@ describe('LayoutSwitcher Integration Tests', () => {
   })
 
   describe('responsive button labels', () => {
-    it('should show full labels on desktop', () => {
-      Object.defineProperty(window, 'innerWidth', {
-        writable: true,
-        configurable: true,
-        value: 1200,
-      })
-
+    it('renders label elements; visibility is controlled by CSS media queries', () => {
       renderWithProviders(<LayoutSwitcher />)
 
-      // Labels should be visible
+      // Note: JSDOM doesn't evaluate stylesheet media queries, so we can't assert
+      // "visible on desktop / hidden on mobile" here. We only assert that the
+      // DOM contains the label elements.
       expect(screen.getByText('Grid')).toBeInTheDocument()
       expect(screen.getByText('Carousel')).toBeInTheDocument()
       expect(screen.getByText('List')).toBeInTheDocument()
       expect(screen.getByText('Cards')).toBeInTheDocument()
     })
 
-    it('should handle mobile viewport', () => {
-      Object.defineProperty(window, 'innerWidth', {
-        writable: true,
-        configurable: true,
-        value: 500,
-      })
-
+    it('renders the list option (CSS hides it on narrow screens)', () => {
       renderWithProviders(<LayoutSwitcher />)
 
-      // Buttons should still be rendered
-      expect(screen.getByLabelText(/switch to grid layout/i)).toBeInTheDocument()
+      // CSS (not JS) hides this option under 640px, which isn't something we can
+      // assert reliably in JSDOM without a real CSS engine.
+      expect(screen.getByLabelText(/switch to list layout/i)).toBeInTheDocument()
     })
   })
 
