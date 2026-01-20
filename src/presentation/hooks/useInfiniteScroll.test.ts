@@ -315,22 +315,38 @@ describe('useInfiniteScroll', () => {
 
   describe('cleanup on unmount', () => {
     it('should disconnect observer on unmount', () => {
-      const loadMore = vi.fn()
-      const { result, unmount } = renderHook(() =>
-        useInfiniteScroll({
-          loadMore,
-          hasMore: true,
-          loading: false,
-        })
-      )
+      vi.useFakeTimers()
+      vi.setSystemTime(new Date('2026-01-20T00:00:00.000Z'))
 
-      expect(result.current).toBeDefined()
+      try {
+        const loadMore = vi.fn().mockResolvedValue(undefined)
+        const { result, unmount } = renderHook(() =>
+          useInfiniteScroll({
+            loadMore,
+            hasMore: true,
+            loading: false,
+          })
+        )
 
-      unmount()
+        const sentinel = document.createElement('div')
+        result.current(sentinel as unknown as HTMLDivElement)
 
-      // Observer should be disconnected
-      intersectionObserverMock.clearObservers()
-      expect(intersectionObserverMock).toBeDefined()
+        // Sanity check: observer is active before unmount.
+        intersectionObserverMock.triggerIntersection(sentinel, true)
+        expect(loadMore).toHaveBeenCalledTimes(1)
+
+        loadMore.mockClear()
+
+        unmount()
+
+        // If the observer wasn't disconnected, this would call loadMore again
+        // (we advance time past the debounce window to avoid false positives).
+        vi.advanceTimersByTime(600)
+        intersectionObserverMock.triggerIntersection(sentinel, true)
+        expect(loadMore).not.toHaveBeenCalled()
+      } finally {
+        vi.useRealTimers()
+      }
     })
   })
 
