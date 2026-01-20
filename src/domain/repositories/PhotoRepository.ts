@@ -1,4 +1,4 @@
-import type { PhotoSearchParams, PhotoSearchResult } from '../entities/Photo'
+import type { PhotoSearchParams, PhotoSearchResult } from '@/domain/entities/Photo'
 
 /**
  * Domain Repository Interface: PhotoRepository

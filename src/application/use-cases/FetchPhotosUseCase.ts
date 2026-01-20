@@ -1,6 +1,6 @@
-import type { PhotoRepository } from '../../domain/repositories/PhotoRepository'
-import type { PhotoSearchParams, PhotoSearchResult } from '../../domain/entities/Photo'
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
+import type { PhotoRepository } from '@/domain/repositories/PhotoRepository'
+import type { PhotoSearchParams, PhotoSearchResult } from '@/domain/entities/Photo'
+import { PhotoRepositoryError } from '@/domain/repositories/PhotoRepository'
 
 /**
  * Application Use Case: FetchPhotosUseCase

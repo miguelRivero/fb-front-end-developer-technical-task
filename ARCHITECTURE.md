@@ -134,7 +134,7 @@ export class UnsplashPhotoRepository implements PhotoRepository {
 
 - **Context**: `PhotoContext`, `LayoutContext` - React state management
 - **Hooks**: `usePhotos`, `useLayout` - React-specific logic
-- **Components**: UI components (in `src/components/`)
+- **Components**: UI components (in `src/presentation/components/`)
 
 **Key Principles**:
 
@@ -304,7 +304,7 @@ src/
 src/
   domain/        # Keep domain entities
   features/       # Feature-based for UI
-  shared/         # Shared utilities
+  utils/          # Shared (framework-agnostic) utilities
 ```
 
 **Pros**: Balance of structure and simplicity  
@@ -322,10 +322,12 @@ src/
 ├── infrastructure/      # External implementations
 │   ├── repositories/   # UnsplashPhotoRepository
 │   └── adapters/       # UnsplashApiAdapter
+├── utils/               # Framework-agnostic utilities
+├── types/               # Shared TypeScript types
 ├── presentation/        # React-specific
 │   ├── context/        # PhotoContext, LayoutContext
-│   └── hooks/          # usePhotos, useLayout
-└── components/          # UI components
+│   ├── hooks/          # All custom React hooks (usePhotos, useLayout, useInfiniteScroll, useViewportWidth, useClickable)
+│   └── components/     # UI components
 ```
 
 ## Component Structure
@@ -335,12 +337,12 @@ The component structure has been refactored to be more logical, scalable, and ma
 ### Directory Structure
 
 ```
-src/components/
+src/presentation/components/
 ├── common/                    # Shared UI components
 │   ├── CreatorInfo/          # Creator avatar + name/username
 │   ├── EmptyState/           # Empty/error states
 │   ├── PhotoDescription/    # Description text component
-│   ├── PhotoImage/           # Reusable photo image with hover
+│   ├── PhotoImage/           # Reusable photo image with responsive srcset/sizes
 │   ├── PhotoOverlay/         # Overlay with title, author, stats
 │   ├── PhotoStats/           # Stats display (likes, views)
 │   └── index.ts              # Common components exports
@@ -361,9 +363,14 @@ src/components/
 
 #### PhotoImage
 
-- **Purpose**: Reusable photo image display with loading states and hover effects
-- **Props**: `photo`, `urlType`, `isHovered`, `aspectRatio`, `priority`, `onClick`
+- **Purpose**: Reusable photo image display with loading states and responsive image support
+- **Props**: `photo`, `urlType`, `aspectRatio`, `priority`, `onClick`, `srcSet?`, `sizes?`
 - **Used in**: GridLayout, CarouselLayout, ListLayout, CardsLayout
+
+#### ScrollToTopButton
+
+- **Purpose**: Floating button that appears after scrolling and smoothly scrolls the page back to the top
+- **Used in**: App shell (global)
 
 #### PhotoOverlay
 
@@ -411,7 +418,8 @@ src/components/
 ```tsx
 import { PhotoOverlay } from '../common/PhotoOverlay/PhotoOverlay'
 
-;<PhotoOverlay photo={photo} isVisible={isHovered} showViews />
+// `isVisible` is typically used for small viewports; desktop reveal is handled via CSS `:hover`/`:focus-visible`.
+;<PhotoOverlay photo={photo} isVisible={isBelowDesktopViewport} showViews />
 ```
 
 #### Using PhotoStats in a card:

@@ -1,0 +1,44 @@
+/* Shared keyframe animations (global).
+ *
+ * Note: `@keyframes` names are global in CSS, even when declared inside CSS Modules.
+ * Keeping them here avoids accidental duplication/collisions across modules.
+ */
+
+@keyframes fb-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: var(--opacity-skeleton);
+  }
+}
+
+@keyframes fb-skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fb-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fb-layout-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--spacing-sm));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

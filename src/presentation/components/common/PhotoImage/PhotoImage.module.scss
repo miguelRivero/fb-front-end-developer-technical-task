@@ -1,0 +1,90 @@
+.imageWrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-lg);
+  background: var(--muted);
+  width: 100%;
+}
+
+.aspect-auto {
+  /* Natural aspect ratio (no constraint) */
+  aspect-ratio: auto;
+}
+
+
+.aspect-4\/3 {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-16\/10 {
+  aspect-ratio: 16 / 10;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.imageWrapper.clickable {
+  cursor: pointer;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-slow, 300ms) ease-out;
+  will-change: transform;
+}
+
+.imageHovered {
+  transform: scale(1.05);
+}
+
+.skeleton {
+  position: absolute;
+  inset: 0;
+  background: var(--muted);
+  animation: fb-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeletonImage {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--muted) 0%,
+    var(--border) 25%,
+    var(--background) 50%,
+    var(--border) 75%,
+    var(--muted) 100%
+  );
+  background-size: 200% 100%;
+  animation: fb-skeleton-shimmer 1.2s ease-in-out infinite;
+}
+
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: min(200px, 100%);
+  padding: 1rem;
+  color: var(--muted-foreground);
+  background: var(--muted);
+}
+
+.errorIcon {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+.errorText {
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--muted-foreground);
+}

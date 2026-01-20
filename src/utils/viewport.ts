@@ -1,4 +1,4 @@
-import { RESPONSIVE_BREAKPOINTS } from '../constants'
+import { RESPONSIVE_BREAKPOINTS } from '@/constants'
 
 /**
  * Pure viewport helpers shared across UI components.

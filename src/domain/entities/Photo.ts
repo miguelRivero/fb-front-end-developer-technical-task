@@ -39,6 +39,12 @@ export interface Photo {
   /** Engagement metrics */
   readonly likes: number
 
+  /**
+   * Optional view count for the photo.
+   * Note: Not all Unsplash endpoints include view stats, so this may be undefined.
+   */
+  readonly views?: number
+
   /** ISO 8601 timestamp of when photo was created */
   readonly createdAt: string
 }

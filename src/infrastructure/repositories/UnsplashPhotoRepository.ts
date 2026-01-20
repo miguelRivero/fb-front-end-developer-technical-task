@@ -1,11 +1,11 @@
-import type { PhotoRepository } from '../../domain/repositories/PhotoRepository'
-import type { PhotoSearchParams, PhotoSearchResult } from '../../domain/entities/Photo'
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
-import type { UnsplashPhoto, UnsplashResponse } from '../../types/unsplash'
-import { UnsplashApiAdapter } from '../adapters/UnsplashApiAdapter'
-import type { HttpClient } from '../http/createUnsplashHttpClient'
-import { createUnsplashHttpClient } from '../http/createUnsplashHttpClient'
-import { mapUnsplashError } from '../errors/unsplashErrorMapper'
+import type { PhotoRepository } from '@/domain/repositories/PhotoRepository'
+import type { PhotoSearchParams, PhotoSearchResult } from '@/domain/entities/Photo'
+import { PhotoRepositoryError } from '@/domain/repositories/PhotoRepository'
+import type { UnsplashPhoto, UnsplashResponse } from '@/types/unsplash'
+import { UnsplashApiAdapter } from '@/infrastructure/adapters/UnsplashApiAdapter'
+import type { HttpClient } from '@/infrastructure/http/createUnsplashHttpClient'
+import { createUnsplashHttpClient } from '@/infrastructure/http/createUnsplashHttpClient'
+import { mapUnsplashError } from '@/infrastructure/errors/unsplashErrorMapper'
 
 /**
  * Infrastructure Implementation: UnsplashPhotoRepository

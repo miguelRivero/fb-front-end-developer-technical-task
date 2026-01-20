@@ -1,0 +1,19 @@
+.description {
+  color: var(--muted-foreground);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.description-sm {
+  font-size: var(--font-size-xs);
+}
+
+.description-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--line-clamp, 2);
+  line-clamp: var(--line-clamp, 2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}

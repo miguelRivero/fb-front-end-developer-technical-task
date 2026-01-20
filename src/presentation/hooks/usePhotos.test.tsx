@@ -1,12 +1,12 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { DEFAULT_SEARCH_QUERY, PAGINATION_CONFIG } from '../../constants'
-import { PhotoProvider } from '../context/PhotoContext'
-import { PhotoUseCasesProvider } from '../context/PhotoUseCasesContext'
-import { createMockPhotoArray } from '../../test/mocks'
+import { DEFAULT_SEARCH_QUERY, PAGINATION_CONFIG } from '@/constants'
+import { PhotoProvider } from '@/presentation/context/PhotoContext'
+import { PhotoUseCasesProvider } from '@/presentation/context/PhotoUseCasesContext'
+import { createMockPhotoArray } from '@/test/mocks'
 import { usePhotos } from './usePhotos'
-import { UiError } from '../errors/UiError'
+import { UiError } from '@/presentation/errors/UiError'
 
 const mockExecute = vi.fn()
 const stubUseCase = { execute: mockExecute }

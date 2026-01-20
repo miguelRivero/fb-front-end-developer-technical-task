@@ -1,16 +1,17 @@
 import './App.scss'
 
-import { CardsLayout } from './components/layouts/CardsLayout'
-import { CarouselLayout } from './components/layouts/CarouselLayout'
-import { ErrorBoundary } from './components/ErrorBoundary'
-import { GridLayout } from './components/layouts/GridLayout'
-import { LayoutSwitcher } from './components/LayoutSwitcher'
-import { ListLayout } from './components/layouts/ListLayout'
-import { EmptyState } from './components/common/EmptyState/EmptyState'
-import { ScrollToTopButton } from './components/common/ScrollToTopButton/ScrollToTopButton'
+import { CardsLayout } from './presentation/components/layouts/CardsLayout'
+import { CarouselLayout } from './presentation/components/layouts/CarouselLayout'
+import { DEFAULT_SEARCH_QUERY } from './constants'
+import { EmptyState } from './presentation/components/common/EmptyState/EmptyState'
+import { ErrorBoundary } from './presentation/components/ErrorBoundary'
+import { GridLayout } from './presentation/components/layouts/GridLayout'
+import { LayoutSwitcher } from './presentation/components/LayoutSwitcher'
+import { ListLayout } from './presentation/components/layouts/ListLayout'
+import { PhotoPlaceholderIcon } from '@/presentation/components/common/icons'
+import { ScrollToTopButton } from './presentation/components/common/ScrollToTopButton/ScrollToTopButton'
 import styles from './App.module.scss'
 import { useEffect } from 'react'
-import { DEFAULT_SEARCH_QUERY } from './constants'
 import { useLayout } from './presentation/hooks/useLayout'
 import { usePhotos } from './presentation/hooks/usePhotos'
 
@@ -34,20 +35,9 @@ function App() {
               {/* Logo and Title */}
               <div className="flex items-center gap-3">
                 <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary">
-                  <svg
+                  <PhotoPlaceholderIcon
                     className="w-6 h-6 text-primary-foreground"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
+                  />
                 </div>
                 <div className="flex flex-col">
                   <h1 className="text-xl font-semibold text-foreground leading-tight">
@@ -78,7 +68,7 @@ function App() {
 
           {/* Layout Display */}
           <div
-            className={`${styles.layoutContainer} animate-in fade-in duration-200`}
+            className={styles.layoutContainer}
             data-testid="app-layout-container"
           >
             <div

@@ -2,7 +2,8 @@
  * Tests for dateUtils
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { formatPhotoDate } from './dateUtils'
 
 describe('formatPhotoDate', () => {
@@ -115,8 +116,8 @@ describe('formatPhotoDate', () => {
 
     it('should catch and handle exceptions gracefully', () => {
       // Mock Date constructor to throw an error
-      const OriginalDate = global.Date
-      global.Date = class extends OriginalDate {
+      const OriginalDate = globalThis.Date
+      globalThis.Date = class extends OriginalDate {
         constructor(...args: unknown[]) {
           super(...(args as []))
           throw new Error('Date construction failed')
@@ -127,7 +128,7 @@ describe('formatPhotoDate', () => {
       expect(result).toBe('Invalid date')
 
       // Restore original Date
-      global.Date = OriginalDate
+      globalThis.Date = OriginalDate
     })
 
     it('should log warning in development mode for invalid dates', () => {

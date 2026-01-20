@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { PhotoProvider, PhotoContext } from './PhotoContext'
-import { createMockPhotoArray } from '../../test/mocks'
+import { createMockPhotoArray } from '@/test/mocks'
 import { useContext } from 'react'
-import { DEFAULT_SEARCH_QUERY } from '../../constants'
-import { UiError } from '../errors/UiError'
+import { DEFAULT_SEARCH_QUERY } from '@/constants'
+import { UiError } from '@/presentation/errors/UiError'
 
 describe('PhotoContext', () => {
   describe('Initial State', () => {

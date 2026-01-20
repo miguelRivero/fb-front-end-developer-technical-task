@@ -1,14 +1,14 @@
-import type { UnsplashPhoto, UnsplashResponse } from '../../types/unsplash'
+import type { UnsplashPhoto, UnsplashResponse } from '@/types/unsplash'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
-import { createUnsplashHttpClient } from '../http/createUnsplashHttpClient'
-import type { HttpClient } from '../http/createUnsplashHttpClient'
+import type { HttpClient } from '@/infrastructure/http/createUnsplashHttpClient'
+import { PhotoRepositoryError } from '@/domain/repositories/PhotoRepository'
 import { UnsplashPhotoRepository } from './UnsplashPhotoRepository'
+import { createUnsplashHttpClient } from '@/infrastructure/http/createUnsplashHttpClient'
 
 // Mock UnsplashApiAdapter (keep repository tests focused on orchestration + error mapping).
-vi.mock('../adapters/UnsplashApiAdapter', async () => {
-  const actual = await vi.importActual('../adapters/UnsplashApiAdapter')
+vi.mock('@/infrastructure/adapters/UnsplashApiAdapter', async () => {
+  const actual = await vi.importActual('@/infrastructure/adapters/UnsplashApiAdapter')
   return {
     ...actual,
     UnsplashApiAdapter: {
@@ -27,6 +27,7 @@ vi.mock('../adapters/UnsplashApiAdapter', async () => {
             height: photo.height,
           },
           likes: photo.likes,
+          views: photo.views,
           createdAt: photo.created_at,
         }))
       }),
@@ -55,6 +56,7 @@ function makePhoto(id: string): UnsplashPhoto {
     width: 4000,
     height: 3000,
     likes: 100,
+    views: 2500,
     created_at: '2024-01-15T10:30:00Z',
   }
 }
@@ -67,7 +69,8 @@ describe('UnsplashPhotoRepository', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     getMock = vi.fn()
-    mockHttpClient = { get: getMock }
+    // HttpClient.get is a generic function; cast the mock to satisfy the signature.
+    mockHttpClient = { get: getMock as unknown as HttpClient['get'] }
     repository = new UnsplashPhotoRepository(mockHttpClient)
   })
 
