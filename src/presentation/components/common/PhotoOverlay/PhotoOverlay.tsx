@@ -57,7 +57,6 @@ export function PhotoOverlay({
   return (
     <div
       className={`${styles.overlay} ${isVisible ? styles.overlayVisible : ''} ${sizeClassName} ${className || ''}`}
-      aria-hidden={!isVisible}
       data-photo-overlay
     >
       <div className={styles.overlayContent}>

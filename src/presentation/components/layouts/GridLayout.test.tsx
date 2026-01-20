@@ -8,7 +8,7 @@ import {
   createMockMatchMedia,
   createMockPhotoArray,
 } from '@/test/mocks'
-import { screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor, act } from '@testing-library/react'
 
 import { GridLayout } from './GridLayout'
 import { UiError } from '@/presentation/errors/UiError'
@@ -376,7 +376,9 @@ describe('GridLayout Integration Tests', () => {
     it('should handle window resize events', async () => {
       const photos = createMockPhotoArray(6)
 
-      const { container } = renderWithProviders(<GridLayout photos={photos} loading={false} hasMore={false} />)
+      const { container } = renderWithProviders(
+        <GridLayout photos={photos} loading={false} hasMore={false} />
+      )
 
       // Simulate resize
       Object.defineProperty(window, 'innerWidth', {
@@ -385,7 +387,9 @@ describe('GridLayout Integration Tests', () => {
         value: 500,
       })
 
-      window.dispatchEvent(new Event('resize'))
+      await act(async () => {
+        fireEvent.resize(window)
+      })
 
       // Grid should still be rendered
       const grid = container.querySelector('[class*="grid"]')

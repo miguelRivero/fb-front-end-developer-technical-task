@@ -11,7 +11,7 @@ import { formatPhotoDate } from '@/utils/dateUtils'
 import styles from './CardsLayout.module.scss'
 import { useClickable } from '@/presentation/hooks/useClickable'
 import { useInfiniteScroll } from '@/presentation/hooks/useInfiniteScroll'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 /**
  * Props for the CardsLayout component
@@ -137,7 +137,7 @@ export function CardsLayout({
   )
 }
 
-function CardItem({
+const CardItem = React.memo(function CardItem({
   photo,
   onPhotoClick,
 }: {
@@ -195,4 +195,4 @@ function CardItem({
       </div>
     </article>
   )
-}
+})

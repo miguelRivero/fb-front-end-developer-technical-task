@@ -4,7 +4,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createMockImage, createMockMatchMedia, createMockPhotoArray } from '@/test/mocks'
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 
 import { CarouselLayout } from './CarouselLayout'
 import { UiError } from '@/presentation/errors/UiError'
@@ -660,7 +660,9 @@ describe('CarouselLayout Integration Tests', () => {
         value: 500,
       })
 
-      window.dispatchEvent(new Event('resize'))
+      await act(async () => {
+        fireEvent.resize(window)
+      })
 
       await waitFor(() => {
         const carousel = container.querySelector('[class*="carousel"]')

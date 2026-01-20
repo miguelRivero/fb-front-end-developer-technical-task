@@ -9,6 +9,7 @@ import { GridLayout } from './presentation/components/layouts/GridLayout'
 import { LayoutSwitcher } from './presentation/components/LayoutSwitcher'
 import { ListLayout } from './presentation/components/layouts/ListLayout'
 import { PhotoPlaceholderIcon } from '@/presentation/components/common/icons'
+import { SearchBar } from './presentation/components/common/SearchBar/SearchBar'
 import { ScrollToTopButton } from './presentation/components/common/ScrollToTopButton/ScrollToTopButton'
 import styles from './App.module.scss'
 import { useEffect } from 'react'
@@ -31,7 +32,7 @@ function App() {
         {/* Fixed Header */}
         <div className={`${styles.header} bg-background border-b border-border`}>
           <div className={styles.headerContainer}>
-            <header className="flex items-center justify-between">
+            <header className="flex flex-wrap items-center justify-between gap-y-2">
               {/* Logo and Title */}
               <div className="flex items-center gap-3">
                 <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary">
@@ -48,6 +49,12 @@ function App() {
                   </span>
                 </div>
               </div>
+
+              {/* Search Bar */}
+              <SearchBar
+                initialQuery={DEFAULT_SEARCH_QUERY}
+                onSearch={fetchPhotos}
+              />
 
               {/* Layout Switcher */}
               <LayoutSwitcher />

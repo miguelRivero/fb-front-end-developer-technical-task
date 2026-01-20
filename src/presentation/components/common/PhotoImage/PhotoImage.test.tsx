@@ -5,7 +5,7 @@
 import '@testing-library/jest-dom'
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 import { PhotoImage } from './PhotoImage'
 import { createMockPhoto } from '@/test/mocks'
@@ -183,7 +183,9 @@ describe('PhotoImage', () => {
 
       // Simulate image load
       Object.defineProperty(image, 'complete', { value: true, writable: true })
-      image.dispatchEvent(new Event('load'))
+      await act(async () => {
+        fireEvent.load(image)
+      })
 
       await waitFor(() => {
         const skeleton = document.querySelector('[aria-hidden="true"]')
@@ -202,7 +204,9 @@ describe('PhotoImage', () => {
 
       // Simulate image load
       Object.defineProperty(image, 'complete', { value: true, writable: true })
-      image.dispatchEvent(new Event('load'))
+      await act(async () => {
+        fireEvent.load(image)
+      })
 
       await waitFor(() => {
         expect(onImageLoad).toHaveBeenCalledTimes(1)
@@ -216,10 +220,10 @@ describe('PhotoImage', () => {
       const image = screen.getByRole('img') as HTMLImageElement
 
       // Should not throw error
-      expect(() => {
+      await act(async () => {
         Object.defineProperty(image, 'complete', { value: true, writable: true })
-        image.dispatchEvent(new Event('load'))
-      }).not.toThrow()
+        fireEvent.load(image)
+      })
     })
   })
 
@@ -231,7 +235,9 @@ describe('PhotoImage', () => {
       const image = screen.getByRole('img') as HTMLImageElement
 
       // Simulate image error
-      image.dispatchEvent(new Event('error'))
+      await act(async () => {
+        fireEvent.error(image)
+      })
 
       await waitFor(() => {
         expect(screen.getByLabelText('Image failed to load')).toBeInTheDocument()
@@ -243,7 +249,9 @@ describe('PhotoImage', () => {
       render(<PhotoImage photo={photo} />)
 
       const image = screen.getByRole('img') as HTMLImageElement
-      image.dispatchEvent(new Event('error'))
+      await act(async () => {
+        fireEvent.error(image)
+      })
 
       await waitFor(() => {
         expect(screen.getByText('Image unavailable')).toBeInTheDocument()
@@ -258,7 +266,9 @@ describe('PhotoImage', () => {
       render(<PhotoImage photo={photo} onError={onError} />)
 
       const image = screen.getByRole('img') as HTMLImageElement
-      image.dispatchEvent(new Event('error'))
+      await act(async () => {
+        fireEvent.error(image)
+      })
 
       await waitFor(() => {
         expect(screen.getByLabelText('Image failed to load')).toBeInTheDocument()
@@ -275,7 +285,9 @@ describe('PhotoImage', () => {
       const { container } = render(<PhotoImage photo={photo} onClick={onClick} />)
 
       const image = screen.getByRole('img') as HTMLImageElement
-      image.dispatchEvent(new Event('error'))
+      await act(async () => {
+        fireEvent.error(image)
+      })
 
       await waitFor(() => {
         expect(screen.getByLabelText('Image failed to load')).toBeInTheDocument()
@@ -285,7 +297,9 @@ describe('PhotoImage', () => {
       expect(wrapper.getAttribute('role')).toBe('button')
       expect(wrapper.tabIndex).toBe(0)
 
-      wrapper.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+      await act(async () => {
+        fireEvent.keyDown(wrapper, { key: 'Enter', bubbles: true })
+      })
       expect(onClick).toHaveBeenCalledTimes(1)
     })
   })
