@@ -2,6 +2,10 @@
  * Tests for PhotoImage component
  */
 
+import '@testing-library/jest-dom'
+
+import * as React from 'react'
+
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 
@@ -249,10 +253,11 @@ describe('PhotoImage', () => {
       })
     })
 
-    it('should handle error with onError callback', async () => {
+    it('should call onError callback when image fails to load', async () => {
       const photo = createMockPhoto()
+      const onError = vi.fn()
       const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      render(<PhotoImage photo={photo} />)
+      render(<PhotoImage photo={photo} onError={onError} />)
 
       const image = screen.getByRole('img') as HTMLImageElement
       image.dispatchEvent(new Event('error'))
@@ -261,7 +266,29 @@ describe('PhotoImage', () => {
         expect(screen.getByLabelText('Image failed to load')).toBeInTheDocument()
       })
 
+      expect(onError).toHaveBeenCalledTimes(1)
+      expect(consoleWarnSpy).toHaveBeenCalled()
       consoleWarnSpy.mockRestore()
+    })
+
+    it('should keep error wrapper keyboard-activatable when onClick is provided', async () => {
+      const photo = createMockPhoto()
+      const onClick = vi.fn()
+      const { container } = render(<PhotoImage photo={photo} onClick={onClick} />)
+
+      const image = screen.getByRole('img') as HTMLImageElement
+      image.dispatchEvent(new Event('error'))
+
+      await waitFor(() => {
+        expect(screen.getByLabelText('Image failed to load')).toBeInTheDocument()
+      })
+
+      const wrapper = container.firstChild as HTMLElement
+      expect(wrapper.getAttribute('role')).toBe('button')
+      expect(wrapper.tabIndex).toBe(0)
+
+      wrapper.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+      expect(onClick).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -333,6 +360,32 @@ describe('PhotoImage', () => {
       expect(onClick).toHaveBeenCalledTimes(1)
     })
 
+    it('should add button semantics when onClick is provided', () => {
+      const photo = createMockPhoto()
+      const onClick = vi.fn()
+      const { container } = render(<PhotoImage photo={photo} onClick={onClick} />)
+
+      const wrapper = container.firstChild as HTMLElement
+      expect(wrapper.getAttribute('role')).toBe('button')
+      expect(wrapper.tabIndex).toBe(0)
+    })
+
+    it('should allow activation via Enter and Space when onClick is provided', () => {
+      const photo = createMockPhoto()
+      const onClick = vi.fn()
+      const { container } = render(<PhotoImage photo={photo} onClick={onClick} />)
+
+      const wrapper = container.firstChild as HTMLElement
+
+      wrapper.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+      expect(onClick).toHaveBeenCalledTimes(1)
+
+      const spaceEvent = new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
+      wrapper.dispatchEvent(spaceEvent)
+      expect(spaceEvent.defaultPrevented).toBe(true)
+      expect(onClick).toHaveBeenCalledTimes(2)
+    })
+
     it('should apply clickable class when onClick provided', () => {
       const photo = createMockPhoto()
       const onClick = vi.fn()
@@ -348,6 +401,8 @@ describe('PhotoImage', () => {
 
       const wrapper = container.firstChild as HTMLElement
       expect(wrapper.className).not.toContain('clickable')
+      expect(wrapper.getAttribute('role')).toBeNull()
+      expect(wrapper.tabIndex).toBe(-1)
     })
   })
 
@@ -415,7 +470,6 @@ describe('PhotoImage', () => {
       expect(image.height).toBe(3000)
     })
   })
-
   describe('with missing photo data (edge cases)', () => {
     it('should handle photo with empty urls gracefully', () => {
       const photo = createMockPhoto({
@@ -429,8 +483,31 @@ describe('PhotoImage', () => {
       })
       render(<PhotoImage photo={photo} />)
 
-      const image = screen.getByRole('img') as HTMLImageElement
-      expect(image.src).toBeTruthy()
+      // When no usable URL exists, the component should render the placeholder error UI.
+      expect(screen.getByLabelText('Image failed to load')).toBeInTheDocument()
+    })
+
+    it('should keep placeholder wrapper keyboard-activatable when onClick is provided', () => {
+      const photo = createMockPhoto({
+        urls: {
+          raw: '',
+          full: '',
+          regular: '',
+          small: '',
+          thumb: '',
+        },
+      })
+      const onClick = vi.fn()
+      const { container } = render(<PhotoImage photo={photo} onClick={onClick} />)
+
+      expect(screen.getByLabelText('Image failed to load')).toBeInTheDocument()
+
+      const wrapper = container.firstChild as HTMLElement
+      expect(wrapper.getAttribute('role')).toBe('button')
+      expect(wrapper.tabIndex).toBe(0)
+
+      wrapper.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+      expect(onClick).toHaveBeenCalledTimes(1)
     })
   })
 
