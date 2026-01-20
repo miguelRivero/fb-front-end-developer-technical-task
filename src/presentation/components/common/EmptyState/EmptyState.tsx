@@ -44,7 +44,7 @@ export function EmptyState({
   return (
     <div className={`${styles.emptyState} ${className || ''}`}>
       {error ? (
-        <p className={styles.errorText}>Error: {error.message}</p>
+        <p className={styles.errorText} role="alert">Error: {error.message}</p>
       ) : (
         <p className={styles.emptyStateText}>{emptyMessage}</p>
       )}
