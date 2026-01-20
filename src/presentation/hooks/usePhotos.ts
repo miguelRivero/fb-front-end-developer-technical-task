@@ -72,10 +72,13 @@ export function usePhotos() {
 
   // Cleanup on unmount
   useEffect(() => {
+    const abortLatestRequest = () => {
+      abortControllerRef.current?.abort()
+    }
+
     return () => {
       // Intentionally abort the *latest* request on unmount.
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      abortControllerRef.current?.abort()
+      abortLatestRequest()
     }
   }, [])
 
