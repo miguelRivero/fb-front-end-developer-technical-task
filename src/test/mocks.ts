@@ -51,24 +51,25 @@ export function createMockPhoto(overrides?: Partial<Photo>): Photo {
 /**
  * Creates an array of mock Photo domain entities
  */
-export function createMockPhotoArray(count: number): Photo[] {
-  return Array.from({ length: count }, (_, index) =>
-    createMockPhoto({
-      id: `photo-${index}`,
-      altDescription: `Photo ${index + 1}`,
-      likes: (index + 1) * 10,
+export function createMockPhotoArray(count: number, startIndex: number = 0): Photo[] {
+  return Array.from({ length: count }, (_, index) => {
+    const actualIndex = startIndex + index
+    return createMockPhoto({
+      id: `photo-${actualIndex}`,
+      altDescription: `Photo ${actualIndex + 1}`,
+      likes: (actualIndex + 1) * 10,
       creator: {
-        name: `Creator ${index + 1}`,
-        username: `creator${index + 1}`,
+        name: `Creator ${actualIndex + 1}`,
+        username: `creator${actualIndex + 1}`,
         profileImageUrl: 'https://images.unsplash.com/profile-default.jpg',
       },
       dimensions: {
-        width: 4000 + index,
-        height: 3000 + index,
+        width: 4000 + actualIndex,
+        height: 3000 + actualIndex,
       },
-      createdAt: `2024-01-${String((index % 28) + 1).padStart(2, '0')}T10:30:00Z`,
+      createdAt: `2024-01-${String((actualIndex % 28) + 1).padStart(2, '0')}T10:30:00Z`,
     })
-  )
+  })
 }
 
 /**

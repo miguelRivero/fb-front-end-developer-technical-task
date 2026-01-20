@@ -1,0 +1,74 @@
+.searchBar {
+  width: 100%;
+  max-width: 400px;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  padding: 0.5rem 2.5rem 0.5rem 2.5rem;
+  font-size: var(--font-size-base);
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-full);
+  color: var(--foreground);
+  transition: border-color 200ms ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary);
+    background-color: var(--background);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+  }
+
+  &::placeholder {
+    color: var(--muted-foreground);
+  }
+}
+
+.clearButton {
+  position: absolute;
+  right: 0.75rem;
+  padding: 0.25rem;
+  border-radius: var(--border-radius-full);
+  color: var(--muted-foreground);
+  transition: color 200ms ease, background-color 200ms ease;
+
+  &:hover {
+    color: var(--foreground);
+    background-color: var(--border);
+  }
+
+  &:focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+  }
+}
+
+.clearIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (max-width: 640px) {
+  .searchBar {
+    max-width: 100%;
+    margin-top: 0.5rem;
+    order: 3;
+    flex-basis: 100%;
+  }
+}

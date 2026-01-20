@@ -395,7 +395,7 @@ describe('CardsLayout Integration Tests', () => {
       )
 
       // Simulate loading more photos
-      const morePhotos = createMockPhotoArray(6)
+      const morePhotos = createMockPhotoArray(6, 6)
       rerender(
         <CardsLayout
           photos={[...initialPhotos, ...morePhotos]}

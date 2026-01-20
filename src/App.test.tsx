@@ -3,7 +3,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 
 import App from './App'
 import { createMockLocalStorage } from './test/mocks'
@@ -29,16 +29,20 @@ describe('App Integration Tests - User Flows', () => {
   })
 
   describe('initial app load and photo fetching', () => {
-    it('should render app header on initial load', () => {
-      renderWithProviders(<App />)
+    it('should render app header on initial load', async () => {
+      await act(async () => {
+        renderWithProviders(<App />)
+      })
 
       // App header should render
       expect(screen.getByText('Flowbox')).toBeInTheDocument()
       expect(screen.getByText('Photo Gallery')).toBeInTheDocument()
     })
 
-    it('should render layout switcher', () => {
-      renderWithProviders(<App />)
+    it('should render layout switcher', async () => {
+      await act(async () => {
+        renderWithProviders(<App />)
+      })
 
       expect(
         screen.getByRole('group', { name: 'Layout view options' })
@@ -119,8 +123,10 @@ describe('App Integration Tests - User Flows', () => {
   })
 
   describe('photo browsing flow', () => {
-    it('should render layout container', () => {
-      renderWithProviders(<App />)
+    it('should render layout container', async () => {
+      await act(async () => {
+        renderWithProviders(<App />)
+      })
 
       // Layout container should be present
       expect(screen.getByTestId('app-layout-container')).toBeInTheDocument()
@@ -128,8 +134,10 @@ describe('App Integration Tests - User Flows', () => {
   })
 
   describe('loading states throughout app', () => {
-    it('should render app structure', () => {
-      renderWithProviders(<App />)
+    it('should render app structure', async () => {
+      await act(async () => {
+        renderWithProviders(<App />)
+      })
 
       // App structure should be present
       expect(screen.getByText('Flowbox')).toBeInTheDocument()
@@ -137,44 +145,52 @@ describe('App Integration Tests - User Flows', () => {
   })
 
   describe('responsive layout changes', () => {
-    it('should adapt to mobile viewport', () => {
+    it('should adapt to mobile viewport', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
         value: 500,
       })
 
-      renderWithProviders(<App />)
+      await act(async () => {
+        renderWithProviders(<App />)
+      })
 
       expect(screen.getByText('Flowbox')).toBeInTheDocument()
     })
 
-    it('should adapt to tablet viewport', () => {
+    it('should adapt to tablet viewport', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
         value: 768,
       })
 
-      renderWithProviders(<App />)
+      await act(async () => {
+        renderWithProviders(<App />)
+      })
 
       expect(screen.getByText('Flowbox')).toBeInTheDocument()
     })
 
-    it('should adapt to desktop viewport', () => {
+    it('should adapt to desktop viewport', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
         value: 1200,
       })
 
-      renderWithProviders(<App />)
+      await act(async () => {
+        renderWithProviders(<App />)
+      })
 
       expect(screen.getByText('Flowbox')).toBeInTheDocument()
     })
 
     it('should handle window resize', async () => {
-      renderWithProviders(<App />)
+      await act(async () => {
+        renderWithProviders(<App />)
+      })
 
       await waitFor(() => {
         expect(screen.getByText('Flowbox')).toBeInTheDocument()
@@ -187,7 +203,9 @@ describe('App Integration Tests - User Flows', () => {
         value: 500,
       })
 
-      window.dispatchEvent(new Event('resize'))
+      await act(async () => {
+        fireEvent.resize(window)
+      })
 
       // App should still render
       await waitFor(() => {
@@ -232,8 +250,10 @@ describe('App Integration Tests - User Flows', () => {
   })
 
   describe('error recovery', () => {
-    it('should render app structure even with potential errors', () => {
-      renderWithProviders(<App />)
+    it('should render app structure even with potential errors', async () => {
+      await act(async () => {
+        renderWithProviders(<App />)
+      })
 
       // App should render
       expect(screen.getByText('Flowbox')).toBeInTheDocument()
