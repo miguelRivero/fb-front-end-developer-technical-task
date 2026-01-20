@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from 'axios'
 
-import { UNSPLASH_API_TIMEOUT_MS } from '../../constants'
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
+import { UNSPLASH_API_TIMEOUT_MS } from '@/constants'
+import { PhotoRepositoryError } from '@/domain/repositories/PhotoRepository'
 
 export interface HttpGetConfig {
   params?: Record<string, unknown>

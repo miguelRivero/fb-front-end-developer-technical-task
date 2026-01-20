@@ -10,7 +10,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 
 import { PhotoImage } from './PhotoImage'
-import { createMockPhoto } from '../../../../test/mocks'
+import { createMockPhoto } from '@/test/mocks'
 
 describe('PhotoImage', () => {
   beforeEach(() => {

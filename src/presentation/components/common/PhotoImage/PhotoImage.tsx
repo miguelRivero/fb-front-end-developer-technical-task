@@ -1,6 +1,6 @@
 import type { KeyboardEvent, SyntheticEvent } from 'react'
 
-import type { Photo } from '../../../../domain/entities/Photo'
+import type { Photo } from '@/domain/entities/Photo'
 import styles from './PhotoImage.module.scss'
 import { useState } from 'react'
 

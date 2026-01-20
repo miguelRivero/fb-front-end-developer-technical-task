@@ -1,17 +1,17 @@
-import { RESPONSIVE_BREAKPOINTS, UI_CONSTANTS } from '../../../constants'
+import { RESPONSIVE_BREAKPOINTS, UI_CONSTANTS } from '@/constants'
 import {
   getCarouselSlidesPerView,
   isBelowDesktopViewport as isBelowDesktopViewportWidth,
-} from '../../../utils/viewport'
+} from '@/utils/viewport'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { EmptyState } from '../common/EmptyState/EmptyState'
-import type { Photo } from '../../../domain/entities/Photo'
-import { PhotoImage } from '../common/PhotoImage/PhotoImage'
-import { PhotoOverlay } from '../common/PhotoOverlay/PhotoOverlay'
+import { EmptyState } from '@/presentation/components/common/EmptyState/EmptyState'
+import type { Photo } from '@/domain/entities/Photo'
+import { PhotoImage } from '@/presentation/components/common/PhotoImage/PhotoImage'
+import { PhotoOverlay } from '@/presentation/components/common/PhotoOverlay/PhotoOverlay'
 import type React from 'react'
 import styles from './CarouselLayout.module.scss'
-import { useViewportWidth } from '../../hooks/useViewportWidth'
+import { useViewportWidth } from '@/presentation/hooks/useViewportWidth'
 
 /**
  * Props for the CarouselLayout component

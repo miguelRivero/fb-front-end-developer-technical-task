@@ -1,14 +1,14 @@
-import type { UnsplashPhoto, UnsplashResponse } from '../../types/unsplash'
+import type { UnsplashPhoto, UnsplashResponse } from '@/types/unsplash'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { HttpClient } from '../http/createUnsplashHttpClient'
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
+import type { HttpClient } from '@/infrastructure/http/createUnsplashHttpClient'
+import { PhotoRepositoryError } from '@/domain/repositories/PhotoRepository'
 import { UnsplashPhotoRepository } from './UnsplashPhotoRepository'
-import { createUnsplashHttpClient } from '../http/createUnsplashHttpClient'
+import { createUnsplashHttpClient } from '@/infrastructure/http/createUnsplashHttpClient'
 
 // Mock UnsplashApiAdapter (keep repository tests focused on orchestration + error mapping).
-vi.mock('../adapters/UnsplashApiAdapter', async () => {
-  const actual = await vi.importActual('../adapters/UnsplashApiAdapter')
+vi.mock('@/infrastructure/adapters/UnsplashApiAdapter', async () => {
+  const actual = await vi.importActual('@/infrastructure/adapters/UnsplashApiAdapter')
   return {
     ...actual,
     UnsplashApiAdapter: {

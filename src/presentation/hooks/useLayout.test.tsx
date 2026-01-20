@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useLayout } from './useLayout'
-import { LayoutProvider } from '../context/LayoutContext'
-import type { Layout } from '../../domain/entities/Layout'
+import { LayoutProvider } from '@/presentation/context/LayoutContext'
+import type { Layout } from '@/domain/entities/Layout'
 
 describe('useLayout', () => {
   beforeEach(() => {

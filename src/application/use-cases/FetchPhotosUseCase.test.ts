@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { FetchPhotosUseCase } from './FetchPhotosUseCase'
-import type { PhotoRepository } from '../../domain/repositories/PhotoRepository'
-import { PhotoRepositoryError } from '../../domain/repositories/PhotoRepository'
-import { createMockPhotoArray } from '../../test/mocks'
+import type { PhotoRepository } from '@/domain/repositories/PhotoRepository'
+import { PhotoRepositoryError } from '@/domain/repositories/PhotoRepository'
+import { createMockPhotoArray } from '@/test/mocks'
 
 describe('FetchPhotosUseCase', () => {
   let mockRepository: PhotoRepository

@@ -13,13 +13,13 @@ import {
   type RenderHookOptions,
 } from '@testing-library/react'
 import { type ReactElement } from 'react'
-import { PhotoProvider } from '../presentation/context/PhotoContext'
-import { LayoutProvider } from '../presentation/context/LayoutContext'
+import { PhotoProvider } from '@/presentation/context/PhotoContext'
+import { LayoutProvider } from '@/presentation/context/LayoutContext'
 import {
   PhotoUseCasesProvider,
   type FetchPhotosUseCaseLike,
-} from '../presentation/context/PhotoUseCasesContext'
-import type { Photo } from '../domain/entities/Photo'
+} from '@/presentation/context/PhotoUseCasesContext'
+import type { Photo } from '@/domain/entities/Photo'
 import { createMockPhoto, createMockPhotoArray } from './mocks'
 
 const testFetchPhotosUseCase: FetchPhotosUseCaseLike = {

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from 'react'
-import { LAYOUTS } from '../../domain/entities/Layout'
-import type { Layout } from '../../domain/entities/Layout'
+import { LAYOUTS } from '@/domain/entities/Layout'
+import type { Layout } from '@/domain/entities/Layout'
 
 /**
  * Presentation Layer: LayoutContext

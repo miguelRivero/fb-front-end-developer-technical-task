@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { RESPONSIVE_BREAKPOINTS } from '../constants'
+import { RESPONSIVE_BREAKPOINTS } from '@/constants'
 import { getCarouselSlidesPerView, isBelowDesktopViewport } from './viewport'
 
 describe('viewport utils', () => {

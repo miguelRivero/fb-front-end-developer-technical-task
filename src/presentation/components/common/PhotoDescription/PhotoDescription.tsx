@@ -1,4 +1,4 @@
-import { capitalizeFirst } from '../../../../utils/stringUtils'
+import { capitalizeFirst } from '@/utils/stringUtils'
 import styles from './PhotoDescription.module.scss'
 
 /**

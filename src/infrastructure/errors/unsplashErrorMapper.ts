@@ -1,4 +1,4 @@
-import type { FetchPhotosError, UnsplashError } from '../../types/unsplash'
+import type { FetchPhotosError, UnsplashError } from '@/types/unsplash'
 
 type AxiosLikeError = {
   isAxiosError?: boolean

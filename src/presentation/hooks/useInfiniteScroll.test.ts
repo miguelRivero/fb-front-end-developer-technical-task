@@ -5,7 +5,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderHook, waitFor } from '@testing-library/react'
 
-import { createMockIntersectionObserver } from '../../test/mocks'
+import { createMockIntersectionObserver } from '@/test/mocks'
 import { useInfiniteScroll } from './useInfiniteScroll'
 
 describe('useInfiniteScroll', () => {

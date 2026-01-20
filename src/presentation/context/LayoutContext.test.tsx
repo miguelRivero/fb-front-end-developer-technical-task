@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { renderHook, act, waitFor } from '@testing-library/react'
 import { LayoutProvider, LayoutContext } from './LayoutContext'
 import { useContext } from 'react'
-import type { Layout } from '../../domain/entities/Layout'
+import type { Layout } from '@/domain/entities/Layout'
 
 describe('LayoutContext', () => {
   // Store original localStorage

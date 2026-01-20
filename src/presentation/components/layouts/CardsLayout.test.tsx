@@ -7,13 +7,13 @@ import {
   createMockIntersectionObserver,
   createMockMatchMedia,
   createMockPhotoArray,
-} from '../../../test/mocks'
+} from '@/test/mocks'
 import { screen, waitFor } from '@testing-library/react'
 
 import { CardsLayout } from './CardsLayout'
-import { UiError } from '../../errors/UiError'
-import { formatPhotoDate } from '../../../utils/dateUtils'
-import { renderWithProviders } from '../../../test/utils'
+import { UiError } from '@/presentation/errors/UiError'
+import { formatPhotoDate } from '@/utils/dateUtils'
+import { renderWithProviders } from '@/test/utils'
 import userEvent from '@testing-library/user-event'
 
 describe('CardsLayout Integration Tests', () => {

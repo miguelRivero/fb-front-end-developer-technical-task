@@ -1,5 +1,5 @@
-import type { Photo } from '../../domain/entities/Photo'
-import type { UnsplashPhoto } from '../../types/unsplash'
+import type { Photo } from '@/domain/entities/Photo'
+import type { UnsplashPhoto } from '@/types/unsplash'
 
 /**
  * Infrastructure Adapter: UnsplashApiAdapter

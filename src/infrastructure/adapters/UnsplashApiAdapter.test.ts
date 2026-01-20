@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { UnsplashApiAdapter } from './UnsplashApiAdapter'
-import { mockUnsplashPhotoResponse } from '../../test/mocks'
+import { mockUnsplashPhotoResponse } from '@/test/mocks'
 
 describe('UnsplashApiAdapter', () => {
   it('should map Unsplash photo response to domain Photo entity', () => {

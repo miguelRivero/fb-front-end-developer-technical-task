@@ -7,8 +7,8 @@ import { screen, waitFor } from '@testing-library/react'
 
 import { LayoutSwitcher } from './LayoutSwitcher'
 import React from 'react'
-import { createMockLocalStorage } from '../../test/mocks'
-import { renderWithProviders } from '../../test/utils'
+import { createMockLocalStorage } from '@/test/mocks'
+import { renderWithProviders } from '@/test/utils'
 import userEvent from '@testing-library/user-event'
 
 describe('LayoutSwitcher Integration Tests', () => {

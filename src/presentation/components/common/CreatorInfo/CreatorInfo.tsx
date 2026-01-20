@@ -1,4 +1,4 @@
-import type { Photo } from '../../../../domain/entities/Photo'
+import type { Photo } from '@/domain/entities/Photo'
 import styles from './CreatorInfo.module.scss'
 
 /**

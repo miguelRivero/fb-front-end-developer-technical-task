@@ -3,12 +3,12 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { createMockImage, createMockMatchMedia, createMockPhotoArray } from '../../../test/mocks'
+import { createMockImage, createMockMatchMedia, createMockPhotoArray } from '@/test/mocks'
 import { screen, waitFor } from '@testing-library/react'
 
 import { CarouselLayout } from './CarouselLayout'
-import { UiError } from '../../errors/UiError'
-import { renderWithProviders } from '../../../test/utils'
+import { UiError } from '@/presentation/errors/UiError'
+import { renderWithProviders } from '@/test/utils'
 import userEvent from '@testing-library/user-event'
 
 describe('CarouselLayout Integration Tests', () => {

@@ -7,13 +7,13 @@ import {
   createMockIntersectionObserver,
   createMockMatchMedia,
   createMockPhotoArray,
-} from '../../../test/mocks'
+} from '@/test/mocks'
 import { screen, waitFor } from '@testing-library/react'
 
 import { GridLayout } from './GridLayout'
 import React from 'react'
-import { UiError } from '../../errors/UiError'
-import { renderWithProviders } from '../../../test/utils'
+import { UiError } from '@/presentation/errors/UiError'
+import { renderWithProviders } from '@/test/utils'
 import userEvent from '@testing-library/user-event'
 
 describe('GridLayout Integration Tests', () => {

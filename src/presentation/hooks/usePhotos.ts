@@ -1,9 +1,9 @@
-import { DEFAULT_SEARCH_QUERY, PAGINATION_CONFIG } from '../../constants'
+import { DEFAULT_SEARCH_QUERY, PAGINATION_CONFIG } from '@/constants'
 import { useCallback, useContext, useEffect, useRef } from 'react'
 
-import { PhotoContext } from '../context/PhotoContext'
-import { toUiError } from '../errors/UiError'
-import { usePhotoUseCases } from '../context/PhotoUseCasesContext'
+import { PhotoContext } from '@/presentation/context/PhotoContext'
+import { toUiError } from '@/presentation/errors/UiError'
+import { usePhotoUseCases } from '@/presentation/context/PhotoUseCasesContext'
 
 function getPerPageForViewport(): number {
   // Be defensive for non-browser environments / test runners.

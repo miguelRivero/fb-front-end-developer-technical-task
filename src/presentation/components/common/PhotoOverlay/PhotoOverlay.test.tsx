@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
 import { PhotoOverlay } from './PhotoOverlay'
-import { createMockPhoto } from '../../../../test/mocks'
+import { createMockPhoto } from '@/test/mocks'
 
 describe('PhotoOverlay', () => {
   it('should render a title and author attribution', () => {

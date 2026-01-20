@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
 import { CreatorInfo } from './CreatorInfo'
-import { createMockPhoto } from '../../../../test/mocks'
+import { createMockPhoto } from '@/test/mocks'
 
 describe('CreatorInfo', () => {
   describe('creator name display', () => {

@@ -1,7 +1,7 @@
-import { LAYOUTS } from '../../domain/entities/Layout'
-import type { Layout } from '../../domain/entities/Layout'
+import { LAYOUTS } from '@/domain/entities/Layout'
+import type { Layout } from '@/domain/entities/Layout'
 import styles from './LayoutSwitcher.module.scss'
-import { useLayout } from '../hooks/useLayout'
+import { useLayout } from '@/presentation/hooks/useLayout'
 
 /**
  * LayoutSwitcher Component

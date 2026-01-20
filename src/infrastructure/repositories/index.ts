@@ -6,7 +6,7 @@
  * concrete implementations of domain interfaces.
  */
 import { UnsplashPhotoRepository } from './UnsplashPhotoRepository'
-import type { PhotoRepository } from '../../domain/repositories/PhotoRepository'
+import type { PhotoRepository } from '@/domain/repositories/PhotoRepository'
 
 /**
  * Factory function to create photo repository instance

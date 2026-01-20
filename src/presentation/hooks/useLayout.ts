@@ -1,4 +1,4 @@
-import { LayoutContext } from '../context/LayoutContext'
+import { LayoutContext } from '@/presentation/context/LayoutContext'
 import { useContext } from 'react'
 
 /**

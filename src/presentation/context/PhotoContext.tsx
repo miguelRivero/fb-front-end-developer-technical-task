@@ -1,7 +1,7 @@
 import { createContext, useReducer, type ReactNode } from 'react'
-import type { Photo } from '../../domain/entities/Photo'
-import { DEFAULT_SEARCH_QUERY } from '../../constants'
-import type { UiError } from '../errors/UiError'
+import type { Photo } from '@/domain/entities/Photo'
+import { DEFAULT_SEARCH_QUERY } from '@/constants'
+import type { UiError } from '@/presentation/errors/UiError'
 
 /**
  * Presentation Layer: PhotoContext

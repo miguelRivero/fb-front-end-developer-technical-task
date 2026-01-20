@@ -5,7 +5,7 @@
  * principles by using domain entities, not infrastructure types.
  */
 
-import type { Photo } from '../domain/entities/Photo'
+import type { Photo } from '@/domain/entities/Photo'
 import { vi } from 'vitest'
 
 /**

@@ -1,8 +1,8 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react'
 
-import { FetchPhotosUseCase } from '../../application/use-cases/FetchPhotosUseCase'
-import type { PhotoRepository } from '../../domain/repositories/PhotoRepository'
-import type { PhotoSearchParams, PhotoSearchResult } from '../../domain/entities/Photo'
+import { FetchPhotosUseCase } from '@/application/use-cases/FetchPhotosUseCase'
+import type { PhotoRepository } from '@/domain/repositories/PhotoRepository'
+import type { PhotoSearchParams, PhotoSearchResult } from '@/domain/entities/Photo'
 
 /**
  * Application-facing interface consumed by the presentation layer.
