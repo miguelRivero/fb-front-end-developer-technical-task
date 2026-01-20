@@ -65,7 +65,6 @@
 }
 
 /* Desktop: prefer placing the button just outside the centered content container */
-/* Desktop gutter positioning is handled in JS for cross-browser reliability. */
 @supports (right: max(0px, 1px)) {
   /* Desktop: prefer placing the button just outside the centered content container */
   @media (min-width: 1024px) {
