@@ -9,6 +9,7 @@ import {
   createMockPhotoArray,
 } from '../../../test/mocks'
 import { screen, waitFor } from '@testing-library/react'
+import React from 'react'
 
 import { GridLayout } from './GridLayout'
 import { UiError } from '../../errors/UiError'
@@ -284,6 +285,9 @@ describe('GridLayout Integration Tests', () => {
       // Allow any async effects to settle, then verify loadMore was not called
       await new Promise(resolve => setTimeout(resolve, 100))
       expect(loadMore).not.toHaveBeenCalled()
+    })
+  })
+
   describe('grid item rendering', () => {
     it('should render photo overlay by default', async () => {
       Object.defineProperty(window, 'innerWidth', {
