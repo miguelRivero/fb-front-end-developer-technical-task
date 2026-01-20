@@ -154,7 +154,7 @@ export function createMockIntersectionObserver() {
   }> = []
 
   // Mock IntersectionObserver constructor
-  global.IntersectionObserver = class IntersectionObserver {
+  globalThis.IntersectionObserver = class IntersectionObserver {
     element?: Element
     callback: IntersectionObserverCallback
     options?: IntersectionObserverInit
@@ -224,7 +224,7 @@ export function createMockImage() {
     onerror: (() => void) | null
   }> = []
 
-  global.Image = class Image {
+  globalThis.Image = class Image {
     src = ''
     onload: (() => void) | null = null
     onerror: (() => void) | null = null

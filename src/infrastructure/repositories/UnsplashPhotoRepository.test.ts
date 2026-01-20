@@ -69,7 +69,8 @@ describe('UnsplashPhotoRepository', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     getMock = vi.fn()
-    mockHttpClient = { get: getMock }
+    // HttpClient.get is a generic function; cast the mock to satisfy the signature.
+    mockHttpClient = { get: getMock as unknown as HttpClient['get'] }
     repository = new UnsplashPhotoRepository(mockHttpClient)
   })
 

@@ -137,7 +137,7 @@ describe('CreatorInfo', () => {
       const photo = createMockPhoto()
       const { container } = render(<CreatorInfo photo={photo} size="sm" />)
 
-      const element = container.firstChild
+      const element = container.firstElementChild as HTMLElement | null
       expect(element?.className).toMatch(/creatorInfo-sm/)
     })
 
@@ -145,7 +145,7 @@ describe('CreatorInfo', () => {
       const photo = createMockPhoto()
       const { container } = render(<CreatorInfo photo={photo} size="md" />)
 
-      const element = container.firstChild
+      const element = container.firstElementChild as HTMLElement | null
       expect(element?.className).toMatch(/creatorInfo-md/)
     })
 
@@ -153,7 +153,7 @@ describe('CreatorInfo', () => {
       const photo = createMockPhoto()
       const { container } = render(<CreatorInfo photo={photo} size="lg" />)
 
-      const element = container.firstChild
+      const element = container.firstElementChild as HTMLElement | null
       expect(element?.className).toMatch(/creatorInfo-lg/)
     })
 
@@ -161,7 +161,7 @@ describe('CreatorInfo', () => {
       const photo = createMockPhoto()
       const { container } = render(<CreatorInfo photo={photo} />)
 
-      const element = container.firstChild
+      const element = container.firstElementChild as HTMLElement | null
       expect(element?.className).toMatch(/creatorInfo-md/)
     })
 
@@ -198,7 +198,7 @@ describe('CreatorInfo', () => {
       const photo = createMockPhoto()
       const { container } = render(<CreatorInfo photo={photo} lightTheme={true} />)
 
-      const element = container.firstChild
+      const element = container.firstElementChild as HTMLElement | null
       expect(element?.className).toMatch(/creatorInfo-light/)
     })
 
@@ -206,7 +206,7 @@ describe('CreatorInfo', () => {
       const photo = createMockPhoto()
       const { container } = render(<CreatorInfo photo={photo} />)
 
-      const element = container.firstChild
+      const element = container.firstElementChild as HTMLElement | null
       expect(element?.className).not.toMatch(/creatorInfo-light/)
     })
   })

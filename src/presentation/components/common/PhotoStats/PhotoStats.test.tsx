@@ -6,7 +6,6 @@ import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
 import { PhotoStats } from './PhotoStats'
-import React from 'react'
 import { createMockPhoto } from '@/test/mocks'
 
 describe('PhotoStats', () => {

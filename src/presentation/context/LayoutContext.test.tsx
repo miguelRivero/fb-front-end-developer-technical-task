@@ -1,12 +1,13 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { renderHook, act, waitFor } from '@testing-library/react'
-import { LayoutProvider, LayoutContext } from './LayoutContext'
-import { useContext } from 'react'
+import { LayoutContext, LayoutProvider } from './LayoutContext'
+import { act, renderHook, waitFor } from '@testing-library/react'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 import type { Layout } from '@/domain/entities/Layout'
+import { useContext } from 'react'
 
 describe('LayoutContext', () => {
   // Store original localStorage
-  const originalLocalStorage = global.localStorage
+  const originalLocalStorage = window.localStorage
 
   beforeEach(() => {
     // Clear localStorage before each test
@@ -17,7 +18,10 @@ describe('LayoutContext', () => {
 
   afterEach(() => {
     // Restore original localStorage
-    global.localStorage = originalLocalStorage
+    Object.defineProperty(window, 'localStorage', {
+      value: originalLocalStorage,
+      writable: true,
+    })
   })
 
   describe('Initial State', () => {
@@ -343,9 +347,7 @@ describe('LayoutContext', () => {
       
       const getItemSpy = vi.spyOn(Storage.prototype, 'getItem')
       getItemSpy.mockImplementation(() => {
-        const error = new DOMException('SecurityError', 'SecurityError')
-        error.name = 'SecurityError'
-        throw error
+        throw new DOMException('SecurityError', 'SecurityError')
       })
 
       const { result } = renderHook(() => useContext(LayoutContext), {

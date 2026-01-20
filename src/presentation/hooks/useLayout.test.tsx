@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { renderHook, act } from '@testing-library/react'
-import { useLayout } from './useLayout'
-import { LayoutProvider } from '@/presentation/context/LayoutContext'
+import { act, renderHook } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import type { Layout } from '@/domain/entities/Layout'
+import { LayoutProvider } from '@/presentation/context/LayoutContext'
+import { useLayout } from './useLayout'
 
 describe('useLayout', () => {
   beforeEach(() => {
@@ -87,9 +88,7 @@ describe('useLayout', () => {
       // Mock localStorage.setItem to throw error
       const setItemSpy = vi.spyOn(Storage.prototype, 'setItem')
       setItemSpy.mockImplementationOnce(() => {
-        const error = new DOMException('QuotaExceededError', 'QuotaExceededError')
-        error.name = 'QuotaExceededError'
-        throw error
+        throw new DOMException('QuotaExceededError', 'QuotaExceededError')
       })
 
       const { result } = renderHook(() => useLayout(), {
