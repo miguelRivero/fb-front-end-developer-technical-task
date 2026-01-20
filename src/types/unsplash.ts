@@ -50,6 +50,12 @@ export interface UnsplashPhoto {
   /** Number of likes the photo has received */
   likes: number
 
+  /**
+   * Optional view count for the photo.
+   * Note: Some endpoints include this (e.g. photo details/statistics), while others may not.
+   */
+  views?: number
+
   /** ISO 8601 timestamp of when photo was created */
   created_at: string
 }

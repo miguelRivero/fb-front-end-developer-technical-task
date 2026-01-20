@@ -5,8 +5,8 @@
  * principles by using domain entities, not infrastructure types.
  */
 
-import { vi } from 'vitest'
 import type { Photo } from '../domain/entities/Photo'
+import { vi } from 'vitest'
 
 /**
  * Creates a mock Photo domain entity
@@ -43,6 +43,7 @@ export function createMockPhoto(overrides?: Partial<Photo>): Photo {
       height: overrides?.dimensions?.height ?? 3000,
     },
     likes: overrides?.likes ?? 100,
+    views: overrides?.views ?? 2500,
     createdAt: overrides?.createdAt ?? '2024-01-15T10:30:00Z',
   }
 }
@@ -93,6 +94,7 @@ export const mockUnsplashPhotoResponse = {
   width: 4000,
   height: 3000,
   likes: 100,
+  views: 2500,
   created_at: '2024-01-15T10:30:00Z',
 }
 

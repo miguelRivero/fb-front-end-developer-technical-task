@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { screen, waitFor } from '@testing-library/react'
 
 import { LayoutSwitcher } from './LayoutSwitcher'
+import React from 'react'
 import { createMockLocalStorage } from '../../test/mocks'
 import { renderWithProviders } from '../../test/utils'
 import userEvent from '@testing-library/user-event'
@@ -277,7 +278,8 @@ describe('LayoutSwitcher Integration Tests', () => {
       expect(gridButton).toHaveAttribute('aria-current', 'true')
 
       const carouselButton = screen.getByLabelText(/switch to carousel layout/i)
-      expect(carouselButton).toHaveAttribute('aria-current', 'false')
+      // aria-current should only be present on the active (current) item
+      expect(carouselButton).not.toHaveAttribute('aria-current')
     })
 
     it('should have title attributes for tooltips', () => {

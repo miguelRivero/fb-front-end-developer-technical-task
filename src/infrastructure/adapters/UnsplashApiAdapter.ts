@@ -1,5 +1,5 @@
-import type { UnsplashPhoto } from '../../types/unsplash'
 import type { Photo } from '../../domain/entities/Photo'
+import type { UnsplashPhoto } from '../../types/unsplash'
 
 /**
  * Infrastructure Adapter: UnsplashApiAdapter
@@ -55,6 +55,7 @@ export class UnsplashApiAdapter {
         height: unsplashPhoto.height,
       },
       likes: unsplashPhoto.likes,
+      views: unsplashPhoto.views,
       createdAt: unsplashPhoto.created_at,
     }
   }

@@ -55,6 +55,8 @@ export function PhotoStats({
   className,
 }: PhotoStatsProps) {
   const formattedLikes = photo.likes.toLocaleString()
+  const views = photo.views ?? 0
+  const formattedViews = views.toLocaleString()
 
   return (
     <div
@@ -84,7 +86,10 @@ export function PhotoStats({
         )}
       </span>
       {showViews && (
-        <span className={styles.statItem}>
+        <span
+          className={styles.statItem}
+          aria-label={`views: ${formattedViews || views}`}
+        >
           <svg
             className={styles.statIcon}
             fill="none"
@@ -105,7 +110,11 @@ export function PhotoStats({
               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
             />
           </svg>
-          <span className={styles.statLabel}>View</span>
+          <span aria-hidden="true">{formattedViews || views}</span>
+          <span className={styles.statLabel} aria-hidden="true">
+            {' '}
+            views
+          </span>
         </span>
       )}
     </div>

@@ -27,6 +27,7 @@ describe('UnsplashApiAdapter', () => {
         height: mockUnsplashPhotoResponse.height,
       },
       likes: mockUnsplashPhotoResponse.likes,
+      views: mockUnsplashPhotoResponse.views,
       createdAt: mockUnsplashPhotoResponse.created_at,
     })
   })

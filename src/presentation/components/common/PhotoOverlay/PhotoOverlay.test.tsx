@@ -53,13 +53,13 @@ describe('PhotoOverlay', () => {
   })
 
   it('should show views label when showViews is true', () => {
-    const photo = createMockPhoto()
+    const photo = createMockPhoto({ views: 321 })
 
     const { rerender } = render(<PhotoOverlay photo={photo} isVisible showViews={false} />)
-    expect(screen.queryByText('View')).not.toBeInTheDocument()
+    expect(screen.queryByText(/views/i)).not.toBeInTheDocument()
 
     rerender(<PhotoOverlay photo={photo} isVisible showViews />)
-    expect(screen.getByText('View')).toBeInTheDocument()
+    expect(screen.getByLabelText('views: 321')).toBeInTheDocument()
   })
 })
 

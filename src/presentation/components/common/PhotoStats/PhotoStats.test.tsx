@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
 import { PhotoStats } from './PhotoStats'
+import React from 'react'
 import { createMockPhoto } from '../../../../test/mocks'
 
 describe('PhotoStats', () => {
@@ -36,24 +37,26 @@ describe('PhotoStats', () => {
 
   describe('views count display', () => {
     it('should display views when showViews is true', () => {
-      const photo = createMockPhoto()
+      const photo = createMockPhoto({ views: 321 })
       render(<PhotoStats photo={photo} showViews={true} />)
 
-      expect(screen.getByText(/view/i)).toBeInTheDocument()
+      expect(screen.getByText('321')).toBeInTheDocument()
+      expect(screen.getByText(/views/i)).toBeInTheDocument()
+      expect(screen.getByLabelText('views: 321')).toBeInTheDocument()
     })
 
     it('should not display views when showViews is false', () => {
       const photo = createMockPhoto()
       render(<PhotoStats photo={photo} showViews={false} />)
 
-      expect(screen.queryByText(/view/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/views/i)).not.toBeInTheDocument()
     })
 
     it('should not display views by default', () => {
       const photo = createMockPhoto()
       render(<PhotoStats photo={photo} />)
 
-      expect(screen.queryByText(/view/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/views/i)).not.toBeInTheDocument()
     })
   })
 
@@ -62,32 +65,32 @@ describe('PhotoStats', () => {
       const photo = createMockPhoto()
       const { container } = render(<PhotoStats photo={photo} size="sm" />)
 
-      const element = container.firstChild
-      expect(element).toHaveClass(/stats-sm/)
+      const element = container.firstChild as HTMLElement
+      expect(element.className).toEqual(expect.stringContaining('stats-sm'))
     })
 
     it('should apply md size variant', () => {
       const photo = createMockPhoto()
       const { container } = render(<PhotoStats photo={photo} size="md" />)
 
-      const element = container.firstChild
-      expect(element).toHaveClass(/stats-md/)
+      const element = container.firstChild as HTMLElement
+      expect(element.className).toEqual(expect.stringContaining('stats-md'))
     })
 
     it('should apply lg size variant', () => {
       const photo = createMockPhoto()
       const { container } = render(<PhotoStats photo={photo} size="lg" />)
 
-      const element = container.firstChild
-      expect(element).toHaveClass(/stats-lg/)
+      const element = container.firstChild as HTMLElement
+      expect(element.className).toEqual(expect.stringContaining('stats-lg'))
     })
 
     it('should default to md size', () => {
       const photo = createMockPhoto()
       const { container } = render(<PhotoStats photo={photo} />)
 
-      const element = container.firstChild
-      expect(element).toHaveClass(/stats-md/)
+      const element = container.firstChild as HTMLElement
+      expect(element.className).toEqual(expect.stringContaining('stats-md'))
     })
   })
 
@@ -96,19 +99,19 @@ describe('PhotoStats', () => {
       const photo = createMockPhoto()
       const { container } = render(<PhotoStats photo={photo} lightTheme={true} />)
 
-      const element = container.firstChild
-      expect(element).toHaveClass(/statsLight/)
+      const element = container.firstChild as HTMLElement
+      expect(element.className).toEqual(expect.stringContaining('statsLight'))
     })
 
     it('should not apply light theme by default', () => {
       const photo = createMockPhoto()
       const { container } = render(<PhotoStats photo={photo} />)
 
-      const element = container.firstChild
-      expect(element).not.toHaveClass(/statsLight/)
+      const element = container.firstChild as HTMLElement
+      expect(element.className).not.toEqual(expect.stringContaining('statsLight'))
     })
 
-    it('should apply light theme when explicitly set to false', () => {
+    it('should not apply light theme when explicitly set to false', () => {
       const photo = createMockPhoto()
       const { container } = render(<PhotoStats photo={photo} lightTheme={false} />)
 
@@ -186,6 +189,13 @@ describe('PhotoStats', () => {
       render(<PhotoStats photo={photo} />)
 
       expect(screen.getByLabelText('Likes: 100')).toBeInTheDocument()
+    })
+
+    it('should provide context for the views count to assistive technology when enabled', () => {
+      const photo = createMockPhoto({ views: 321 })
+      render(<PhotoStats photo={photo} showViews />)
+
+      expect(screen.getByLabelText('views: 321')).toBeInTheDocument()
     })
   })
 })
