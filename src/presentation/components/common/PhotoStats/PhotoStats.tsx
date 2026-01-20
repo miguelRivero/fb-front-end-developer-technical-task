@@ -1,4 +1,5 @@
 import type { Photo } from '@/domain/entities/Photo'
+import { EyeIcon, HeartOutlineIcon } from '@/presentation/components/common/icons'
 import styles from './PhotoStats.module.scss'
 
 /**
@@ -63,20 +64,7 @@ export function PhotoStats({
       className={`${styles.stats} ${styles[`stats-${size}`]} ${lightTheme ? styles.statsLight : ''} ${className || ''}`}
     >
       <span className={styles.statItem} aria-label={`Likes: ${formattedLikes}`}>
-        <svg
-          className={styles.statIcon}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-          />
-        </svg>
+        <HeartOutlineIcon className={styles.statIcon} />
         <span aria-hidden="true">{formattedLikes}</span>
         {showLikesLabel && (
           <span className={styles.statLabel} aria-hidden="true">
@@ -90,26 +78,7 @@ export function PhotoStats({
           className={styles.statItem}
           aria-label={`views: ${formattedViews || views}`}
         >
-          <svg
-            className={styles.statIcon}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-            />
-          </svg>
+          <EyeIcon className={styles.statIcon} />
           <span aria-hidden="true">{formattedViews || views}</span>
           <span className={styles.statLabel} aria-hidden="true">
             {' '}

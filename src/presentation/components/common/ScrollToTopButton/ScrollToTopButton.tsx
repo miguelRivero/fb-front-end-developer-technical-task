@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
+import { ChevronUpIcon } from '@/presentation/components/common/icons'
 import styles from './ScrollToTopButton.module.scss'
 
 const DEFAULT_VISIBILITY_THRESHOLD_PX = 200
@@ -65,20 +66,7 @@ export function ScrollToTopButton({
       aria-hidden={isVisible ? undefined : true}
       data-testid="scroll-to-top"
     >
-      <svg
-        className={styles.icon}
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M5 15l7-7 7 7"
-        />
-      </svg>
+      <ChevronUpIcon className={styles.icon} />
     </button>
   )
 }

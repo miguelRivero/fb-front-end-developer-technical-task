@@ -9,6 +9,7 @@ import { GridLayout } from './presentation/components/layouts/GridLayout'
 import { LayoutSwitcher } from './presentation/components/LayoutSwitcher'
 import { ListLayout } from './presentation/components/layouts/ListLayout'
 import { ScrollToTopButton } from './presentation/components/common/ScrollToTopButton/ScrollToTopButton'
+import { PhotoPlaceholderIcon } from '@/presentation/components/common/icons'
 import styles from './App.module.scss'
 import { useEffect } from 'react'
 import { useLayout } from './presentation/hooks/useLayout'
@@ -34,20 +35,9 @@ function App() {
               {/* Logo and Title */}
               <div className="flex items-center gap-3">
                 <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary">
-                  <svg
+                  <PhotoPlaceholderIcon
                     className="w-6 h-6 text-primary-foreground"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
+                  />
                 </div>
                 <div className="flex flex-col">
                   <h1 className="text-xl font-semibold text-foreground leading-tight">

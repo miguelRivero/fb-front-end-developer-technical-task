@@ -1,4 +1,5 @@
 import type { BaseLayoutProps } from '@/types/layout'
+import { ArrowsExpandIcon, CalendarIcon } from '@/presentation/components/common/icons'
 import { CreatorInfo } from '@/presentation/components/common/CreatorInfo/CreatorInfo'
 import { EmptyState } from '@/presentation/components/common/EmptyState/EmptyState'
 import type { Photo } from '@/domain/entities/Photo'
@@ -179,20 +180,7 @@ function CardItem({
           <PhotoStats photo={photo} lightTheme size="sm" />
           {/* Dimensions */}
           <div className={styles.metadataItem}>
-            <svg
-              className={styles.metadataIcon}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-              />
-            </svg>
+            <ArrowsExpandIcon className={styles.metadataIcon} />
             <span className={styles.metadataValue}>
               {photo.dimensions.width} × {photo.dimensions.height}
             </span>
@@ -200,20 +188,7 @@ function CardItem({
 
           {/* Creation Date */}
           <div className={styles.metadataItem}>
-            <svg
-              className={styles.metadataIcon}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
+            <CalendarIcon className={styles.metadataIcon} />
             <span className={styles.metadataValue}>{formattedDate}</span>
           </div>
         </div>

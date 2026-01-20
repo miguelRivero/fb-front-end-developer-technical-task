@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { EmptyState } from '@/presentation/components/common/EmptyState/EmptyState'
 import type { Photo } from '@/domain/entities/Photo'
+import { ChevronLeftIcon, ChevronRightIcon } from '@/presentation/components/common/icons'
 import { PhotoImage } from '@/presentation/components/common/PhotoImage/PhotoImage'
 import { PhotoOverlay } from '@/presentation/components/common/PhotoOverlay/PhotoOverlay'
 import type React from 'react'
@@ -330,30 +331,14 @@ export function CarouselLayout({ photos, onPhotoClick, loading, error }: Carouse
 
         {/* Navigation Arrows */}
         <button onClick={goToPrevious} className={styles.navButton} aria-label="Previous photo">
-          <svg
-            className={styles.navIcon}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
+          <ChevronLeftIcon className={styles.navIcon} />
         </button>
         <button
           onClick={goToNext}
           className={`${styles.navButton} ${styles.navButtonNext}`}
           aria-label="Next photo"
         >
-          <svg
-            className={styles.navIcon}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+          <ChevronRightIcon className={styles.navIcon} />
         </button>
       </div>
 
