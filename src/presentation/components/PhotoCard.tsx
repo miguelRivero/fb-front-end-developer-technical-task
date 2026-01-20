@@ -1,5 +1,5 @@
-import type { Photo } from '@/domain/entities/Photo'
 import { HeartSolidIcon } from '@/presentation/components/common/icons'
+import type { Photo } from '@/domain/entities/Photo'
 import styles from './PhotoCard.module.scss'
 
 /**
@@ -89,7 +89,7 @@ export function PhotoCard({ photo, onClick, className }: PhotoCardProps) {
         <div className={styles.creatorInfo}>
           <img
             src={photo.creator.profileImageUrl}
-            alt={`${photo.creator.name}'s profile`}
+            alt={photo.creator.name ? `${photo.creator.name}'s profile` : 'Creator profile'}
             className={styles.profileImage}
             width={32}
             height={32}

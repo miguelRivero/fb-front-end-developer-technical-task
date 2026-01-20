@@ -15,6 +15,9 @@ export function useViewportWidth(): number | null {
   const [width, setWidth] = useState<number | null>(() => getWidth())
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
     const onResize = () => setWidth(getWidth())
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)

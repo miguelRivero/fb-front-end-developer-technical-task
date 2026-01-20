@@ -138,7 +138,7 @@ describe('CreatorInfo', () => {
       const { container } = render(<CreatorInfo photo={photo} size="sm" />)
 
       const element = container.firstChild
-      expect(element).toHaveClass(/creatorInfo-sm/)
+      expect(element?.className).toMatch(/creatorInfo-sm/)
     })
 
     it('should apply md size variant', () => {
@@ -146,7 +146,7 @@ describe('CreatorInfo', () => {
       const { container } = render(<CreatorInfo photo={photo} size="md" />)
 
       const element = container.firstChild
-      expect(element).toHaveClass(/creatorInfo-md/)
+      expect(element?.className).toMatch(/creatorInfo-md/)
     })
 
     it('should apply lg size variant', () => {
@@ -154,7 +154,7 @@ describe('CreatorInfo', () => {
       const { container } = render(<CreatorInfo photo={photo} size="lg" />)
 
       const element = container.firstChild
-      expect(element).toHaveClass(/creatorInfo-lg/)
+      expect(element?.className).toMatch(/creatorInfo-lg/)
     })
 
     it('should default to md size', () => {
@@ -162,7 +162,7 @@ describe('CreatorInfo', () => {
       const { container } = render(<CreatorInfo photo={photo} />)
 
       const element = container.firstChild
-      expect(element).toHaveClass(/creatorInfo-md/)
+      expect(element?.className).toMatch(/creatorInfo-md/)
     })
 
     it('should set correct image dimensions for sm size', () => {
@@ -199,7 +199,7 @@ describe('CreatorInfo', () => {
       const { container } = render(<CreatorInfo photo={photo} lightTheme={true} />)
 
       const element = container.firstChild
-      expect(element).toHaveClass(/creatorInfo-light/)
+      expect(element?.className).toMatch(/creatorInfo-light/)
     })
 
     it('should not apply light theme by default', () => {
@@ -207,7 +207,7 @@ describe('CreatorInfo', () => {
       const { container } = render(<CreatorInfo photo={photo} />)
 
       const element = container.firstChild
-      expect(element).not.toHaveClass(/creatorInfo-light/)
+      expect(element?.className).not.toMatch(/creatorInfo-light/)
     })
   })
 

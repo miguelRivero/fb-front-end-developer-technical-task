@@ -212,7 +212,7 @@ describe('useInfiniteScroll', () => {
       intersectionObserverMock.triggerIntersection(sentinel, true)
 
       await waitFor(() => {
-        expect(loadMore.mock.calls.length).toBeGreaterThan(0)
+        expect(loadMore).toHaveBeenCalledTimes(2)
       })
     })
   })

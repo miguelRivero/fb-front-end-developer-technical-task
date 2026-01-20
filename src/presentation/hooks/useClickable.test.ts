@@ -147,10 +147,10 @@ describe('useClickable', () => {
         preventDefault: vi.fn(),
       } as unknown as React.KeyboardEvent
 
-      // Should not throw error
-      expect(() => {
-        result.current.onKeyDown?.(mockEvent)
-      }).not.toThrow()
+      result.current.onKeyDown?.(mockEvent)
+
+      // Should not call preventDefault when onClick is not provided
+      expect(mockEvent.preventDefault).not.toHaveBeenCalled()
     })
   })
 

@@ -1,5 +1,6 @@
-import type { Photo } from '@/domain/entities/Photo'
 import { EyeIcon, HeartOutlineIcon } from '@/presentation/components/common/icons'
+
+import type { Photo } from '@/domain/entities/Photo'
 import styles from './PhotoStats.module.scss'
 
 /**
@@ -76,7 +77,7 @@ export function PhotoStats({
       {showViews && (
         <span
           className={styles.statItem}
-          aria-label={`views: ${formattedViews || views}`}
+          aria-label={`Views: ${formattedViews}`}
         >
           <EyeIcon className={styles.statIcon} />
           <span aria-hidden="true">{formattedViews || views}</span>

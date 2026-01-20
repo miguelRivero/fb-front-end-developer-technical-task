@@ -132,19 +132,33 @@ export function CarouselLayout({ photos, onPhotoClick, loading, error }: Carouse
     // Preload images
     indicesToPreload.forEach((index) => {
       const photo = photos[index]
-      if (photo && !loadedImages.has(photo.id)) {
-        // Clean up old preload if it exists
-        const oldImg = preloadedImagesRef.current.get(photo.id)
-        if (oldImg) {
-          oldImg.src = ''
-          preloadedImagesRef.current.delete(photo.id)
+      if (!photo || loadedImages.has(photo.id)) return
+
+      const existingImg = preloadedImagesRef.current.get(photo.id)
+      if (existingImg) {
+        // If a preload is already in-flight (or already loaded successfully), don't recreate it.
+        // Recreating would cancel the in-flight request by clearing `src`.
+        const isSameSrc = existingImg.src !== '' && existingImg.src === photo.urls.regular
+        const isLoadedSuccessfully = existingImg.complete && existingImg.naturalWidth > 0
+        const isInFlight = existingImg.src !== '' && !existingImg.complete
+
+        if ((isSameSrc && isInFlight) || isLoadedSuccessfully) {
+          // If it finished loading but state hasn't caught up yet, sync it.
+          if (isLoadedSuccessfully && !loadedImages.has(photo.id)) {
+            handleImageLoad(photo.id)
+          }
+          return
         }
 
-        const img = new Image()
-        img.src = photo.urls.regular
-        img.onload = () => handleImageLoad(photo.id)
-        preloadedImagesRef.current.set(photo.id, img)
+        // Existing preload is not valid; clean it up before replacing.
+        existingImg.src = ''
+        preloadedImagesRef.current.delete(photo.id)
       }
+
+      const img = new Image()
+      img.onload = () => handleImageLoad(photo.id)
+      img.src = photo.urls.regular
+      preloadedImagesRef.current.set(photo.id, img)
     })
 
     // Cleanup function - capture ref value to avoid stale closure
@@ -246,6 +260,11 @@ export function CarouselLayout({ photos, onPhotoClick, loading, error }: Carouse
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input
+      const target = e.target as HTMLElement
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+        return
+      }
       if (e.key === 'ArrowLeft') goToPrevious()
       if (e.key === 'ArrowRight') goToNext()
     }

@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
 import { PhotoOverlay } from './PhotoOverlay'
+import styles from './PhotoOverlay.module.scss'
 import { createMockPhoto } from '@/test/mocks'
 
 describe('PhotoOverlay', () => {
@@ -39,8 +40,8 @@ describe('PhotoOverlay', () => {
 
     const overlayEl = container.querySelector('[data-photo-overlay]')
     expect(overlayEl).toBeInTheDocument()
-    expect(overlayEl).toHaveClass(/overlay/)
-    expect(overlayEl).not.toHaveClass(/overlayVisible/)
+    expect(overlayEl).toHaveClass(styles.overlay)
+    expect(overlayEl).not.toHaveClass(styles.overlayVisible)
   })
 
   it('should apply visible styling when isVisible is true', () => {
@@ -49,7 +50,7 @@ describe('PhotoOverlay', () => {
 
     const overlayEl = container.querySelector('[data-photo-overlay]')
     expect(overlayEl).toBeInTheDocument()
-    expect(overlayEl).toHaveClass(/overlayVisible/)
+    expect(overlayEl).toHaveClass(styles.overlayVisible)
   })
 
   it('should show views label when showViews is true', () => {
@@ -59,7 +60,7 @@ describe('PhotoOverlay', () => {
     expect(screen.queryByText(/views/i)).not.toBeInTheDocument()
 
     rerender(<PhotoOverlay photo={photo} isVisible showViews />)
-    expect(screen.getByLabelText('views: 321')).toBeInTheDocument()
+    expect(screen.getByLabelText('Views: 321')).toBeInTheDocument()
   })
 })
 

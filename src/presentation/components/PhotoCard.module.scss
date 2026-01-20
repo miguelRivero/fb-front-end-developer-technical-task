@@ -139,7 +139,7 @@
 /* Hover Effects */
 .card:hover,
 .card:focus {
-  transform: translateY(-0.375em) var(--transform-scale-hover-small);
+  transform: translateY(-0.375em) var(--transform-scale-hover-small, scale(1.02));
   box-shadow: var(--shadow-lg);
 }
 
@@ -149,17 +149,18 @@
 
 .card:hover .image,
 .card:focus .image {
-  transform: var(--transform-scale-hover-large);
+  transform: var(--transform-scale-hover-large, scale(1.05));
 }
 
 .card:active .image {
-  transform: var(--transform-scale-hover);
+  transform: var(--transform-scale-hover, scale(1.03));
 }
 
 /* Responsive Design */
 @media (max-width: 640px) {
   .metadata {
     opacity: 1; /* Always show on mobile for better UX */
+    transform: translateY(0);
     background: linear-gradient(
       to top,
       rgba(0, 0, 0, var(--opacity-overlay)) 0%,
@@ -167,6 +168,7 @@
       transparent 100%
     );
   }
+}
 
   .creatorDetails {
     gap: 0;

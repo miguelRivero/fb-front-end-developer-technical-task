@@ -148,7 +148,8 @@ describe('LayoutSwitcher Integration Tests', () => {
 
       // Re-render to verify context persisted
       rerender(<LayoutSwitcher />)
-      expect(carouselButton).toHaveAttribute('aria-current', 'true')
+      const rerenderedCarouselButton = screen.getByLabelText(/switch to carousel layout/i)
+      expect(rerenderedCarouselButton).toHaveAttribute('aria-current', 'true')
     })
   })
 

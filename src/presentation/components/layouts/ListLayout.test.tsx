@@ -8,7 +8,7 @@ import {
   createMockMatchMedia,
   createMockPhotoArray,
 } from '@/test/mocks'
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 
 import { ListLayout } from './ListLayout'
 import { UiError } from '@/presentation/errors/UiError'
@@ -100,8 +100,13 @@ describe('ListLayout Integration Tests', () => {
       renderWithProviders(<ListLayout photos={photos} loading={false} hasMore={false} />)
 
       photos.forEach((photo) => {
-        // Stats should include likes count
-        expect(screen.getByText(new RegExp(`\\b${photo.likes}\\b`))).toBeInTheDocument()
+        // Scope assertions to each photo container to avoid collisions (e.g. duplicate likes).
+        const image = screen.getByAltText(photo.altDescription || `Photo by ${photo.creator.name}`)
+        const photoElement = image.closest('article')
+        expect(photoElement).not.toBeNull()
+
+        const formattedLikes = photo.likes.toLocaleString()
+        expect(within(photoElement!).getByLabelText(`Likes: ${formattedLikes}`)).toBeInTheDocument()
       })
     })
   })
