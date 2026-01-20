@@ -19,7 +19,7 @@ import { useViewportWidth } from '../../hooks/useViewportWidth'
 interface CarouselLayoutProps {
   /** Array of Photo domain entities to display */
   photos: Photo[]
-  /** Optional click handler for photo interactions */
+  /** Optional click handler invoked when a photo is clicked */
   onPhotoClick?: (photo: Photo) => void
   /** Loading state - shows skeleton loading UI */
   loading?: boolean
@@ -30,7 +30,8 @@ interface CarouselLayoutProps {
 /**
  * CarouselLayout Component
  *
- * Displays photos in a swipeable carousel/slider layout using Swiper.
+ * Displays photos in a swipeable carousel/slider layout using a custom implementation
+ * (CSS transforms + touch and keyboard navigation).
  * Provides a focused, one-photo-at-a-time viewing experience with smooth navigation.
  *
  * Features:
@@ -40,7 +41,7 @@ interface CarouselLayoutProps {
  * - Responsive design with adaptive slides per view
  * - Smooth transitions between slides
  * - Loading and empty states
- * - Clean integration with PhotoCard component
+ * - Click handling via `onPhotoClick`
  *
  * @param props - CarouselLayout component props
  * @returns CarouselLayout component
@@ -54,7 +55,7 @@ interface CarouselLayoutProps {
  * />
  * ```
  */
-export function CarouselLayout({ photos, loading, error }: CarouselLayoutProps) {
+export function CarouselLayout({ photos, onPhotoClick, loading, error }: CarouselLayoutProps) {
   const viewportWidth = useViewportWidth()
   // Default to desktop behavior in non-browser environments.
   const widthForLayout = viewportWidth ?? RESPONSIVE_BREAKPOINTS.DESKTOP_MIN_WIDTH
@@ -67,6 +68,8 @@ export function CarouselLayout({ photos, loading, error }: CarouselLayoutProps) 
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
   const preloadedImagesRef = useRef<Map<string, HTMLImageElement>>(new Map())
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isMountedRef = useRef(true)
 
   const minSwipeDistance = UI_CONSTANTS.SWIPE_MIN_DISTANCE
 
@@ -144,20 +147,40 @@ export function CarouselLayout({ photos, loading, error }: CarouselLayoutProps) 
 
     // Cleanup function - capture ref value to avoid stale closure
     const preloadedImages = preloadedImagesRef.current
+    const keepIndices = indicesToPreload
+    const photoIndexById = new Map<string, number>()
+    photos.forEach((photo, index) => {
+      photoIndexById.set(photo.id, index)
+    })
     return () => {
-      // Clean up preloaded images when component unmounts or dependencies change
-      preloadedImages.forEach((img) => {
-        img.src = ''
+      // Only evict images that are outside the current preload window.
+      // This preserves already-preloaded adjacent images across effect re-runs.
+      Array.from(preloadedImages.entries()).forEach(([photoId, img]) => {
+        const index = photoIndexById.get(photoId)
+
+        // If photo no longer exists, or it's outside the keep window, evict it.
+        if (index === undefined || !keepIndices.has(index)) {
+          if (img.src.startsWith('blob:')) {
+            URL.revokeObjectURL(img.src)
+          }
+          img.src = ''
+          preloadedImages.delete(photoId)
+        }
       })
-      preloadedImages.clear()
     }
   }, [currentIndex, slidesPerView, photos, loadedImages, handleImageLoad])
 
   // Cleanup on unmount
   useEffect(() => {
+    isMountedRef.current = true
     // Capture ref value to avoid stale closure
     const preloadedImages = preloadedImagesRef.current
     return () => {
+      isMountedRef.current = false
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current)
+        transitionTimeoutRef.current = null
+      }
       preloadedImages.forEach((img) => {
         img.src = ''
       })
@@ -167,7 +190,7 @@ export function CarouselLayout({ photos, loading, error }: CarouselLayoutProps) 
 
   const goToSlide = useCallback(
     (index: number) => {
-      if (isTransitioning || photos.length === 0) return
+      if (!isMountedRef.current || isTransitioning || photos.length === 0) return
       // Clamp index to valid range, accounting for slides per view
       // When showing multiple slides, adjust so we don't go past the end
       let validIndex = Math.max(0, Math.min(index, photos.length - 1))
@@ -177,9 +200,19 @@ export function CarouselLayout({ photos, loading, error }: CarouselLayoutProps) 
         validIndex = Math.max(0, photos.length - slidesPerView)
       }
 
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current)
+        transitionTimeoutRef.current = null
+      }
+
+      if (!isMountedRef.current) return
       setIsTransitioning(true)
       setCurrentIndex(validIndex)
-      setTimeout(() => setIsTransitioning(false), UI_CONSTANTS.TRANSITION_DURATION)
+      transitionTimeoutRef.current = setTimeout(() => {
+        transitionTimeoutRef.current = null
+        if (!isMountedRef.current) return
+        setIsTransitioning(false)
+      }, UI_CONSTANTS.TRANSITION_DURATION)
     },
     [isTransitioning, photos.length, slidesPerView]
   )
@@ -276,6 +309,7 @@ export function CarouselLayout({ photos, loading, error }: CarouselLayoutProps) 
                       urlType="regular"
                       aspectRatio="4/3"
                       priority={isActive}
+                      onClick={onPhotoClick ? () => onPhotoClick(photo) : undefined}
                       onImageLoad={() => handleImageLoad(photo.id)}
                       sizes="100vw"
                     />

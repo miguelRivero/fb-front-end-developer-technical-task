@@ -53,6 +53,27 @@ describe('CarouselLayout Integration Tests', () => {
       expect(images.length).toBeGreaterThan(0)
     })
 
+    it('should call onPhotoClick when a photo is clicked', async () => {
+      const user = userEvent.setup()
+      const photos = createMockPhotoArray(3)
+      const onPhotoClick = vi.fn()
+
+      renderWithProviders(
+        <CarouselLayout
+          photos={photos}
+          loading={false}
+          onPhotoClick={onPhotoClick}
+        />
+      )
+
+      // Clicking the image should bubble to the clickable PhotoImage wrapper.
+      const images = screen.getAllByRole('img')
+      await user.click(images[0])
+
+      expect(onPhotoClick).toHaveBeenCalledTimes(1)
+      expect(onPhotoClick).toHaveBeenCalledWith(photos[0])
+    })
+
     it('should render all slides', () => {
       const photos = createMockPhotoArray(5)
 
