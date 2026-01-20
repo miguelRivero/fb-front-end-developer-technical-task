@@ -39,7 +39,7 @@ interface PhotoCardProps {
  */
 export function PhotoCard({ photo, onClick, className }: PhotoCardProps) {
   // Generate alt text with fallback chain
-  const altText = photo.altDescription || `Photo by ${photo.creator.name}` || 'Photo'
+  const altText = photo.altDescription || (photo.creator.name ? `Photo by ${photo.creator.name}` : 'Photo')
 
   // Handle click event
   const handleClick = () => {
