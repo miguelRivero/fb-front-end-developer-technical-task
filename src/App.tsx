@@ -68,7 +68,7 @@ function App() {
 
           {/* Layout Display */}
           <div
-            className={`${styles.layoutContainer} animate-in fade-in duration-200`}
+            className={styles.layoutContainer}
             data-testid="app-layout-container"
           >
             <div

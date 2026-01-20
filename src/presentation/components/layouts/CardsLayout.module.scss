@@ -111,7 +111,7 @@
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
-  animation: pulse var(--animation-skeleton-pulse);
+  animation: fb-skeleton-pulse var(--animation-skeleton-pulse, 2s cubic-bezier(0.4, 0, 0.6, 1)) infinite;
 }
 
 .skeletonCard:nth-child(1) {
@@ -150,7 +150,7 @@
     var(--muted) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer var(--animation-skeleton-shimmer);
+  animation: fb-skeleton-shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
   will-change: background-position;
 }
 
@@ -174,7 +174,7 @@
     var(--muted) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer var(--animation-skeleton-shimmer);
+  animation: fb-skeleton-shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
   will-change: background-position;
 }
 
@@ -191,27 +191,8 @@
     var(--muted) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer var(--animation-skeleton-shimmer);
+  animation: fb-skeleton-shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
   will-change: background-position;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: var(--opacity-skeleton);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
 }
 
 /* Responsive Design */

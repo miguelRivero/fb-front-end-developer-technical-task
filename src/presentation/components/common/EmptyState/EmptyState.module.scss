@@ -6,7 +6,7 @@
   padding: 2rem;
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: fadeIn var(--transition-base, 200ms) ease-out;
+    animation: fb-fade-in var(--transition-base, 200ms) ease-out;
   }
 }
 
@@ -20,13 +20,4 @@
   font-size: var(--font-size-lg);
   color: var(--destructive);
   text-align: center;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }

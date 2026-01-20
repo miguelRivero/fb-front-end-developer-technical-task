@@ -11,6 +11,8 @@ interface PhotoOverlayProps {
   photo: Photo
   /** Whether the overlay should be visible (typically controlled by hover state) */
   isVisible: boolean
+  /** Size variant for typography/padding (default: 'md') */
+  size?: 'md' | 'lg'
   /** Whether to display view count statistics (default: false) */
   showViews?: boolean
   /** Additional CSS class names to apply */
@@ -45,14 +47,16 @@ interface PhotoOverlayProps {
 export function PhotoOverlay({
   photo,
   isVisible,
+  size = 'md',
   showViews = false,
   className,
 }: PhotoOverlayProps) {
   const title = capitalizeFirst(photo.altDescription) || 'Photo'
+  const sizeClassName = size === 'lg' ? styles.overlayLarge : ''
 
   return (
     <div
-      className={`${styles.overlay} ${isVisible ? styles.overlayVisible : ''} ${className || ''}`}
+      className={`${styles.overlay} ${isVisible ? styles.overlayVisible : ''} ${sizeClassName} ${className || ''}`}
       aria-hidden={!isVisible}
       data-photo-overlay
     >

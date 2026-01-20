@@ -45,7 +45,7 @@
   position: absolute;
   inset: 0;
   background: var(--muted);
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: fb-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .skeletonImage {
@@ -60,26 +60,7 @@
     var(--muted) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: var(--opacity-skeleton);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  animation: fb-skeleton-shimmer 1.2s ease-in-out infinite;
 }
 
 .errorState {

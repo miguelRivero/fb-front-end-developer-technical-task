@@ -315,7 +315,7 @@ export function CarouselLayout({ photos, onPhotoClick, loading, error }: Carouse
                         photo={photo}
                         isVisible={showOverlay}
                         showViews
-                        className={isActive ? styles.overlayLarge : ''}
+                        size={isActive ? 'lg' : 'md'}
                       />
                     )}
                   </div>

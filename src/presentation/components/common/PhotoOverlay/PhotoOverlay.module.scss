@@ -43,17 +43,23 @@
 }
 
 /* Large variant for carousel */
-.overlay-large .photoTitle {
+.overlayLarge .photoTitle {
   font-size: var(--font-size-xl);
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
 
-.overlay-large .photoAuthor {
+.overlayLarge .photoAuthor {
   font-size: var(--font-size-sm);
   margin-bottom: 0.5rem;
 }
 
-.overlay-large {
+.overlayLarge {
   padding: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .overlayLarge {
+    padding: 1rem;
+  }
 }

@@ -95,7 +95,7 @@
   background: var(--color-surface);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-sm);
-  animation: pulse
+  animation: fb-skeleton-pulse
     var(--animation-skeleton-pulse, 2s cubic-bezier(0.4, 0, 0.6, 1)) infinite;
   will-change: opacity;
 }
@@ -139,7 +139,7 @@
     var(--muted) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
+  animation: fb-skeleton-shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
   will-change: background-position;
 }
 
@@ -163,7 +163,7 @@
     var(--muted) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
+  animation: fb-skeleton-shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
   animation-delay: calc(var(--animation-skeleton-delay-base, 0.1s) * 0.5);
   will-change: background-position;
 }
@@ -181,28 +181,9 @@
     var(--muted) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
+  animation: fb-skeleton-shimmer var(--animation-skeleton-shimmer, 1.2s ease-in-out) infinite;
   animation-delay: calc(var(--animation-skeleton-delay-base, 0.1s) * 1);
   will-change: background-position;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: var(--opacity-skeleton);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
 }
 
 /* Reduce motion for users who prefer it */
