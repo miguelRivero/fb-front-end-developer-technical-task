@@ -101,7 +101,7 @@ describe('ListLayout Integration Tests', () => {
 
       photos.forEach((photo) => {
         // Stats should include likes count
-        expect(screen.getByText(new RegExp(photo.likes.toString()))).toBeInTheDocument()
+        expect(screen.getByText(new RegExp(`\\b${photo.likes}\\b`))).toBeInTheDocument()
       })
     })
   })
@@ -152,6 +152,9 @@ describe('ListLayout Integration Tests', () => {
       // Only count the photo images (CreatorInfo also renders an avatar <img>)
       const photoImages = screen.getAllByAltText(/Photo \d+/)
       expect(photoImages).toHaveLength(photos.length)
+
+      // Verify loading-more is not present
+      expect(screen.queryByTestId('loading-more')).not.toBeInTheDocument()
     })
   })
 
@@ -270,9 +273,8 @@ describe('ListLayout Integration Tests', () => {
       expect(sentinel).toBeInTheDocument()
 
       // Trigger intersection
-      if (sentinel) {
-        mockIntersectionObserver.triggerIntersection(sentinel, true)
-      }
+      expect(sentinel).not.toBeNull()
+      mockIntersectionObserver.triggerIntersection(sentinel!, true)
 
       await waitFor(() => {
         expect(loadMore).toHaveBeenCalled()
