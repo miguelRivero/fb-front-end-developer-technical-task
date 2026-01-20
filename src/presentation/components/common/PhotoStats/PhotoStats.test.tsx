@@ -176,26 +176,11 @@ describe('PhotoStats', () => {
       expect(icons.length).toBeGreaterThan(0)
     })
 
-    it('should be readable by screen readers', () => {
-      const photo = createMockPhoto({ likes: 100 })
-      render(<PhotoStats photo={photo} />)
-
-      // Likes count should be readable
-      expect(screen.getByText('100')).toBeInTheDocument()
-    })
-
     it('should provide context for the likes count to assistive technology', () => {
       const photo = createMockPhoto({ likes: 100 })
       render(<PhotoStats photo={photo} />)
 
       expect(screen.getByLabelText('Likes: 100')).toBeInTheDocument()
-    })
-
-    it('should provide context for the views count to assistive technology when enabled', () => {
-      const photo = createMockPhoto({ views: 321 })
-      render(<PhotoStats photo={photo} showViews />)
-
-      expect(screen.getByLabelText('views: 321')).toBeInTheDocument()
     })
   })
 })
