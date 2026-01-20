@@ -276,21 +276,14 @@ describe('GridLayout Integration Tests', () => {
         />
       )
 
-      const sentinel = container.querySelector('[aria-hidden="true"]')
+      const sentinel = container.querySelector('[data-testid="infinite-scroll-sentinel"]')
       if (sentinel) {
         mockIntersectionObserver.triggerIntersection(sentinel, true)
       }
 
-      // Wait a bit to ensure loadMore is not called
-      await waitFor(() => {
-        // loadMore should not be called when loadingMore is true
-      }, { timeout: 500 })
-
-      // Note: Due to debouncing, we can't reliably test this without more complex setup
-      // But the hook itself prevents loading when loadingMore is true
-    })
-  })
-
+      // Allow any async effects to settle, then verify loadMore was not called
+      await new Promise(resolve => setTimeout(resolve, 100))
+      expect(loadMore).not.toHaveBeenCalled()
   describe('grid item rendering', () => {
     it('should render photo overlay by default', async () => {
       Object.defineProperty(window, 'innerWidth', {

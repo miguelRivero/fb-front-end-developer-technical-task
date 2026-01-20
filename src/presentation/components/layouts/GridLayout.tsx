@@ -32,7 +32,7 @@ interface GridLayoutProps extends BaseLayoutProps {
  * - Responsive grid using CSS Grid
  * - Graceful handling of varying photo aspect ratios
  * - Loading and empty states
- * - Clean integration with PhotoCard component
+ * - Clean integration with PhotoImage and PhotoOverlay components
  *
  * @param props - GridLayout component props
  * @returns GridLayout component
@@ -145,7 +145,7 @@ const GridItem = React.memo(function GridItem({
   isBelowDesktopViewport: boolean
 }) {
   const { onClick: handleClick, onKeyDown, role, tabIndex, 'aria-label': ariaLabel } =
-    useClickable(onClick, photo, `View photo by ${photo.creator.name || 'unknown'}`)
+    useClickable(onClick, photo, `View photo by ${photo.creator?.name || 'unknown'}`)
   return (
     <div
       className={`${styles.gridItem} ${onClick ? styles.clickable : ''}`}

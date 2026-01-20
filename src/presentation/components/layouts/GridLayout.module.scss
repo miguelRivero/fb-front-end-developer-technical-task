@@ -166,6 +166,14 @@
     transform: none;
     box-shadow: none;
   }
+
+  .gridItem:hover [data-photo-overlay] {
+    opacity: 0;
+  }
+
+  .gridItem:hover .imageWrapper img {
+    transform: none;
+  }
 }
 
 /* Sentinel element for infinite scroll */
