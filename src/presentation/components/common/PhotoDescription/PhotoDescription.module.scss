@@ -8,10 +8,6 @@
   font-size: var(--font-size-xs);
 }
 
-.description-md {
-  font-size: var(--font-size-sm);
-}
-
 .description-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -20,9 +16,4 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
-}
-
-/* Light theme variant for overlays */
-.description-overlay {
-  color: var(--white-overlay-90);
 }

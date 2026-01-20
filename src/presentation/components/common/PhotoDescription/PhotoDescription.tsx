@@ -48,9 +48,11 @@ export function PhotoDescription({
 }: PhotoDescriptionProps) {
   if (!description) return null
 
+  const sizeClassName = size === 'sm' ? styles['description-sm'] : ''
+
   return (
     <div
-      className={`${styles.description} ${styles[`description-${size}`]} ${className || ''}`}
+      className={`${styles.description} ${sizeClassName} ${className || ''}`}
     >
       <p
         className={styles['description-text']}

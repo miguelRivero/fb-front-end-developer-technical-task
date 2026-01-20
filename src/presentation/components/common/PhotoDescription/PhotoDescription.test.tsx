@@ -117,14 +117,16 @@ describe('PhotoDescription', () => {
       const { container } = render(<PhotoDescription description="Test" size="md" />)
 
       const element = container.firstChild
-      expect(element).toHaveClass(/description-md/)
+      expect(element).toHaveClass(/description/)
+      expect(element).not.toHaveClass(/description-sm/)
     })
 
     it('should default to md size', () => {
       const { container } = render(<PhotoDescription description="Test" />)
 
       const element = container.firstChild
-      expect(element).toHaveClass(/description-md/)
+      expect(element).toHaveClass(/description/)
+      expect(element).not.toHaveClass(/description-sm/)
     })
   })
 
